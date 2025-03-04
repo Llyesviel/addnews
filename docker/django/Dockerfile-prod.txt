@@ -1,0 +1,27 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Устанавливаем зависимости для OpenCV
+RUN apt-get update && apt-get install -y \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Устанавливаем зависимости Python
+COPY server/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Копируем код проекта
+COPY server/ .
+
+# Собираем статические файлы
+RUN python manage.py collectstatic --noinput
+
+# Порт, на котором работает приложение
+EXPOSE 8000
+
+# Запускаем сервер
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "core.wsgi:application"] 
