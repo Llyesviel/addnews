@@ -1,0 +1,98 @@
+# Виртуальное окружение Python
+.venv/
+env/
+ENV/
+venv/
+virtualenv/
+
+# Байткод Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+static_collected/
+
+# Покрытие кода
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Документация
+docs/_build/
+site/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Среды разработки
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+.DS_Store
+Thumbs.db
+
+# Пользовательские файлы
+*.bak
+*.tmp
+*.old
+
+# Настройки для различных IDE
+.spyderproject
+.spyproject
+.ropeproject
+/site
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+
+# Логи и отчеты
+celerybeat-schedule
+celerybeat.pid
+
+# Локальные настройки для разработки
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Migrations (опционально, зависит от стратегии команды)
+# */migrations/*.py
+# !*/migrations/__init__.py 
