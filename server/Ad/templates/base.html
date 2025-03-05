@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AdNews{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    {% load static %}
+    <style>
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #010105 0%, #150f38 100%);
+            color: #231c5c;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            max-width: 100%;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .header, .footer {
+            background-color: white;
+            text-align: center;
+            font-size: 1.5rem;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 20px;
+        }
+
+        .footer {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .wrap {
+            flex: 1;
+            overflow: hidden;
+            margin-right: 30px;
+            padding: 10px 0;
+            position: relative;
+        }
+
+        .items-wrap {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+
+        .items {
+            display: flex;
+            white-space: nowrap;
+            animation: scroll 4s linear infinite;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .items-content {
+            display: flex;
+            flex-shrink: 0;
+            gap: 20px;
+            padding: 0 10px;
+            animation: none;
+        }
+
+        .item {
+            padding: 8px 20px;
+            background: white;
+            color: #231c5c;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .item:hover {
+            transform: scale(1.1);
+            background: #231c5c;
+            color: white;
+            box-shadow: 0 0 15px rgba(35, 28, 92, 0.3);
+            z-index: 1;
+        }
+
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+
+        .current-date {
+            font-size: 1.2rem;
+            color: white;
+            padding: 5px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            min-width: 150px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .current-time {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        .current-date-text {
+            font-size: 1rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 2rem;
+            margin-bottom: 40px;
+        }
+
+        /* Добавляем стили для левой и правой секций заголовка */
+        .header span {
+            flex: 1;  /* Даем секциям одинаковую ширину */
+            text-align: left;  /* Выравниваем текст по левому краю */
+        }
+
+        .header span:last-child {
+            text-align: right;  /* Выравниваем RTUMIREA по правому краю */
+        }
+
+        .nav-menu {
+            flex: 2;  /* Даем навигационному меню больше пространства */
+            display: flex;
+            justify-content: center;  /* Центрируем меню */
+            gap: 20px;
+        }
+
+        .nav-link {
+            color: #231c5c;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(35, 28, 92, 0.1);
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .auth-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-submit {
+            padding: 10px 20px;
+            background-color: #231c5c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-submit:hover {
+            background-color: #1a1461;
+        }
+
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .message-error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .message-success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        /* Дополнительные стили добавляются в блоке style */
+        {% block style %}
+            <style>
+                .items {
+                    display: inline-flex;
+                    white-space: nowrap;
+                    font-size: 1.5rem; /* Увеличиваем размер текста */
+                }
+
+                .item {
+                    padding: 5px 15px;
+                    background: white;
+                    color: #231c5c;
+                    margin-right: 15px;
+                    font-weight: bold;
+                }
+
+                /* Удаляем анимации и эффекты при наведении */
+                .item:hover {
+                    background: white;
+                    color: #231c5c;
+                    transform: none;
+                }
+            </style>
+        {% endblock %}
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <span>Экономические новости</span>
+            <div class="nav-menu">
+                <a href="{% url 'main' %}" class="nav-link">Главная</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="nav-link">Личный кабинет</a>
+                    <a href="{% url 'logout' %}" class="nav-link">Выход</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-link">Вход</a>
+                    <a href="{% url 'register' %}" class="nav-link">Регистрация</a>
+                {% endif %}
+            </div>
+            <span>RTUMIREA</span>
+        </div>
+
+        <div class="content">
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message {% if message.tags %}message-{{ message.tags }}{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </div>
+
+        <div class="footer">
+            <div class="wrap">
+                <div class="items-wrap">
+                    <div class="items">
+                        <div class="items-content">
+                            {% for currency in currency_rates %}
+                                <div class="item">
+                                    {% if currency.currency_name == "BTC" or currency.currency_name == "ETH" %}
+                                        {{ currency.currency_name }} {{ currency.rate }}$
+                                    {% else %}
+                                        {{ currency.symbol }} {{ currency.rate }}₽
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="items-content">
+                            {% for currency in currency_rates %}
+                                <div class="item">
+                                    {% if currency.currency_name == "BTC" or currency.currency_name == "ETH" %}
+                                        {{ currency.currency_name }} {{ currency.rate }}$
+                                    {% else %}
+                                        {{ currency.symbol }} {{ currency.rate }}₽
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="items-content">
+                            {% for currency in currency_rates %}
+                                <div class="item">
+                                    {% if currency.currency_name == "BTC" or currency.currency_name == "ETH" %}
+                                        {{ currency.currency_name }} {{ currency.rate }}$
+                                    {% else %}
+                                        {{ currency.symbol }} {{ currency.rate }}₽
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="items-content">
+                            {% for currency in currency_rates %}
+                                <div class="item">
+                                    {% if currency.currency_name == "BTC" or currency.currency_name == "ETH" %}
+                                        {{ currency.currency_name }} {{ currency.rate }}$
+                                    {% else %}
+                                        {{ currency.symbol }} {{ currency.rate }}₽
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="items-content">
+                            {% for currency in currency_rates %}
+                                <div class="item">
+                                    {% if currency.currency_name == "BTC" or currency.currency_name == "ETH" %}
+                                        {{ currency.currency_name }} {{ currency.rate }}$
+                                    {% else %}
+                                        {{ currency.symbol }} {{ currency.rate }}₽
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="current-date">-- : --</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const items = document.querySelector('.items');
+
+            function setupScroll() {
+                const itemsContent = document.querySelector('.items-content');
+                const scrollWidth = itemsContent.offsetWidth;
+                const duration = Math.max(scrollWidth / 200, 2);
+
+                // Вычисляем точное время для синхронизации
+                const totalWidth = scrollWidth * 5; // 5 копий контента
+                const cycleTime = duration * 5; // Полный цикл для всех копий
+
+                // Плавно останавливаем текущую анимацию
+                items.style.animation = 'none';
+                items.offsetHeight;
+
+                // Запускаем новую анимацию
+                requestAnimationFrame(() => {
+                    items.style.animation = `scroll ${cycleTime}s linear infinite`;
+                });
+
+                // Устанавливаем интервал обновления равный времени полного цикла
+                clearInterval(window.scrollInterval);
+                window.scrollInterval = setInterval(() => {
+                    if (!document.hidden) {
+                        items.style.animation = 'none';
+                        items.offsetHeight;
+                        requestAnimationFrame(() => {
+                            items.style.animation = `scroll ${cycleTime}s linear infinite`;
+                        });
+                    }
+                }, cycleTime * 1300);
+            }
+
+            // Настройка начальной анимации
+            setupScroll();
+
+            // Перенастройка при изменении размера окна с debounce
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(setupScroll, 150);
+            });
+
+            // При уходе со страницы очищаем интервал
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    clearInterval(window.scrollInterval);
+                } else {
+                    setupScroll();
+                }
+            });
+
+            // Очищаем старый интервал при размонтировании
+            window.addEventListener('beforeunload', () => {
+                clearInterval(window.scrollInterval);
+            });
+
+            // Обновление времени
+            const updateTime = () => {
+                const now = new Date();
+                const time = now.toLocaleTimeString('ru-RU', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                });
+                const date = now.toLocaleDateString('ru-RU', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+
+                const dateContainer = document.querySelector('.current-date');
+                dateContainer.innerHTML = `
+                    <div class="current-time">${time}</div>
+                    <div class="current-date-text">${date}</div>
+                `;
+            };
+
+            updateTime();
+            setInterval(updateTime, 1000);
+        });
+
+    </script>
+    {% block script %}{% endblock %}
+</body>
+</html>
