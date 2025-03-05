@@ -5,6 +5,20 @@
 
 {% block style %}
 
+.error-code {
+    font-size: 5rem;
+    font-weight: bold;
+    color: #231c5c;
+    margin: 0;
+    line-height: 1;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    z-index: 2;
+}
+
 .error-message {
     font-size: 1.5rem;
     color: #231c5c;
@@ -13,6 +27,7 @@
     position: relative;
     z-index: 2;
 }
+
 
 .error-back-button {
     display: inline-block;
@@ -38,7 +53,8 @@
 <div class="error-container">
     <h1 class="error-code">404</h1>
     <p class="error-message">Такой страницы нет</p>
+
     <a href="{% url 'main' %}" class="error-back-button">Вернуться на главную</a>
 </div>
-{% endblock %}
 
+{% endblock %}
