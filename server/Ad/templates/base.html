@@ -337,31 +337,31 @@
         }
 
         /* Дополнительные стили добавляются в блоке style */
-        {% block style %}
-            <style>
-                .items {
-                    display: inline-flex;
-                    white-space: nowrap;
-                    font-size: 1.5rem; /* Увеличиваем размер текста */
-                }
-
-                .item {
-                    padding: 5px 15px;
-                    background: white;
-                    color: #231c5c;
-                    margin-right: 15px;
-                    font-weight: bold;
-                }
-
-                /* Удаляем анимации и эффекты при наведении */
-                .item:hover {
-                    background: white;
-                    color: #231c5c;
-                    transform: none;
-                }
-            </style>
-        {% endblock %}
     </style>
+    {% block style %}
+    <style>
+        .items {
+            display: inline-flex;
+            white-space: nowrap;
+            font-size: 1.5rem; /* Увеличиваем размер текста */
+        }
+
+        .item {
+            padding: 5px 15px;
+            background: white;
+            color: #231c5c;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        /* Удаляем анимации и эффекты при наведении */
+        .item:hover {
+            background: white;
+            color: #231c5c;
+            transform: none;
+        }
+    </style>
+    {% endblock %}
     <style>
         /* Стили для всплывающих сообщений */
         .currency-tooltip {
@@ -679,3 +679,6 @@
                 container.appendChild(star);
             }
         });
+    </script>
+</body>
+</html>

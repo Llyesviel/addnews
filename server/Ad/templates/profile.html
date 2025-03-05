@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Личный кабинет | AdNews{% endblock %}
+
+{% block style %}
+.profile-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.profile-info {
+    margin-bottom: 40px;
+}
+
+.profile-section {
+    margin-bottom: 20px;
+}
+
+.profile-section h3 {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.profile-data {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.profile-label {
+    font-weight: bold;
+}
+
+.change-password-form {
+    margin-top: 30px;
+}
+
+.error-text {
+    color: #c62828;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+.helptext {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 5px 0;
+    display: block;
+}
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h2 style="text-align: center; margin-bottom: 30px;">Личный кабинет</h2>
+
+    <div class="profile-section profile-info">
+        <h3>Информация о пользователе</h3>
+        <div class="profile-data">
+            <div class="profile-label">Имя пользователя:</div>
+            <div>{{ user.username }}</div>
+        </div>
+        <div class="profile-data">
+            <div class="profile-label">Дата регистрации:</div>
+            <div>{{ user.date_joined|date:"d.m.Y" }}</div>
+        </div>
+    </div>
+
+    <div class="profile-section">
+        <h3>Сменить пароль</h3>
+        <form method="post" action="{% url 'change_password' %}" class="auth-form change-password-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="id_old_password">Текущий пароль:</label>
+                <input type="password" name="old_password" id="id_old_password" class="form-control" required>
+                {% if form.old_password.errors %}
+                    <div class="error-text">{{ form.old_password.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_new_password1">Новый пароль:</label>
+                <input type="password" name="new_password1" id="id_new_password1" class="form-control" required>
+                {% if form.new_password1.errors %}
+                    <div class="error-text">{{ form.new_password1.errors }}</div>
+                {% endif %}
+                <span class="helptext">
+                    Ваш пароль должен содержать минимум 8 символов.<br>
+                    Пароль не должен быть слишком простым или часто используемым.
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="id_new_password2">Подтверждение нового пароля:</label>
+                <input type="password" name="new_password2" id="id_new_password2" class="form-control" required>
+                {% if form.new_password2.errors %}
+                    <div class="error-text">{{ form.new_password2.errors }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="form-submit">Сменить пароль</button>
+        </form>
+    </div>
+
+    <div class="profile-section">
+        <h3>Активность</h3>
+        <p>Скоро здесь появится история ваших оценок новостей и другая информация о вашей активности на сайте.</p>
+    </div>
+</div>
+{% endblock %}
