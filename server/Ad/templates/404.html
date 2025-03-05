@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Страница не найдена | AdNews{% endblock %}
+
+{% block style %}
+
+.error-message {
+    font-size: 1.5rem;
+    color: #231c5c;
+    margin: 90px 0 20px;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    position: relative;
+    z-index: 2;
+}
+
+.error-back-button {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #231c5c;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 20px;
+}
+
+.error-back-button:hover {
+    background-color: #1a1461;
+    transform: translateY(-2px);
+}
+
+
+{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <h1 class="error-code">404</h1>
+    <p class="error-message">Такой страницы нет</p>
+    <a href="{% url 'main' %}" class="error-back-button">Вернуться на главную</a>
+</div>
+{% endblock %}
+
