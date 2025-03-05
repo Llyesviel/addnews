@@ -1,15 +1,104 @@
 <!DOCTYPE html>
+<!-- Последнее обновление: Мир, безопасность и взаимное процветание -->
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}AdNews{% endblock %}</title>
+    <title>{% block title %}AdNews - Инновационная платформа новостей{% endblock %}</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     {% load static %}
     <style>
-
+        /* Добавляем стили для звездного фона прямо в base.html */
+        html {
+            height: 100%;
+        }
+        
+        .star-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .stars,
+        .stars1,
+        .stars2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .stars {
+            background: transparent url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzIgMTZhMSAxIDAgMSAwIDAgMiAxIDEgMCAwIDAgMC0yem00NCAxMDhhMiAyIDAgMSAwIDAtNCAxIDEgMCAwIDAgMCA0eiIvPjwvc3ZnPg==') repeat;
+            background-size: 256px 256px;
+            animation: animStar 100s linear infinite;
+        }
+        
+        .stars1 {
+            background: transparent url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsPSIjZmZmIiBkPSJNODIgMzRhMiAyIDAgMSAwIDAgNCAxIDEgMCAwIDAgMC00em0yODQgMTk4YTMgMyAwIDEgMCAwLTYgMyAzIDAgMCAwIDAgNnoiLz48L3N2Zz4=') repeat;
+            background-size: 512px 512px;
+            animation: animStar 125s linear infinite;
+        }
+        
+        .stars2 {
+            background: transparent url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAyNCIgaGVpZ2h0PSIxMDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0yNDQgMTA2YTMgMyAwIDEgMCAwIDYgMyAzIDAgMCAwIDAtNnptNTU2IDQ2OGE0IDQgMCAxIDAgMC04IDQgNCAwIDAgMCAwIDh6Ii8+PC9zdmc+') repeat;
+            background-size: 1024px 1024px;
+            animation: animStar 175s linear infinite;
+        }
+        
+        @keyframes animStar {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: -2560px 2560px;
+            }
+        }
+        
+        .shooting-star {
+            position: absolute;
+            width: 3px;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+            border-top-left-radius: 50%;
+            border-top-right-radius: 50%;
+            animation: shootingStar 5s linear infinite;
+            transform: rotate(45deg);
+            opacity: 0;
+        }
+        
+        @keyframes shootingStar {
+            0% {
+                transform: translate(calc(100vw * var(--x, 0)), calc(100vh * var(--y, 0))) rotate(45deg);
+                opacity: 0;
+                height: 5px;
+            }
+            1% {
+                opacity: 1;
+            }
+            5% {
+                opacity: 1;
+                transform: translate(calc(100vw * var(--x, 0) - 100px), calc(100vh * var(--y, 0) + 100px)) rotate(45deg);
+                height: 30px;
+            }
+            10% {
+                opacity: 0;
+                height: 80px;
+                transform: translate(calc(100vw * var(--x, 0) - 200px), calc(100vh * var(--y, 0) + 200px)) rotate(45deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(calc(100vw * var(--x, 0) - 200px), calc(100vh * var(--y, 0) + 200px)) rotate(45deg);
+            }
+        }
+    
         *, *::before, *::after {
             box-sizing: border-box;
         }
@@ -273,11 +362,115 @@
             </style>
         {% endblock %}
     </style>
+    <style>
+        /* Стили для всплывающих сообщений */
+        .currency-tooltip {
+            position: fixed;
+            background: rgba(35, 28, 92, 0.95);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            z-index: 1000;
+            max-width: 250px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s, transform 0.3s;
+            text-align: center;
+            pointer-events: none;
+        }
 
+        .currency-tooltip.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .item {
+            animation: none;
+        }
+
+        .item.clicked {
+            animation: jumpAnimation 0.6s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
+        }
+
+        @keyframes jumpAnimation {
+            0% { 
+                transform: translateY(0) scale(1);
+            }
+            25% { 
+                transform: translateY(-15px) scale(1.1);
+            }
+            50% { 
+                transform: translateY(-5px) scale(1.05);
+            }
+            75% { 
+                transform: translateY(-8px) scale(1.08);
+            }
+            100% { 
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .cbr-tooltip {
+            position: absolute;
+            background: rgba(35, 28, 92, 0.95);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            z-index: 1000;
+            max-width: 300px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s, transform 0.3s;
+            text-align: center;
+            pointer-events: none;
+            left: 50%;
+            top: 120%;
+            transform: translateX(-50%);
+        }
+
+        .cbr-tooltip.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        .qr-section {
+            position: relative;
+            cursor: pointer;
+            padding: 5px;
+            background: transparent;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            transform: scale(1.0);
+            margin-top: 40px;  
+        }
+
+        .qr-section:hover {
+            background: transparent;
+            transform: scale(1.0);
+        }
+
+        .qr-section span {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+    </style>
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-
+    <!-- Звездный фон -->
+    <div class="star-container">
+        <div class="stars"></div>
+        <div class="stars1"></div>
+        <div class="stars2"></div>
+        <div id="shooting-stars-container"></div>
+    </div>
+    
     <div class="container">
         <div class="header">
             <span>Экономические новости</span>
@@ -377,20 +570,20 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const items = document.querySelector('.items');
-
+            
             function setupScroll() {
                 const itemsContent = document.querySelector('.items-content');
                 const scrollWidth = itemsContent.offsetWidth;
                 const duration = Math.max(scrollWidth / 200, 2);
-
+                
                 // Вычисляем точное время для синхронизации
                 const totalWidth = scrollWidth * 5; // 5 копий контента
                 const cycleTime = duration * 5; // Полный цикл для всех копий
-
+                
                 // Плавно останавливаем текущую анимацию
                 items.style.animation = 'none';
                 items.offsetHeight;
-
+                
                 // Запускаем новую анимацию
                 requestAnimationFrame(() => {
                     items.style.animation = `scroll ${cycleTime}s linear infinite`;
@@ -447,7 +640,7 @@
                     month: '2-digit',
                     year: 'numeric'
                 });
-
+                
                 const dateContainer = document.querySelector('.current-date');
                 dateContainer.innerHTML = `
                     <div class="current-time">${time}</div>
@@ -459,7 +652,30 @@
             setInterval(updateTime, 1000);
         });
 
-    </script>
-    {% block script %}{% endblock %}
-</body>
-</html>
+        // Добавляем скрипт для создания падающих звезд
+        document.addEventListener('DOMContentLoaded', () => {
+            const shootingStarsContainer = document.getElementById('shooting-stars-container');
+            const numberOfStars = 10;
+            
+            // Создаем падающие звезды
+            for (let i = 0; i < numberOfStars; i++) {
+                createShootingStar(shootingStarsContainer, i);
+            }
+            
+            function createShootingStar(container, index) {
+                const star = document.createElement('div');
+                star.className = 'shooting-star';
+                
+                // Устанавливаем случайную начальную позицию
+                const xPos = Math.random();
+                const yPos = Math.random() * 0.5; // Только в верхней половине экрана
+                
+                star.style.setProperty('--x', xPos);
+                star.style.setProperty('--y', yPos);
+                
+                // Устанавливаем случайную задержку для начала анимации
+                star.style.animationDelay = `${Math.random() * 20}s`;
+                
+                container.appendChild(star);
+            }
+        });
