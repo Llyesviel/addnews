@@ -415,7 +415,7 @@
         dislikeButtons.forEach(button => {
             button.addEventListener('click', () => {
                 {% if user.is_authenticated %}
-                    handleRatingClick(button, 'dislike');
+                    handleRatingClick(button, 'dislike');q
                 {% else %}
                     alert('Пожалуйста, войдите в систему, чтобы оценивать новости.');
                     window.location.href = '{% url "login" %}';
