@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}AdNews - Инновационная платформа новостей{% endblock %}</title>
+    <title>{% block title %}AdNews{% endblock %}</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -336,32 +336,8 @@
         }
 
         /* Дополнительные стили добавляются в блоке style */
-    </style>
-    {% block style %}
-    <style>
-        .items {
-            display: inline-flex;
-            white-space: nowrap;
-            font-size: 1.5rem; /* Увеличиваем размер текста */
-        }
+        {% block style %}{% endblock %}
 
-        .item {
-            padding: 5px 15px;
-            background: white;
-            color: #231c5c;
-            margin-right: 15px;
-            font-weight: bold;
-        }
-
-        /* Удаляем анимации и эффекты при наведении */
-        .item:hover {
-            background: white;
-            color: #231c5c;
-            transform: none;
-        }
-    </style>
-    {% endblock %}
-    <style>
         /* Стили для всплывающих сообщений */
         .currency-tooltip {
             position: fixed;
@@ -678,7 +654,7 @@
                 container.appendChild(star);
             }
         });
-        
+
         // Обновляем объект currencyFacts и увеличиваем время показа тултипа
         const currencyFacts = {
             'USD': [
@@ -752,6 +728,92 @@
                 '💻 Язык программирования Solidity был создан специально для Ethereum'
             ]
         };
+
+      document.addEventListener('DOMContentLoaded', () => {
+            const items = document.querySelectorAll('.item');
+            let tooltip = document.createElement('div');
+            tooltip.className = 'currency-tooltip';
+            document.body.appendChild(tooltip);
+
+            items.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    // Удаляем активный класс и класс анимации у всех элементов
+                    items.forEach(i => {
+                        i.classList.remove('active', 'clicked');
+                    });
+                    
+                    // Добавляем классы текущему элементу
+                    this.classList.add('active');
+                    this.classList.add('clicked');
+                    
+                    // Удаляем класс анимации после её завершения
+                    setTimeout(() => {
+                        this.classList.remove('clicked');
+                    }, 600);
+
+                    // Определяем валюту из текста элемента
+                    const currencyText = this.textContent.trim();
+                    
+                    let currency = null;
+
+                    // Определяем валюту на основе формата отображения
+                    if (currencyText.includes('BTC')) currency = 'BTC';
+                    else if (currencyText.includes('ETH')) currency = 'ETH';
+                    else if (currencyText.includes('$')) currency = 'USD';
+                    else if (currencyText.includes('€')) currency = 'EUR';
+                    else if (currencyText.includes('¥')) currency = 'CNY';
+                    
+                    if (currency) {
+                        const facts = currencyFacts[currency];
+                        const randomFact = facts[Math.floor(Math.random() * facts.length)];
+                        
+                        tooltip.textContent = randomFact;
+                        tooltip.classList.add('show');
+                        
+                        // Позиционируем тултип над элементом с учетом прокрутки
+                        const rect = this.getBoundingClientRect();
+                        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                        
+                        tooltip.style.left = Math.max(10, Math.min(
+                            rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2),
+                            window.innerWidth - tooltip.offsetWidth - 10
+                        )) + 'px';
+                        tooltip.style.top = Math.max(10, rect.top + scrollTop - tooltip.offsetHeight - 10) + 'px';
+                        
+                        // Скрываем тултип через 5 секунд
+                        setTimeout(() => {
+                            tooltip.classList.remove('show');
+                        }, 5000);
+                    }
+                });
+
+                // Обновляем обработчики наведения
+                item.addEventListener('mouseenter', function() {
+                    if (!this.classList.contains('clicked')) {
+                        this.style.transform = 'translateY(-2px) scale(1.05)';
+                    }
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('clicked')) {
+                        this.style.transform = 'translateY(0) scale(1)';
+                        this.classList.remove('active');
+                    }
+                });
+            });
+
+            // Скрываем тултип при клике вне элементов
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.item')) {
+                    tooltip.classList.remove('show');
+                    items.forEach(item => {
+                        item.classList.remove('active', 'clicked');
+                        item.style.transform = 'translateY(0) scale(1)';
+                    });
+                }
+            });
+        });
     </script>
+    {% block script %}{% endblock %}
 </body>
-</html>
+</html>   
