@@ -38,3 +38,26 @@ class CurrencyRate(models.Model):
 
     def __str__(self):
         return f"{self.currency_name}{self.symbol}: {self.rate}₽"
+        # Модель фоновых изображений
+class BackgroundImage(models.Model):
+    image = models.ImageField(upload_to='backgrounds/', verbose_name="Фоновое изображение")
+
+    class Meta:
+        verbose_name = "Фоновое изображение"
+        verbose_name_plural = "Фоновые изображения"
+
+    def __str__(self):
+        return f"Фоновое изображение {self.id}"
+
+
+class NewsSource(models.Model):
+    name = models.CharField(max_length=255, verbose_name="Название источника")
+    feed_url = models.URLField(max_length=1000, verbose_name="URL RSS канала")
+    is_active = models.BooleanField(default=True, verbose_name="Активный источник")
+
+    class Meta:
+        verbose_name = "Источник новостей"
+        verbose_name_plural = "Источники новостей"
+
+    def __str__(self):
+        return self.name
