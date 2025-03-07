@@ -61,3 +61,18 @@ class NewsSource(models.Model):
 
     def __str__(self):
         return self.name
+        # модель для оценок новостей
+class NewsRating(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь")
+    news = models.ForeignKey(News, on_delete=models.CASCADE, verbose_name="Новость")
+    is_like = models.BooleanField(verbose_name="Лайк")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+
+    class Meta:
+        verbose_name = "Оценка новости"
+        verbose_name_plural = "Оценки новостей"
+        unique_together = ('user', 'news')  # Пользователь может оценить новость только один раз
+
+    def __str__(self):
+        rating_type = "лайк" if self.is_like else "дизлайк"
+        return f"{self.user.username} - {self.news.title} - {rating_type}"
