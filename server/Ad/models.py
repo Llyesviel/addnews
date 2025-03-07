@@ -76,3 +76,13 @@ class NewsRating(models.Model):
     def __str__(self):
         rating_type = "лайк" if self.is_like else "дизлайк"
         return f"{self.user.username} - {self.news.title} - {rating_type}"
+        # Модель профиля пользователя для расширения стандартной модели пользователя
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Пользователь")
+    
+    class Meta:
+        verbose_name = "Профиль пользователя"
+        verbose_name_plural = "Профили пользователей"
+        
+    def __str__(self):
+        return self.user.username
