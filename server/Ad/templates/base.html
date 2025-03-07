@@ -334,10 +334,9 @@
             background-color: #e8f5e9;
             color: #2e7d32;
         }
-
-        /* Дополнительные стили добавляются в блоке style */
-        {% block style %}{% endblock %}
-
+    </style>
+    {% block style %}{% endblock %}
+    <style>
         /* Стили для всплывающих сообщений */
         .currency-tooltip {
             position: fixed;
@@ -729,7 +728,7 @@
             ]
         };
 
-      document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
             const items = document.querySelectorAll('.item');
             let tooltip = document.createElement('div');
             tooltip.className = 'currency-tooltip';
@@ -816,4 +815,4 @@
     </script>
     {% block script %}{% endblock %}
 </body>
-</html>   
+</html> 
