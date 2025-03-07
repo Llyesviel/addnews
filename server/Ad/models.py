@@ -21,11 +21,10 @@ class News(models.Model):
     class Meta:
         verbose_name = "Новость"
         verbose_name_plural = "Новости"
-        # unique_together = ('title', 'date_published')  # Удалено для устранения конфликта с уникальностью 'link'
 
     def __str__(self):
         return self.title
-        # Модель курсов валют
+# Модель курсов валют
 class CurrencyRate(models.Model):
     currency_name = models.CharField(max_length=10, verbose_name="Название валюты")
     rate = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Курс")
@@ -38,7 +37,7 @@ class CurrencyRate(models.Model):
 
     def __str__(self):
         return f"{self.currency_name}{self.symbol}: {self.rate}₽"
-        # Модель фоновых изображений
+# Модель фоновых изображений
 class BackgroundImage(models.Model):
     image = models.ImageField(upload_to='backgrounds/', verbose_name="Фоновое изображение")
 
@@ -61,7 +60,8 @@ class NewsSource(models.Model):
 
     def __str__(self):
         return self.name
-        # модель для оценок новостей
+        
+# Модель для оценок новостей
 class NewsRating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь")
     news = models.ForeignKey(News, on_delete=models.CASCADE, verbose_name="Новость")
@@ -76,7 +76,7 @@ class NewsRating(models.Model):
     def __str__(self):
         rating_type = "лайк" if self.is_like else "дизлайк"
         return f"{self.user.username} - {self.news.title} - {rating_type}"
-        # Модель профиля пользователя для расширения стандартной модели пользователя
+# Модель профиля пользователя для расширения стандартной модели пользователя
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Пользователь")
     
