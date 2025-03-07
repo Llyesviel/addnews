@@ -5,7 +5,6 @@ from . import views
 router = routers.DefaultRouter()
 
 urlpatterns = [
-    path('', views.redirect_to_main, name='index'),
     path('main/', views.main_page, name='main'),
     path('login/', views.login_view, name='login'),
     path('register/', views.register_view, name='register'),
