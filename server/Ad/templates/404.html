@@ -4,6 +4,17 @@
 {% block title %}Страница не найдена | AdNews{% endblock %}
 
 {% block style %}
+.error-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
 
 .error-code {
     font-size: 5rem;
@@ -28,6 +39,39 @@
     z-index: 2;
 }
 
+.game-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    margin: 20px 0;
+    overflow: hidden;
+    background-color: rgba(21, 15, 56, 0.1);
+    border-radius: 10px;
+}
+
+#game-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.game-instructions {
+    font-size: 1rem;
+    color: #444;
+    margin: 10px 0 20px;
+}
+
+.score-display {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.2rem;
+    color: #231c5c;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 5px 10px;
+    border-radius: 20px;
+    z-index: 2;
+}
 
 .error-back-button {
     display: inline-block;
@@ -46,15 +90,317 @@
     transform: translateY(-2px);
 }
 
+.stars-small {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+}
 
+.game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    color: #fff;
+    background-color: rgba(35, 28, 92, 0.8);
+    padding: 20px 40px;
+    border-radius: 10px;
+    display: none;
+    z-index: 3;
+}
+
+.restart-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #231c5c;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
 {% endblock %}
 
 {% block content %}
 <div class="error-container">
     <h1 class="error-code">404</h1>
-    <p class="error-message">Такой страницы нет</p>
-
+    <p class="error-message">Такой страницы нет, но вы можете поиграть, пока мы её создаём!</p>
+    
+    <div class="game-container">
+        <div class="score-display">Счёт: <span id="score">0</span></div>
+        <canvas id="game-canvas"></canvas>
+        <div class="game-over">
+            Игра окончена!<br>
+            <button class="restart-btn" onclick="restartGame()">Играть снова</button>
+        </div>
+    </div>
+    
+    <p class="game-instructions">Нажмите пробел или стрелку вверх для прыжка</p>
     <a href="{% url 'main' %}" class="error-back-button">Вернуться на главную</a>
 </div>
-
 {% endblock %}
+
+{% block script %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Настройка игры
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const gameOverElement = document.querySelector('.game-over');
+        
+        // Устанавливаем размер canvas равным размеру контейнера
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        
+        // Переменные игры
+        let score = 0;
+        let gameSpeed = 6;
+        let gravity = 0.8;
+        let isGameOver = false;
+        
+        // Игрок
+        const player = {
+            x: 50,
+            y: 0,
+            width: 30,
+            height: 50,
+            velocity: 0,
+            jumping: false,
+            draw() {
+                // Рисуем космонавта
+                ctx.fillStyle = '#ffffff';
+                // Тело
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                
+                // Шлем
+                ctx.fillStyle = '#231c5c';
+                ctx.fillRect(this.x + 5, this.y, this.width - 10, 15);
+                
+                // Визор
+                ctx.fillStyle = '#aaccff';
+                ctx.fillRect(this.x + 8, this.y + 3, this.width - 16, 8);
+                
+                // Ранец
+                ctx.fillStyle = '#cc3333';
+                ctx.fillRect(this.x - 5, this.y + 20, 8, 20);
+            },
+            update() {
+                // Применяем гравитацию
+                this.velocity += gravity;
+                this.y += this.velocity;
+                
+                // Проверяем столкновение с землей
+                const ground = canvas.height - this.height - 20;
+                if (this.y > ground) {
+                    this.y = ground;
+                    this.velocity = 0;
+                    this.jumping = false;
+                }
+            },
+            jump() {
+                if (!this.jumping) {
+                    this.velocity = -16;
+                    this.jumping = true;
+                }
+            }
+        };
+        
+        // Массив препятствий
+        const obstacles = [];
+        
+        // Звезды для фона
+        const stars = [];
+        for (let i = 0; i < 100; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 1,
+                speed: Math.random() * 0.5 + 0.1
+            });
+        }
+        
+        // Класс препятствия
+        class Obstacle {
+            constructor() {
+                this.width = 20 + Math.random() * 30;
+                this.height = 30 + Math.random() * 40;
+                this.x = canvas.width;
+                this.y = canvas.height - this.height - 20;
+                
+                // Случайный тип препятствия
+                this.type = Math.random() > 0.5 ? 'rock' : 'satellite';
+            }
+            
+            draw() {
+                if (this.type === 'rock') {
+                    // Рисуем астероид
+                    ctx.fillStyle = '#aaa';
+                    ctx.beginPath();
+                    ctx.moveTo(this.x, this.y + this.height);
+                    ctx.lineTo(this.x + this.width/2, this.y + this.height/3);
+                    ctx.lineTo(this.x + this.width, this.y + this.height);
+                    ctx.fill();
+                } else {
+                    // Рисуем спутник
+                    ctx.fillStyle = '#888';
+                    ctx.fillRect(this.x, this.y + this.height/2, this.width, this.height/2);
+                    
+                    // Антенна
+                    ctx.fillStyle = '#ccc';
+                    ctx.fillRect(this.x + this.width/2 - 2, this.y, 4, this.height/2);
+                    
+                    // Солнечная панель
+                    ctx.fillStyle = '#4455aa';
+                    ctx.fillRect(this.x - 15, this.y + this.height/2, 15, 10);
+                    ctx.fillRect(this.x + this.width, this.y + this.height/2, 15, 10);
+                }
+            }
+            
+            update() {
+                this.x -= gameSpeed;
+            }
+        }
+        
+        // Спавн препятствий
+        function spawnObstacle() {
+            if (!isGameOver) {
+                obstacles.push(new Obstacle());
+                setTimeout(spawnObstacle, 1500 + Math.random() * 1000);
+            }
+        }
+        
+        // Основной игровой цикл
+        function gameLoop() {
+            // Очищаем канвас
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Рисуем звезды на фоне
+            for (const star of stars) {
+                ctx.fillStyle = 'white';
+                ctx.fillRect(star.x, star.y, star.size, star.size);
+                star.x -= star.speed;
+                if (star.x < 0) {
+                    star.x = canvas.width;
+                    star.y = Math.random() * canvas.height;
+                }
+            }
+            
+            // Обновляем игрока
+            player.update();
+            player.draw();
+            
+            // Рисуем землю
+            drawGround();
+            
+            // Обновляем и рисуем препятствия
+            for (let i = 0; i < obstacles.length; i++) {
+                const obstacle = obstacles[i];
+                obstacle.update();
+                obstacle.draw();
+                
+                // Удаляем препятствия, которые вышли за экран
+                if (obstacle.x + obstacle.width < 0) {
+                    obstacles.splice(i, 1);
+                    i--;
+                    
+                    // Увеличиваем счет за пройденное препятствие
+                    updateScore();
+                }
+            }
+            
+            // Проверяем столкновения
+            if (checkCollision()) {
+                isGameOver = true;
+                gameOverElement.style.display = 'block';
+                return; // Останавливаем цикл при столкновении
+            }
+            
+            // Продолжаем игровой цикл
+            if (!isGameOver) {
+                requestAnimationFrame(gameLoop);
+            }
+        }
+        
+        // Функция рестарта
+        window.restartGame = function() {
+            // Сбрасываем все переменные
+            obstacles.length = 0;
+            score = 0;
+            gameSpeed = 6;
+            isGameOver = false;
+            gameOverElement.style.display = 'none';
+            scoreElement.textContent = '0';
+            
+            // Сбрасываем позицию игрока
+            player.y = 0;
+            player.velocity = 0;
+            
+            // Перезапускаем игровой цикл
+            gameLoop();
+            
+            // Запускаем спавн препятствий снова
+            setTimeout(spawnObstacle, 1000);
+        };
+        
+        // Остальные функции без изменений
+        function checkCollision() {
+            for (const obstacle of obstacles) {
+                if (
+                    player.x < obstacle.x + obstacle.width &&
+                    player.x + player.width > obstacle.x &&
+                    player.y < obstacle.y + obstacle.height &&
+                    player.y + player.height > obstacle.y
+                ) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        function drawGround() {
+            ctx.fillStyle = '#333344';
+            ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+        }
+        
+        function updateScore() {
+            score++;
+            scoreElement.textContent = score;
+            
+            // Увеличиваем скорость игры
+            if (score % 100 === 0) {
+                gameSpeed += 0.5;
+            }
+        }
+        
+        // Обработчики событий для управления
+        document.addEventListener('keydown', (e) => {
+            if ((e.code === 'Space' || e.code === 'ArrowUp') && !isGameOver) {
+                e.preventDefault();
+                player.jump();
+            }
+        });
+        
+        // Для мобильных устройств
+        canvas.addEventListener('touchstart', (e) => {
+            if (!isGameOver) {
+                e.preventDefault();
+                player.jump();
+            }
+        });
+        
+        // Запускаем игру
+        setTimeout(spawnObstacle, 1000);
+        gameLoop();
+        
+        // Адаптируем размер при изменении окна
+        window.addEventListener('resize', () => {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        });
+    });
+</script>
+{% endblock %} 
