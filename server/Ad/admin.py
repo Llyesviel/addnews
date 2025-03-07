@@ -10,8 +10,8 @@ class NewsAdmin(admin.ModelAdmin):
     search_fields = ('title', 'source__name')
     list_filter = ('source',)
     fields = ('title', 'description', 'date_published', 'image', 'background_image', 'source')
-
-min.register(NewsSource)
+    
+@admin.register(NewsSource)
 class NewsSourceAdmin(admin.ModelAdmin):
     list_display = ('name', 'feed_url', 'is_active')
     list_filter = ('is_active',)
