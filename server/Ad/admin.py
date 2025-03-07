@@ -11,15 +11,7 @@ class NewsAdmin(admin.ModelAdmin):
     list_filter = ('source',)
     fields = ('title', 'description', 'date_published', 'image', 'background_image', 'source')
 
-# def get_video_duration(file_path):
-#     video = cv2.VideoCapture(file_path)
-#     total_frames = video.get(cv2.CAP_PROP_FRAME_COUNT)
-#     fps = video.get(cv2.CAP_PROP_FPS)
-#     duration = total_frames / fps if fps != 0 else 0
-#     video.release()
-#     return duration
-
-@admin.register(NewsSource)
+min.register(NewsSource)
 class NewsSourceAdmin(admin.ModelAdmin):
     list_display = ('name', 'feed_url', 'is_active')
     list_filter = ('is_active',)
