@@ -18,3 +18,27 @@ class NewsAdmin(admin.ModelAdmin):
 #     duration = total_frames / fps if fps != 0 else 0
 #     video.release()
 #     return duration
+
+@admin.register(NewsSource)
+class NewsSourceAdmin(admin.ModelAdmin):
+    list_display = ('name', 'feed_url', 'is_active')
+    list_filter = ('is_active',)
+    search_fields = ('name', 'feed_url')
+    actions = ['update_news_from_sources']
+
+    @admin.action(description="Обновить новости из выбранных источников")
+    def update_news_from_sources(self, request, queryset):
+        try:
+            from .tasks import SchedulerSingleton
+            SchedulerSingleton.fetch_news_from_sources(queryset)
+            self.message_user(
+                request,
+                f"Новости успешно обновлены из {queryset.count()} источников",
+                messages.SUCCESS
+            )
+        except Exception as e:
+            self.message_user(
+                request,
+                f"Ошибка при обновлении новостей: {str(e)}",
+                messages.ERROR
+            )
