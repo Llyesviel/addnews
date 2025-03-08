@@ -19,7 +19,7 @@ python server/manage.py runserver
 ```bash
 python server/manage.py createsuperuser
 ```
-### Настройка IDE
+### Настройка IDE (Pycharm)
 
 Settings - Project - Project Structure
 
@@ -53,8 +53,6 @@ docker-compose -p adnews restart
 docker-compose -p adnews down
 ```
 
-## Добавить инструкции по установке зависимостей OpenCV
-
 ### Установка зависимостей OpenCV
 
 При использовании `opencv-python` убедитесь, что все системные зависимости установлены. Для Docker это уже настроено через `Dockerfile`. Для локальной разработки установите необходимые библиотеки:
@@ -79,18 +77,4 @@ pip install opencv-python
 После установки системных зависимостей, установите Python-зависимости:
 ```bash
 pip install -r server/requirements.txt
-```
-
-
-```bash
-docker build -t batbka/adnews-server:v1.9 -f docker/django/Dockerfile-prod.txt .
-```
-```bash
-docker run --env-file .env.debug --name adnews-prod -p 8000:8000 batbka/adnews-server:v1.9
-```
-```bash
-docker login
-```
-```bash
-docker push batbka/adnews-server:v1.9
 ```
