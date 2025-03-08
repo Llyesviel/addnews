@@ -5,6 +5,8 @@ from . import views
 router = routers.DefaultRouter()
 
 urlpatterns = [
+    # Добавляем маршрут для корневого URL
+    path('', views.main_page, name='home'),
     path('main/', views.main_page, name='main'),
     path('login/', views.login_view, name='login'),
     path('register/', views.register_view, name='register'),
@@ -16,6 +18,9 @@ urlpatterns = [
     path('api/change-password/', views.change_password, name='change_password'),
     path('test-404/', views.test_404, name='test_404'),
     
-    # Перенаправление всех остальных URL на test-404
-    re_path(r'^.*$', views.redirect_to_404, name='catch_all'),
+    # Только добавляем наиболее распространенные URL для перенаправления
+    re_path(r'^admin/(?!.*)', views.redirect_to_404),
 ]
+
+# Добавляем специальный обработчик для 404 ошибок
+handler404 = 'Ad.views.page_not_found'

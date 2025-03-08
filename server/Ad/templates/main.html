@@ -4,6 +4,7 @@
 {% block title %}Экономические Новости - Главная{% endblock %}
 
 {% block style %}
+<style>
 .main-content {
     display: flex;
     justify-content: space-between;
@@ -212,6 +213,7 @@
     z-index: -1;
     opacity: 0.5;
 }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -310,7 +312,7 @@
                 showNews(currentNewsIndex - 1);
 
                 // AJAX запрос для уведомления сервера
-                fetch("{% url 'skip_news' %}", {
+                fetch("/api/skip-news/", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -326,7 +328,7 @@
                 showNews(currentNewsIndex + 1);
 
                 // AJAX запрос для уведомления сервера
-                fetch("{% url 'skip_news' %}", {
+                fetch("/api/skip-news/", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -342,15 +344,28 @@
             const ratingType = button.dataset.rating;
 
             // AJAX запрос для отправки оценки
-            fetch("{% url 'rate_news' %}", {
+            fetch("/api/rate-news/", {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                     'X-CSRFToken': getCsrfToken(),
                 },
-                body: `news_id=${newsId}&rating_type=${ratingType}`
+                body: JSON.stringify({
+                    news_id: newsId,
+                    rating_type: ratingType
+                })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ошибка! Статус: ${response.status}`);
+                }
+                // Проверка типа содержимого на валидность JSON
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error(`Неожиданный тип содержимого: ${contentType}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.status === 'success' || data.status === 'removed') {
                     // Обновляем счетчики лайков и дизлайков
@@ -374,9 +389,15 @@
                         // Если оценка была удалена
                         button.classList.remove('active');
                     }
+                } else if (data.status === 'error') {
+                    console.error('Ошибка:', data.message);
+                    alert(`Ошибка при оценке новости: ${data.message}`);
                 }
             })
-            .catch(error => console.error('Ошибка:', error));
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при отправке оценки. Пожалуйста, попробуйте еще раз.');
+            });
         }
 
         // Функция для проверки авторизации и вызова соответствующего действия

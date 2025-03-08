@@ -9,6 +9,9 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from itertools import cycle
 from django.urls import reverse
+import json
+import logging
+from django.views.decorators.csrf import csrf_exempt
 
 
 def redirect_to_main(request):
@@ -111,38 +114,67 @@ def change_password(request):
 
 
 @login_required
+@csrf_exempt
 @require_POST
 def rate_news(request):
-    news_id = request.POST.get('news_id')
-    rating_type = request.POST.get('rating_type')  # 'like' или 'dislike'
-
-    news = get_object_or_404(News, id=news_id)
-
-    # Проверяем, уже оценил ли пользователь эту новость
+    logger = logging.getLogger('Ad.views')
+    logger.debug(f"rate_news called: PATH={request.path}, METHOD={request.method}")
+    logger.debug(f"Headers: {dict(request.headers)}")
+    
     try:
-        rating = NewsRating.objects.get(user=request.user, news=news)
-        # Если тип оценки совпадает с текущей - удаляем оценку
-        if (rating.is_like and rating_type == 'like') or (not rating.is_like and rating_type == 'dislike'):
-            rating.delete()
-            return JsonResponse({
-                'status': 'removed',
-                'likes': NewsRating.objects.filter(news=news, is_like=True).count(),
-                'dislikes': NewsRating.objects.filter(news=news, is_like=False).count()
-            })
-        else:
-            # Изменяем тип оценки
-            rating.is_like = rating_type == 'like'
-            rating.save()
-    except NewsRating.DoesNotExist:
-        # Создаем новую оценку
-        rating = NewsRating(user=request.user, news=news, is_like=rating_type == 'like')
-        rating.save()
+        # Логируем детали запроса
+        logger.debug(f"POST data: {request.POST}")
+        logger.debug(f"Body: {request.body.decode('utf-8') if request.body else None}")
+        
+        # Пробуем получить данные из POST
+        news_id = request.POST.get('news_id')
+        rating_type = request.POST.get('rating_type')
+        
+        # Если данных нет в POST, пробуем из тела запроса
+        if not news_id or not rating_type:
+            try:
+                data = json.loads(request.body)
+                logger.debug(f"JSON data: {data}")
+                news_id = data.get('news_id')
+                rating_type = data.get('rating_type')
+            except Exception as e:
+                logger.error(f"Error parsing JSON: {str(e)}")
+        
+        logger.debug(f"Parsed data: news_id={news_id}, rating_type={rating_type}")
+        
+        if not news_id or not rating_type:
+            return JsonResponse({'status': 'error', 'message': 'Missing required parameters'})
 
-    return JsonResponse({
-        'status': 'success',
-        'likes': NewsRating.objects.filter(news=news, is_like=True).count(),
-        'dislikes': NewsRating.objects.filter(news=news, is_like=False).count()
-    })
+        news = get_object_or_404(News, id=news_id)
+
+        # Проверяем, уже оценил ли пользователь эту новость
+        try:
+            rating = NewsRating.objects.get(user=request.user, news=news)
+            # Если тип оценки совпадает с текущей - удаляем оценку
+            if (rating.is_like and rating_type == 'like') or (not rating.is_like and rating_type == 'dislike'):
+                rating.delete()
+                return JsonResponse({
+                    'status': 'removed',
+                    'likes': NewsRating.objects.filter(news=news, is_like=True).count(),
+                    'dislikes': NewsRating.objects.filter(news=news, is_like=False).count()
+                })
+            else:
+                # Изменяем тип оценки
+                rating.is_like = rating_type == 'like'
+                rating.save()
+        except NewsRating.DoesNotExist:
+            # Создаем новую оценку
+            rating = NewsRating(user=request.user, news=news, is_like=rating_type == 'like')
+            rating.save()
+
+        return JsonResponse({
+            'status': 'success',
+            'likes': NewsRating.objects.filter(news=news, is_like=True).count(),
+            'dislikes': NewsRating.objects.filter(news=news, is_like=False).count()
+        })
+    except Exception as e:
+        # В случае ошибки возвращаем понятное сообщение вместо HTML страницы
+        return JsonResponse({'status': 'error', 'message': str(e)})
 
 
 @require_POST
