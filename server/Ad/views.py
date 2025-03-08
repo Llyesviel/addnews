@@ -11,9 +11,9 @@ from itertools import cycle
 from django.urls import reverse
 
 
-
 def redirect_to_main(request):
     return redirect('main')
+
 
 def main_page(request):
     news_list = list(News.objects.all().order_by('-date_published')[:10])
@@ -33,7 +33,7 @@ def main_page(request):
     for news in news_list:
         news.likes_count = NewsRating.objects.filter(news=news, is_like=True).count()
         news.dislikes_count = NewsRating.objects.filter(news=news, is_like=False).count()
-        
+
         # Проверяем, оценил ли текущий пользователь эту новость
         if request.user.is_authenticated:
             try:
@@ -143,3 +143,42 @@ def rate_news(request):
         'likes': NewsRating.objects.filter(news=news, is_like=True).count(),
         'dislikes': NewsRating.objects.filter(news=news, is_like=False).count()
     })
+
+
+@require_POST
+def skip_news(request):
+    return JsonResponse({'status': 'success'})
+
+
+def page_not_found(request, exception):
+    """
+    Обработчик ошибки 404 - страница не найдена
+    """
+    # Получаем актуальные курсы валют для отображения в футере
+    from .models import CurrencyRate
+    currency_rates = CurrencyRate.objects.all()
+
+    # Возвращаем страницу с правильным статусом 404
+    return render(request, '404.html', {
+        'currency_rates': currency_rates
+    }, status=404)
+
+
+def test_404(request):
+    """
+    Функция для тестирования страницы 404 при включенном DEBUG режиме
+    """
+    from .models import CurrencyRate
+    currency_rates = CurrencyRate.objects.all()
+
+    return render(request, '404.html', {
+        'currency_rates': currency_rates
+    })
+
+
+def redirect_to_404(request):
+    """
+    Функция перенаправления всех несуществующих URL на страницу test-404
+    """
+    return redirect('test_404')
+
