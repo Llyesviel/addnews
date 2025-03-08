@@ -189,7 +189,27 @@ def rate_news(request):
 
 @require_POST
 def skip_news(request):
-    return JsonResponse({'status': 'success'})
+    """
+    Функция для регистрации пропуска новости
+    """
+    logger = logging.getLogger('Ad.views')
+    logger.debug(f"skip_news вызван: PATH={request.path}, METHOD={request.method}")
+    
+    try:
+        # Здесь можно добавить логику для отслеживания пропусков,
+        # например, сохранять информацию в базе данных
+        
+        # Возвращаем успешный JSON-ответ
+        return JsonResponse({
+            'status': 'success',
+            'message': 'News skip recorded'
+        })
+    except Exception as e:
+        logger.error(f"Ошибка в skip_news: {str(e)}")
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)
 
 
 def page_not_found(request, exception):
@@ -208,11 +228,14 @@ def page_not_found(request, exception):
 
 def test_404(request):
     """
-    Функция для тестирования страницы 404 при включенном DEBUG режиме
+    Тестовая страница 404 для отображения дизайна страницы ошибки
     """
-    from .models import CurrencyRate
+    logger = logging.getLogger('Ad.views')
+    logger.debug(f"test_404 вызван для пути: {request.path}")
+    
     currency_rates = CurrencyRate.objects.all()
-
+    
+    # Отображаем страницу ошибки
     return render(request, '404.html', {
         'currency_rates': currency_rates
     })
@@ -223,7 +246,11 @@ def redirect_to_404(request):
     Функция перенаправления всех несуществующих URL на страницу test-404
     """
     logger = logging.getLogger('Ad.views')
-    logger.debug(f"redirect_to_404 called for path: {request.path}")
+    logger.debug(f"redirect_to_404 вызван для пути: {request.path}")
+    
+    # Перенаправляем на страницу test-404
+    # Важно! Используем redirect (временное перенаправление 302) вместо HttpResponseRedirect
+    # Это предотвращает проблемы с кэшированием и повторными запросами
     return redirect('test_404')
 
 

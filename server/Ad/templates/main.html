@@ -393,7 +393,6 @@
     </div>
     <div class="qr-section">
         <img src="{% static 'Ad/images/qr-placeholder.png' %}" alt="QR код">
-        <span>ЦБ РФ</span>
     </div>
 </div>
 
@@ -489,9 +488,19 @@
                 fetch("/api/skip-news/", {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json',
                         'X-CSRFToken': getCsrfToken(),
+                        'Accept': 'application/json'
                     },
+                    body: JSON.stringify({direction: 'back'})
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error(`Ошибка при отправке уведомления: ${response.status}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка при отправке уведомления:', error);
                 });
             });
         });
@@ -505,9 +514,19 @@
                 fetch("/api/skip-news/", {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json',
                         'X-CSRFToken': getCsrfToken(),
+                        'Accept': 'application/json'
                     },
+                    body: JSON.stringify({direction: 'forward'})
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error(`Ошибка при отправке уведомления: ${response.status}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка при отправке уведомления:', error);
                 });
             });
         });
@@ -523,6 +542,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCsrfToken(),
+                    'Accept': 'application/json' // Явно указываем, что ожидаем JSON
                 },
                 body: JSON.stringify({
                     news_id: newsId,
@@ -531,16 +551,27 @@
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`HTTP ошибка! Статус: ${response.status}`);
+                    console.error(`HTTP ошибка! Статус: ${response.status}`);
+                    return response.text().then(text => {
+                        console.error("Содержимое ответа:", text);
+                        throw new Error(`HTTP ошибка! Статус: ${response.status}`);
+                    });
                 }
+                
                 // Проверка типа содержимого на валидность JSON
                 const contentType = response.headers.get("content-type");
                 if (!contentType || !contentType.includes("application/json")) {
-                    throw new Error(`Неожиданный тип содержимого: ${contentType}`);
+                    return response.text().then(text => {
+                        console.error("Неверный тип содержимого:", contentType);
+                        console.error("Содержимое ответа:", text);
+                        throw new Error(`Неожиданный тип содержимого: ${contentType}`);
+                    });
                 }
+                
                 return response.json();
             })
             .then(data => {
+                console.log("Успешный ответ:", data);
                 if (data.status === 'success' || data.status === 'removed') {
                     // Обновляем счетчики лайков и дизлайков
                     const newsItem = document.querySelector(`.news-item[data-id="${newsId}"]`);
@@ -569,7 +600,7 @@
                 }
             })
             .catch(error => {
-                console.error('Ошибка:', error);
+                console.error('Ошибка при обработке запроса:', error);
                 alert('Произошла ошибка при отправке оценки. Пожалуйста, попробуйте еще раз.');
             });
         }
@@ -598,14 +629,34 @@
         function loadComments(newsId) {
             commentsList.innerHTML = '<div class="no-comments">Загрузка комментариев...</div>';
             
-            fetch(`/api/comments/${newsId}/`)
+            fetch(`/api/comments/${newsId}/`, {
+                headers: {
+                    'Accept': 'application/json' // Явно указываем, что ожидаем JSON
+                }
+            })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error(`HTTP ошибка! Статус: ${response.status}`);
+                        return response.text().then(text => {
+                            console.error(`HTTP ошибка! Статус: ${response.status}`);
+                            console.error("Содержимое ответа:", text);
+                            throw new Error(`HTTP ошибка! Статус: ${response.status}`);
+                        });
                     }
+                    
+                    // Проверка типа содержимого на валидность JSON
+                    const contentType = response.headers.get("content-type");
+                    if (!contentType || !contentType.includes("application/json")) {
+                        return response.text().then(text => {
+                            console.error("Неверный тип содержимого:", contentType);
+                            console.error("Содержимое ответа:", text);
+                            throw new Error(`Неожиданный тип содержимого: ${contentType}`);
+                        });
+                    }
+                    
                     return response.json();
                 })
                 .then(data => {
+                    console.log("Ответ от API комментариев:", data);
                     if (data.status === 'success') {
                         const comments = data.comments;
                         
@@ -631,7 +682,7 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Ошибка:', error);
+                    console.error('Ошибка при загрузке комментариев:', error);
                     commentsList.innerHTML = '<div class="error-message">Ошибка при загрузке комментариев. Пожалуйста, попробуйте позже.</div>';
                 });
         }
@@ -652,6 +703,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCsrfToken(),
+                    'Accept': 'application/json' // Явно указываем, что ожидаем JSON
                 },
                 body: JSON.stringify({
                     news_id: newsId,
@@ -663,11 +715,28 @@
                     if (response.status === 401) {
                         throw new Error('Пожалуйста, войдите в систему, чтобы оставлять комментарии.');
                     }
-                    throw new Error(`HTTP ошибка! Статус: ${response.status}`);
+                    
+                    return response.text().then(text => {
+                        console.error(`HTTP ошибка! Статус: ${response.status}`);
+                        console.error("Содержимое ответа:", text);
+                        throw new Error(`HTTP ошибка! Статус: ${response.status}`);
+                    });
                 }
+                
+                // Проверка типа содержимого на валидность JSON
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    return response.text().then(text => {
+                        console.error("Неверный тип содержимого:", contentType);
+                        console.error("Содержимое ответа:", text);
+                        throw new Error(`Неожиданный тип содержимого: ${contentType}`);
+                    });
+                }
+                
                 return response.json();
             })
             .then(data => {
+                console.log("Ответ от API добавления комментария:", data);
                 if (data.status === 'success') {
                     // Очищаем форму
                     commentText.value = '';
@@ -702,7 +771,7 @@
                 }
             })
             .catch(error => {
-                console.error('Ошибка:', error);
+                console.error('Ошибка при добавлении комментария:', error);
                 commentError.textContent = error.message;
                 commentError.style.display = 'block';
             })

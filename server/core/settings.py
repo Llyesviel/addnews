@@ -63,7 +63,8 @@ INSTALLED_APPS = [
 
 # Debug toolbar в режиме разработки
 if DEBUG:
-    INSTALLED_APPS += ['debug_toolbar']
+    # INSTALLED_APPS += ['debug_toolbar']  # Временно отключаем Debug Toolbar для отладки
+    pass
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -79,7 +80,8 @@ MIDDLEWARE = [
 
 # Debug toolbar middleware в режиме разработки
 if DEBUG:
-    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+    # MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')  # Временно отключаем Debug Toolbar middleware
+    pass
 
 ROOT_URLCONF = 'core.urls'
 
