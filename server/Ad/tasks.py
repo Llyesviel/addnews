@@ -22,6 +22,12 @@ class SchedulerSingleton:
             cls._initialize_scheduler()
         return cls._instance
 
+    # Инициализация планировщика - Метод _initialize_scheduler:
+    # Данный метод создает и настраивает планировщик фоновых задач на основе библиотеки apscheduler.
+    # Он регистрирует все периодические задачи приложения с указанием интервалов их выполнения:
+    # - Обновление курсов валют (ежедневно в полночь)
+    # - Сбор новостей (каждые 6 часов)
+    # Также планировщик выполняет начальный запуск задач при старте приложения.
     @classmethod
     def _initialize_scheduler(cls):
         cls._scheduler = BackgroundScheduler()
@@ -176,6 +182,10 @@ class SchedulerSingleton:
         sentences = re.split(r'(?<=[.!?])\s+', text)
         return ' '.join(sentences[:num_sentences]) if len(sentences) > num_sentences else text
 
+    # Выборочное обновление новостей - Метод fetch_news_from_sources
+    # Данный метод позволяет обновлять новости только из указанных источников,
+    # в отличие от основного метода fetch_news, который обрабатывает все активные источники.
+    # Это полезно для ручного обновления определенных источников или тестирования новых RSS-каналов.
     @classmethod
     def fetch_news_from_sources(cls, sources):
         """
