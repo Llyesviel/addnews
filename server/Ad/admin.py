@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 #import cv2
-from .models import News, AdVideo, CurrencyRate, BackgroundImage, NewsSource
+from .models import News, CurrencyRate, BackgroundImage, NewsSource
 from django.contrib import messages
 
 @admin.register(News)

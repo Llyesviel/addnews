@@ -30,16 +30,13 @@
 }
 
 .qr-section {
-    width: 32%;
-    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: calc(100% - 40px);
-    box-sizing: border-box;
-    margin-right: 20px;
-    margin-top: 10px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    margin-top: 15px;
 }
 
 .qr-section img {
@@ -67,26 +64,6 @@
 .news-item {
     margin-top: -20px;
     position: relative;
-}
-
-.video-section {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(68, 66, 223, 1);
-    z-index: 1000;
-}
-
-.video-section video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    border: none;
 }
 
 .news-controls {
@@ -224,6 +201,17 @@
 .rating-count {
     font-size: 0.9rem;
 }
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    opacity: 0.5;
+}
 {% endblock %}
 
 {% block content %}
@@ -263,15 +251,6 @@
         <img src="{% static 'Ad/images/qr-placeholder.png' %}" alt="QR код">
         <span>ЦБ РФ</span>
     </div>
-    <div id="video-data" type="application/json">
-        {{ video_data|json_script:"video-data" }}
-    </div>
-    <div class="video-section">
-        <video id="ad-video" autoplay muted>
-            <source src="" type="video/mp4">
-            Ваш браузер не поддерживает воспроизведение видео.
-        </video>
-    </div>
 </div>
 {% endblock %}
 
@@ -279,16 +258,12 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const newsItems = document.querySelectorAll('.news-item');
-        const videoSection = document.querySelector('.video-section');
-        const adVideo = document.getElementById('ad-video');
-        const videoList = JSON.parse(document.getElementById('video-data').textContent);
         const skipButtons = document.querySelectorAll('.skip-button');
         const likeButtons = document.querySelectorAll('.like-button');
         const dislikeButtons = document.querySelectorAll('.dislike-button');
         const backButtons = document.querySelectorAll('.back-button');
 
         let currentNewsIndex = 0;
-        let currentVideoIndex = 0;
         let timer;
 
         function showNews(index) {
@@ -312,7 +287,6 @@
             newsItems.forEach((item, i) => {
                 item.style.display = (i === index) ? 'block' : 'none';
             });
-            videoSection.style.display = 'none';
 
             // Очищаем предыдущий таймер и устанавливаем новый
             clearTimeout(timer);
