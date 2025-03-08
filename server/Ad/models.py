@@ -25,6 +25,12 @@ class News(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def comments_count(self):
+        """Возвращает количество комментариев к новости"""
+        return self.comments.count()
+
 # Модель курсов валют
 class CurrencyRate(models.Model):
     currency_name = models.CharField(max_length=10, verbose_name="Название валюты")
@@ -38,6 +44,7 @@ class CurrencyRate(models.Model):
 
     def __str__(self):
         return f"{self.currency_name}{self.symbol}: {self.rate}₽"
+
 # Модель фоновых изображений
 class BackgroundImage(models.Model):
     image = models.ImageField(upload_to='backgrounds/', verbose_name="Фоновое изображение")
@@ -77,6 +84,7 @@ class NewsRating(models.Model):
     def __str__(self):
         rating_type = "лайк" if self.is_like else "дизлайк"
         return f"{self.user.username} - {self.news.title} - {rating_type}"
+
 # Модель профиля пользователя для расширения стандартной модели пользователя
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Пользователь")
@@ -87,3 +95,18 @@ class UserProfile(models.Model):
         
     def __str__(self):
         return self.user.username
+
+# Модель для комментариев к новостям
+class NewsComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь")
+    news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='comments', verbose_name="Новость")
+    text = models.TextField(verbose_name="Текст комментария")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    
+    class Meta:
+        verbose_name = "Комментарий к новости"
+        verbose_name_plural = "Комментарии к новостям"
+        ordering = ['-created_at']  # Сортировка по дате (сначала новые)
+        
+    def __str__(self):
+        return f"{self.user.username} - {self.news.title[:30]}"

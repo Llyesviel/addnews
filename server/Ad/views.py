@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.timezone import now
-from .models import News, CurrencyRate, BackgroundImage, NewsRating, UserProfile
+from .models import News, CurrencyRate, BackgroundImage, NewsRating, UserProfile, NewsComment
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
@@ -36,11 +36,12 @@ def main_page(request):
     for news in news_list:
         news.likes_count = NewsRating.objects.filter(news=news, is_like=True).count()
         news.dislikes_count = NewsRating.objects.filter(news=news, is_like=False).count()
-
-        # Проверяем, оценил ли текущий пользователь эту новость
+        # Свойство comments_count вычисляется автоматически, не нужно его устанавливать
+        
+        # Если пользователь аутентифицирован, определяем его оценку
         if request.user.is_authenticated:
             try:
-                rating = NewsRating.objects.get(news=news, user=request.user)
+                rating = NewsRating.objects.get(user=request.user, news=news)
                 news.user_rating = 'like' if rating.is_like else 'dislike'
             except NewsRating.DoesNotExist:
                 news.user_rating = None
@@ -113,18 +114,17 @@ def change_password(request):
     return render(request, 'profile.html', {'form': form})
 
 
-@login_required
 @csrf_exempt
 @require_POST
 def rate_news(request):
     logger = logging.getLogger('Ad.views')
     logger.debug(f"rate_news called: PATH={request.path}, METHOD={request.method}")
-    logger.debug(f"Headers: {dict(request.headers)}")
     
     try:
         # Логируем детали запроса
         logger.debug(f"POST data: {request.POST}")
-        logger.debug(f"Body: {request.body.decode('utf-8') if request.body else None}")
+        body_text = request.body.decode('utf-8') if request.body else None
+        logger.debug(f"Body: {body_text}")
         
         # Пробуем получить данные из POST
         news_id = request.POST.get('news_id')
@@ -133,7 +133,7 @@ def rate_news(request):
         # Если данных нет в POST, пробуем из тела запроса
         if not news_id or not rating_type:
             try:
-                data = json.loads(request.body)
+                data = json.loads(body_text)
                 logger.debug(f"JSON data: {data}")
                 news_id = data.get('news_id')
                 rating_type = data.get('rating_type')
@@ -146,6 +146,13 @@ def rate_news(request):
             return JsonResponse({'status': 'error', 'message': 'Missing required parameters'})
 
         news = get_object_or_404(News, id=news_id)
+        
+        # Проверяем, авторизован ли пользователь
+        if not request.user.is_authenticated:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Пользователь не авторизован'
+            })
 
         # Проверяем, уже оценил ли пользователь эту новость
         try:
@@ -173,8 +180,11 @@ def rate_news(request):
             'dislikes': NewsRating.objects.filter(news=news, is_like=False).count()
         })
     except Exception as e:
-        # В случае ошибки возвращаем понятное сообщение вместо HTML страницы
-        return JsonResponse({'status': 'error', 'message': str(e)})
+        logger.error(f"Error in rate_news: {str(e)}")
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        })
 
 
 @require_POST
@@ -212,5 +222,106 @@ def redirect_to_404(request):
     """
     Функция перенаправления всех несуществующих URL на страницу test-404
     """
+    logger = logging.getLogger('Ad.views')
+    logger.debug(f"redirect_to_404 called for path: {request.path}")
     return redirect('test_404')
+
+
+@csrf_exempt
+def get_comments(request, news_id):
+    """
+    Получение комментариев к новости
+    """
+    logger = logging.getLogger('Ad.views')
+    logger.debug(f"get_comments called for news_id={news_id}")
+    
+    try:
+        news = get_object_or_404(News, id=news_id)
+        comments = NewsComment.objects.filter(news=news).select_related('user')
+        
+        # Форматируем комментарии для передачи в JSON
+        comments_data = []
+        for comment in comments:
+            comments_data.append({
+                'id': comment.id,
+                'username': comment.user.username,
+                'text': comment.text,
+                'created_at': comment.created_at.strftime('%d.%m.%Y %H:%M'),
+                'is_owner': request.user.is_authenticated and request.user.id == comment.user.id
+            })
+        
+        return JsonResponse({
+            'status': 'success',
+            'comments': comments_data
+        })
+    except Exception as e:
+        logger.error(f"Error in get_comments: {str(e)}")
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        })
+
+
+@csrf_exempt
+@require_POST
+def add_comment(request):
+    """
+    Добавление комментария к новости
+    """
+    logger = logging.getLogger('Ad.views')
+    logger.debug(f"add_comment called: PATH={request.path}, METHOD={request.method}")
+    
+    if not request.user.is_authenticated:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Пользователь не авторизован'
+        }, status=401)
+    
+    try:
+        # Получаем данные из запроса
+        body_text = request.body.decode('utf-8') if request.body else None
+        logger.debug(f"Body: {body_text}")
+        
+        # Пробуем получить данные из POST или JSON
+        news_id = request.POST.get('news_id')
+        comment_text = request.POST.get('comment_text')
+        
+        if not news_id or not comment_text:
+            try:
+                data = json.loads(body_text)
+                logger.debug(f"JSON data: {data}")
+                news_id = data.get('news_id')
+                comment_text = data.get('comment_text')
+            except Exception as e:
+                logger.error(f"Error parsing JSON: {str(e)}")
+        
+        logger.debug(f"Parsed data: news_id={news_id}, comment_text={comment_text}")
+        
+        if not news_id or not comment_text:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Не указан идентификатор новости или текст комментария'
+            }, status=400)
+        
+        # Получаем новость и сохраняем комментарий
+        news = get_object_or_404(News, id=news_id)
+        comment = NewsComment(user=request.user, news=news, text=comment_text)
+        comment.save()
+        
+        return JsonResponse({
+            'status': 'success',
+            'comment': {
+                'id': comment.id,
+                'username': comment.user.username,
+                'text': comment.text,
+                'created_at': comment.created_at.strftime('%d.%m.%Y %H:%M'),
+                'is_owner': True
+            }
+        })
+    except Exception as e:
+        logger.error(f"Error in add_comment: {str(e)}")
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)
 

@@ -191,6 +191,14 @@
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23231c5c"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v1.91l.01.01L1 14c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>');
 }
 
+.comment-button .rating-icon {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-right: 5px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23231c5c"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>');
+}
+
 .like-button.active .rating-icon {
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233949ab"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.01-.01L23 10z"/></svg>');
 }
@@ -213,6 +221,136 @@
     z-index: -1;
     opacity: 0.5;
 }
+
+/* Стили для модального окна с комментариями */
+.comments-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.comments-modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 15px;
+    width: 60%;
+    max-width: 800px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: modalopen 0.3s;
+}
+
+@keyframes modalopen {
+    from {opacity: 0; transform: scale(0.9);}
+    to {opacity: 1; transform: scale(1);}
+}
+
+.close-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: #231c5c;
+    text-decoration: none;
+}
+
+.comments-header {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.comments-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #231c5c;
+}
+
+.comments-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.comment-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.comment-username {
+    font-weight: bold;
+    color: #231c5c;
+}
+
+.comment-date {
+    color: #777;
+    font-size: 0.8rem;
+}
+
+.comment-text {
+    margin-bottom: 5px;
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.comment-submit {
+    align-self: flex-end;
+    background-color: #231c5c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.comment-submit:hover {
+    background-color: #3949ab;
+}
+
+.no-comments {
+    text-align: center;
+    color: #777;
+    padding: 20px;
+}
+
+.error-message {
+    color: #f44336;
+    margin-bottom: 10px;
+}
 </style>
 {% endblock %}
 
@@ -233,6 +371,10 @@
                         <span class="rating-icon"></span>
                         <span class="rating-count">{{ news.dislikes_count }}</span>
                     </button>
+                    <button class="rating-button comment-button" data-news-id="{{ news.id }}">
+                        <span class="rating-icon"></span>
+                        <span class="rating-count">{{ news.comments_count }}</span>
+                    </button>
                 </div>
                 <div class="navigation-buttons">
                     <button class="nav-button back-button" data-index="{{ forloop.counter0 }}">Назад</button>
@@ -251,6 +393,28 @@
     </div>
     <div class="qr-section">
         <img src="{% static 'Ad/images/qr-placeholder.png' %}" alt="QR код">
+        <span>ЦБ РФ</span>
+    </div>
+</div>
+
+<!-- Модальное окно с комментариями -->
+<div id="comments-modal" class="comments-modal">
+    <div class="comments-modal-content">
+        <span class="close-modal">&times;</span>
+        <div class="comments-header">
+            <h3>Комментарии</h3>
+        </div>
+        <div class="comments-list" id="comments-list">
+            <!-- Сюда будут добавляться комментарии -->
+            <div class="no-comments">
+                Комментариев пока нет. Будьте первым!
+            </div>
+        </div>
+        <div class="comment-form" id="comment-form">
+            <div class="error-message" id="comment-error" style="display: none;"></div>
+            <textarea class="comment-textarea" id="comment-text" placeholder="Напишите комментарий..."></textarea>
+            <button class="comment-submit" id="comment-submit">Отправить</button>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -263,6 +427,17 @@
         const likeButtons = document.querySelectorAll('.like-button');
         const dislikeButtons = document.querySelectorAll('.dislike-button');
         const backButtons = document.querySelectorAll('.back-button');
+        const commentButtons = document.querySelectorAll('.comment-button');
+        const commentsModal = document.getElementById('comments-modal');
+        const closeModal = document.querySelector('.close-modal');
+        const commentsList = document.getElementById('comments-list');
+        const commentForm = document.getElementById('comment-form');
+        const commentText = document.getElementById('comment-text');
+        const commentSubmit = document.getElementById('comment-submit');
+        const commentError = document.getElementById('comment-error');
+        
+        // Переменные для хранения текущего ID новости в модальном окне
+        let currentNewsId = null;
         
         // Получаем информацию об аутентификации пользователя из шаблона Django
         const userAuthenticated = "{{ user.is_authenticated|yesno:'true,false' }}";
@@ -417,6 +592,181 @@
         // Обработчик для кнопок дизлайков
         dislikeButtons.forEach(button => {
             button.addEventListener('click', () => handleRatingButtonClick(button, 'dislike'));
+        });
+        
+        // Функция для загрузки комментариев к новости
+        function loadComments(newsId) {
+            commentsList.innerHTML = '<div class="no-comments">Загрузка комментариев...</div>';
+            
+            fetch(`/api/comments/${newsId}/`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ошибка! Статус: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        const comments = data.comments;
+                        
+                        if (comments.length === 0) {
+                            commentsList.innerHTML = '<div class="no-comments">Комментариев пока нет. Будьте первым!</div>';
+                        } else {
+                            commentsList.innerHTML = '';
+                            comments.forEach(comment => {
+                                const commentItem = document.createElement('div');
+                                commentItem.className = 'comment-item';
+                                commentItem.innerHTML = `
+                                    <div class="comment-header">
+                                        <span class="comment-username">${comment.username}</span>
+                                        <span class="comment-date">${comment.created_at}</span>
+                                    </div>
+                                    <div class="comment-text">${comment.text}</div>
+                                `;
+                                commentsList.appendChild(commentItem);
+                            });
+                        }
+                    } else {
+                        commentsList.innerHTML = `<div class="error-message">Ошибка загрузки комментариев: ${data.message}</div>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    commentsList.innerHTML = '<div class="error-message">Ошибка при загрузке комментариев. Пожалуйста, попробуйте позже.</div>';
+                });
+        }
+        
+        // Функция для добавления нового комментария
+        function addComment(newsId, commentText) {
+            if (!commentText.trim()) {
+                commentError.textContent = 'Пожалуйста, введите текст комментария';
+                commentError.style.display = 'block';
+                return;
+            }
+            
+            commentError.style.display = 'none';
+            commentSubmit.disabled = true;
+            
+            fetch('/api/add-comment/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken(),
+                },
+                body: JSON.stringify({
+                    news_id: newsId,
+                    comment_text: commentText
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error('Пожалуйста, войдите в систему, чтобы оставлять комментарии.');
+                    }
+                    throw new Error(`HTTP ошибка! Статус: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    // Очищаем форму
+                    commentText.value = '';
+                    
+                    // Если это первый комментарий, очищаем сообщение "нет комментариев"
+                    const noComments = commentsList.querySelector('.no-comments');
+                    if (noComments) {
+                        commentsList.innerHTML = '';
+                    }
+                    
+                    // Добавляем новый комментарий в начало списка
+                    const commentItem = document.createElement('div');
+                    commentItem.className = 'comment-item';
+                    commentItem.innerHTML = `
+                        <div class="comment-header">
+                            <span class="comment-username">${data.comment.username}</span>
+                            <span class="comment-date">${data.comment.created_at}</span>
+                        </div>
+                        <div class="comment-text">${data.comment.text}</div>
+                    `;
+                    commentsList.insertBefore(commentItem, commentsList.firstChild);
+                    
+                    // Обновляем счетчик комментариев на кнопке
+                    const commentButton = document.querySelector(`.comment-button[data-news-id="${newsId}"]`);
+                    const countElement = commentButton.querySelector('.rating-count');
+                    const currentCount = parseInt(countElement.textContent) || 0;
+                    countElement.textContent = currentCount + 1;
+                    
+                } else {
+                    commentError.textContent = data.message;
+                    commentError.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                commentError.textContent = error.message;
+                commentError.style.display = 'block';
+            })
+            .finally(() => {
+                commentSubmit.disabled = false;
+            });
+        }
+        
+        // Обработчики для комментариев
+        commentButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const newsId = button.dataset.newsId;
+                currentNewsId = newsId;
+                
+                // Очищаем предыдущие данные
+                commentText.value = '';
+                commentError.style.display = 'none';
+                
+                // Проверяем авторизацию для формы комментариев
+                if (userAuthenticated !== "true") {
+                    commentForm.innerHTML = `
+                        <div class="error-message">
+                            Пожалуйста, <a href="${loginUrl}">войдите в систему</a>, чтобы оставлять комментарии.
+                        </div>
+                    `;
+                } else {
+                    // Восстанавливаем форму если она была изменена
+                    if (!commentText) {
+                        commentForm.innerHTML = `
+                            <div class="error-message" id="comment-error" style="display: none;"></div>
+                            <textarea class="comment-textarea" id="comment-text" placeholder="Напишите комментарий..."></textarea>
+                            <button class="comment-submit" id="comment-submit">Отправить</button>
+                        `;
+                        commentText = document.getElementById('comment-text');
+                        commentSubmit = document.getElementById('comment-submit');
+                        commentError = document.getElementById('comment-error');
+                    }
+                }
+                
+                // Загружаем комментарии
+                loadComments(newsId);
+                
+                // Открываем модальное окно
+                commentsModal.style.display = 'block';
+            });
+        });
+        
+        // Обработчик для отправки комментария
+        commentSubmit.addEventListener('click', () => {
+            if (currentNewsId) {
+                addComment(currentNewsId, commentText.value);
+            }
+        });
+        
+        // Обработчик для закрытия модального окна
+        closeModal.addEventListener('click', () => {
+            commentsModal.style.display = 'none';
+        });
+        
+        // Закрытие модального окна при клике вне его области
+        window.addEventListener('click', (event) => {
+            if (event.target === commentsModal) {
+                commentsModal.style.display = 'none';
+            }
         });
 
         // Функция для получения CSRF токена
