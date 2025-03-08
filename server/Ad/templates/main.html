@@ -262,6 +262,10 @@
         const likeButtons = document.querySelectorAll('.like-button');
         const dislikeButtons = document.querySelectorAll('.dislike-button');
         const backButtons = document.querySelectorAll('.back-button');
+        
+        // Получаем информацию об аутентификации пользователя из шаблона Django
+        const userAuthenticated = "{{ user.is_authenticated|yesno:'true,false' }}";
+        const loginUrl = "{% url 'login' %}";
 
         let currentNewsIndex = 0;
         let timer;
@@ -306,7 +310,7 @@
                 showNews(currentNewsIndex - 1);
 
                 // AJAX запрос для уведомления сервера
-                fetch('{% url "skip_news" %}', {
+                fetch("{% url 'skip_news' %}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -322,7 +326,7 @@
                 showNews(currentNewsIndex + 1);
 
                 // AJAX запрос для уведомления сервера
-                fetch('{% url "skip_news" %}', {
+                fetch("{% url 'skip_news' %}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -338,7 +342,7 @@
             const ratingType = button.dataset.rating;
 
             // AJAX запрос для отправки оценки
-            fetch('{% url "rate_news" %}', {
+            fetch("{% url 'rate_news' %}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -375,26 +379,24 @@
             .catch(error => console.error('Ошибка:', error));
         }
 
+        // Функция для проверки авторизации и вызова соответствующего действия
+        function handleRatingButtonClick(button, ratingType) {
+            if (userAuthenticated === "true") {
+                handleRatingClick(button, ratingType);
+            } else {
+                alert('Пожалуйста, войдите в систему, чтобы оценивать новости.');
+                window.location.href = loginUrl;
+            }
+        }
+
+        // Обработчик для кнопок лайков
         likeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                {% if user.is_authenticated %}
-                    handleRatingClick(button, 'like');
-                {% else %}
-                    alert('Пожалуйста, войдите в систему, чтобы оценивать новости.');
-                    window.location.href = '{% url "login" %}';
-                {% endif %}
-            });
+            button.addEventListener('click', () => handleRatingButtonClick(button, 'like'));
         });
 
+        // Обработчик для кнопок дизлайков
         dislikeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                {% if user.is_authenticated %}
-                    handleRatingClick(button, 'dislike');
-                {% else %}
-                    alert('Пожалуйста, войдите в систему, чтобы оценивать новости.');
-                    window.location.href = '{% url "login" %}';
-                {% endif %}
-            });
+            button.addEventListener('click', () => handleRatingButtonClick(button, 'dislike'));
         });
 
         // Функция для получения CSRF токена
