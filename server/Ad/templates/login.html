@@ -2,7 +2,199 @@
 
 {% block title %}Вход | AdNews{% endblock %}
 
+{% block style %}
+<style>
+/* Стили для улучшенного звездного фона */
+html, body {
+    background-color: transparent !important;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+}
+
+.enhanced-stars-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Базовые стили для звезд */
+.star {
+    position: absolute;
+    background-color: #fff;
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle var(--duration, 4s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+}
+
+/* Размеры звезд */
+.star.tiny {
+    width: 1px;
+    height: 1px;
+    box-shadow: 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+.star.small {
+    width: 2px;
+    height: 2px;
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.star.medium {
+    width: 3px;
+    height: 3px;
+    box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.6);
+}
+
+.star.large {
+    width: 4px;
+    height: 4px;
+    box-shadow: 0 0 4px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Звезды с особым свечением */
+.star.bright {
+    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.3) 70%, rgba(255, 255, 255, 0) 100%);
+    width: 6px;
+    height: 6px;
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.7);
+    animation: bright-twinkle var(--duration, 6s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+}
+
+/* Падающие звезды (метеоры) */
+.meteor {
+    position: absolute;
+    width: 2px;
+    height: 1px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0));
+    transform: rotate(-35deg);
+    opacity: 0;
+    top: calc(var(--top, 0.3) * 100%);
+    left: calc(var(--left, 0.5) * 100%);
+    animation: meteor 8s linear infinite;
+    animation-delay: var(--delay, 0s);
+    z-index: 1;
+}
+
+/* Туманности */
+.nebula {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, 
+                               rgba(63, 81, 181, 0.05) 0%, 
+                               rgba(76, 0, 153, 0.03) 50%, 
+                               rgba(15, 11, 50, 0) 70%);
+    opacity: 0.3;
+    animation: pulse 15s ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+    transform: scale(var(--scale, 1));
+    z-index: 0;
+    mix-blend-mode: screen;
+}
+
+/* Анимации */
+@keyframes twinkle {
+    0%, 100% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.2); }
+}
+
+@keyframes bright-twinkle {
+    0%, 100% { opacity: 0.5; transform: scale(1); filter: blur(0px); }
+    25% { opacity: 1; transform: scale(1.1); filter: blur(0px); }
+    50% { opacity: 0.7; transform: scale(1.3); filter: blur(1px); }
+    75% { opacity: 1; transform: scale(1.1); filter: blur(0px); }
+}
+
+@keyframes meteor {
+    0% {
+        opacity: 0;
+        width: 0;
+        transform: translateX(0) translateY(0) rotate(-35deg);
+    }
+    5% {
+        opacity: 1;
+        width: 120px;
+    }
+    20% {
+        opacity: 1;
+    }
+    30% {
+        opacity: 0;
+        width: 0;
+        transform: translateX(900px) translateY(900px) rotate(-35deg);
+    }
+    100% {
+        opacity: 0;
+        width: 0;
+        transform: translateX(900px) translateY(900px) rotate(-35deg);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scale(var(--scale, 1)); }
+    50% { opacity: 0.5; transform: scale(calc(var(--scale, 1) * 1.2)); }
+}
+
+/* Стили для скроллбара body */
+body::-webkit-scrollbar {
+    width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    border: 2px solid transparent;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Принудительно делаем все контейнеры с прозрачным фоном */
+.container, 
+.content-container,
+.wrapper,
+.page-wrapper,
+.main-wrapper {
+    background-color: transparent !important;
+}
+
+/* Стили для контейнера авторизации */
+.auth-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 450px;
+    margin: 100px auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+}
+</style>
+{% endblock %}
+
 {% block content %}
+<!-- Улучшенный звездный фон -->
+<div class="enhanced-stars-container" id="enhanced-stars">
+    <!-- Здесь будут динамически созданные звезды и метеоры -->
+</div>
+
 <div class="auth-container">
     <h2 style="text-align: center; margin-bottom: 30px;">Вход в аккаунт</h2>
     
@@ -30,4 +222,114 @@
         Нет аккаунта? <a href="{% url 'register' %}" style="color: #4442DF;">Зарегистрироваться</a>
     </p>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Создаем улучшенный звездный фон
+        function createEnhancedStarryBackground() {
+            const container = document.getElementById('enhanced-stars');
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            
+            // Добавляем мерцающие звезды разных размеров
+            const starTypes = ['tiny', 'small', 'medium', 'large', 'bright'];
+            const starCounts = [150, 100, 50, 25, 10]; // Количество звезд каждого типа
+            
+            starTypes.forEach((type, index) => {
+                for (let i = 0; i < starCounts[index]; i++) {
+                    const star = document.createElement('div');
+                    star.className = `star ${type}`;
+                    
+                    // Распределяем звезды по экрану
+                    star.style.left = `${Math.random() * 100}%`;
+                    star.style.top = `${Math.random() * 100}%`;
+                    
+                    // Назначаем случайные длительности и задержки для анимации
+                    const duration = type === 'bright' ? 6 + Math.random() * 6 : 3 + Math.random() * 4;
+                    star.style.setProperty('--duration', `${duration}s`);
+                    star.style.setProperty('--delay', `${Math.random() * 5}s`);
+                    
+                    container.appendChild(star);
+                }
+            });
+            
+            // Создаем туманности с разными параметрами
+            for (let i = 0; i < 4; i++) {
+                const nebula = document.createElement('div');
+                nebula.className = 'nebula';
+                
+                // Распределяем туманности по экрану
+                nebula.style.left = `${Math.random() * 100}%`;
+                nebula.style.top = `${Math.random() * 100}%`;
+                
+                // Добавляем случайные параметры для анимации
+                nebula.style.setProperty('--delay', `${Math.random() * 10}s`);
+                nebula.style.setProperty('--scale', `${1 + Math.random() * 1.5}`);
+                
+                // Случайный поворот для разнообразия
+                nebula.style.transform = `scale(var(--scale, 1)) rotate(${Math.random() * 360}deg)`;
+                
+                container.appendChild(nebula);
+            }
+            
+            // Функция для периодического создания метеоров
+            function createMeteor() {
+                const meteor = document.createElement('div');
+                meteor.className = 'meteor';
+                
+                // Случайная позиция для начала метеора (в верхней части экрана)
+                const topPosition = Math.random() * 0.3; // 0-30% сверху
+                const leftPosition = 0.1 + Math.random() * 0.8; // 10-90% слева
+                
+                meteor.style.setProperty('--top', `${topPosition}`);
+                meteor.style.setProperty('--left', `${leftPosition}`);
+                
+                // Добавляем метеор на страницу
+                container.appendChild(meteor);
+                
+                // Удаляем метеор после завершения анимации
+                setTimeout(() => {
+                    meteor.remove();
+                }, 8000); // Время жизни метеора (должно быть >= времени анимации)
+            }
+            
+            // Изначально создаем несколько метеоров
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    createMeteor();
+                }, i * 2000); // Распределяем создание по времени
+            }
+            
+            // Периодически создаем новые метеоры
+            setInterval(() => {
+                createMeteor();
+            }, 8000 + Math.random() * 5000); // Случайный интервал между метеорами
+        }
+        
+        // Вызываем функцию создания звездного фона
+        createEnhancedStarryBackground();
+        
+        // Обеспечиваем прозрачный фон для всех родительских элементов
+        function setTransparentBg() {
+            // Получаем текущий элемент
+            let currentElement = document.querySelector('.auth-container');
+            
+            // Пока не дошли до body, делаем фон родителей прозрачным
+            while (currentElement && currentElement.parentElement) {
+                currentElement = currentElement.parentElement;
+                if (currentElement.tagName !== 'HTML') {
+                    currentElement.style.backgroundColor = 'transparent';
+                }
+            }
+        }
+        
+        // Выполняем при загрузке страницы
+        setTransparentBg();
+        
+        // И также при прокрутке для надежности
+        window.addEventListener('scroll', setTransparentBg);
+    });
+</script>
 {% endblock %} 
