@@ -521,33 +521,123 @@ body::-webkit-scrollbar-thumb:hover {
             });
         }
         
+        // Функция для очистки холста
+        function clearCanvas() {
+            ctx.fillStyle = 'rgba(21, 15, 56, 0.3)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+            
+        // Рисуем звезды на фоне
+        function drawStars() {
+            ctx.fillStyle = 'white';
+            for (let i = 0; i < stars.length; i++) {
+                const star = stars[i];
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Движение звезд
+                star.x -= star.speed;
+                
+                // Если звезда ушла за край, перемещаем ее в начало
+                if (star.x < 0) {
+                    star.x = canvas.width;
+                    star.y = Math.random() * canvas.height;
+                }
+            }
+        }
+        
+        // Рисуем землю
+        function drawGround() {
+            // Более красивая земля с градиентом
+            const groundGradient = ctx.createLinearGradient(0, canvas.height - 25, 0, canvas.height);
+            groundGradient.addColorStop(0, '#3a3056');
+            groundGradient.addColorStop(1, '#231c5c');
+            
+            ctx.fillStyle = groundGradient;
+            ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+            
+            // Добавляем линию горизонта
+            ctx.strokeStyle = '#675fd5';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height - 20);
+            ctx.lineTo(canvas.width, canvas.height - 20);
+            ctx.stroke();
+        }
+        
+        // Переменная для отслеживания времени последнего создания препятствия
+        let lastObstacleTime = 0;
+        const obstacleInterval = 1500; // Интервал создания препятствий в миллисекундах
+        
+        // Функция для генерации нового препятствия
+        function spawnObstacle(currentTime) {
+            if (isGameOver) return;
+            
+            // Создаем препятствия с фиксированным интервалом, а не рандомно
+            if (currentTime - lastObstacleTime > obstacleInterval) {
+                obstacles.push(new Obstacle());
+                lastObstacleTime = currentTime;
+            }
+        }
+        
         // Класс препятствия
         class Obstacle {
             constructor() {
-                this.width = 20 + Math.random() * 30;
-                this.height = 30 + Math.random() * 40;
+                this.width = 25 + Math.random() * 20;
+                this.height = 40 + Math.random() * 30;
                 this.x = canvas.width;
                 this.y = canvas.height - this.height - 20;
+                this.passed = false; // Флаг для отслеживания, прошел ли игрок это препятствие
                 
-                // Случайный цвет
-                const colors = ['#ff6347', '#7fff00', '#1e90ff', '#ffd700'];
-                this.color = colors[Math.floor(Math.random() * colors.length)];
+                // Случайный цвет с лучшей палитрой
+                const colors = [
+                    { fill: '#5a54d1', stroke: '#3a34a3' },
+                    { fill: '#54a0d1', stroke: '#2980b9' },
+                    { fill: '#d16954', stroke: '#b95729' },
+                    { fill: '#7754d1', stroke: '#4727b9' }
+                ];
+                this.colorScheme = colors[Math.floor(Math.random() * colors.length)];
             }
             
             draw() {
-                ctx.fillStyle = this.color;
-                ctx.fillRect(this.x, this.y, this.width, this.height);
+                // Рисуем препятствие с более интересным дизайном
+                ctx.fillStyle = this.colorScheme.fill;
+                ctx.strokeStyle = this.colorScheme.stroke;
+                ctx.lineWidth = 2;
+                
+                // Рисуем основное тело препятствия
+                ctx.beginPath();
+                ctx.roundRect(this.x, this.y, this.width, this.height, 5);
+                ctx.fill();
+                ctx.stroke();
+                
+                // Добавляем детали
+                const segmentHeight = this.height / 3;
+                ctx.fillStyle = this.colorScheme.stroke;
+                ctx.fillRect(this.x, this.y + segmentHeight, this.width, 5);
+                ctx.fillRect(this.x, this.y + segmentHeight * 2, this.width, 5);
+                
+                // Добавляем световые эффекты
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.fillRect(this.x + 5, this.y + 5, 3, this.height - 10);
             }
             
             update() {
                 this.x -= gameSpeed;
-            }
-        }
-        
-        // Функция для генерации нового препятствия
-        function spawnObstacle() {
-            if (!isGameOver && Math.random() < 0.02) {
-                obstacles.push(new Obstacle());
+                
+                // Отмечаем препятствие как пройденное, когда игрок его прошел
+                if (!this.passed && this.x + this.width < player.x) {
+                    this.passed = true;
+                    // Увеличиваем счет только когда игрок прошел препятствие
+                    score++;
+                    scoreElement.textContent = score;
+                    
+                    // Увеличиваем скорость игры со временем
+                    if (score % 5 === 0) {
+                        gameSpeed += 0.5;
+                    }
+                }
             }
         }
         
@@ -565,17 +655,6 @@ body::-webkit-scrollbar-thumb:hover {
                 ) {
                     gameOver();
                 }
-            }
-        }
-        
-        // Функция обновления счета
-        function updateScore() {
-            score++;
-            scoreElement.textContent = score;
-            
-            // Увеличиваем скорость игры со временем
-            if (score % 100 === 0) {
-                gameSpeed += 0.5;
             }
         }
         
@@ -600,40 +679,8 @@ body::-webkit-scrollbar-thumb:hover {
             requestAnimationFrame(gameLoop);
         };
         
-        // Функция для очистки холста
-        function clearCanvas() {
-            ctx.fillStyle = 'rgba(21, 15, 56, 0.1)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-        
-        // Рисуем звезды на фоне
-        function drawStars() {
-            ctx.fillStyle = 'white';
-            for (let i = 0; i < stars.length; i++) {
-                const star = stars[i];
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Движение звезд
-                star.x -= star.speed;
-                
-                // Если звезда ушла за край, перемещаем ее в начало
-                if (star.x < 0) {
-                    star.x = canvas.width;
-                    star.y = Math.random() * canvas.height;
-                }
-            }
-        }
-        
-        // Рисуем землю
-        function drawGround() {
-            ctx.fillStyle = '#333';
-            ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
-        }
-        
-        // Основной игровой цикл
-        function gameLoop() {
+        // Основной игровой цикл с временной меткой
+        function gameLoop(timestamp) {
             // Очищаем холст
             clearCanvas();
             
@@ -647,8 +694,8 @@ body::-webkit-scrollbar-thumb:hover {
             player.update();
             player.draw();
             
-            // Обрабатываем препятствия
-            spawnObstacle();
+            // Обрабатываем препятствия с учетом времени
+            spawnObstacle(timestamp);
             
             for (let i = 0; i < obstacles.length; i++) {
                 obstacles[i].update();
@@ -663,11 +710,6 @@ body::-webkit-scrollbar-thumb:hover {
             
             // Проверяем столкновения
             checkCollisions();
-            
-            // Обновляем счет
-            if (!isGameOver) {
-                updateScore();
-            }
             
             // Продолжаем игровой цикл, если игра не завершена
             if (!isGameOver) {
