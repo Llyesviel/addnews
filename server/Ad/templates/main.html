@@ -5,497 +5,695 @@
 
 {% block style %}
 <style>
-.main-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex: 1;
-    overflow: hidden;
-    width: 100%;
-    gap: 25px;
-    padding: 15px 0;
-}
-
-.news-content, .qr-section {
-    align-self: flex-start;
-}
-
-.news-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 30px;
-    width: 60%;
-    flex: 0 0 auto;
-    overflow-y: auto;
-    box-sizing: border-box;
-    font-size: 1.5rem;
-    margin-left: 15px;
-    margin-top: 40px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    max-height: 65vh;
-    position: relative;
-}
-
-.qr-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    padding-top: 20px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 30px;
-    margin-right: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 35%;
-    flex: 0 0 auto;
-}
-
-.qr-section img {
-    width: 85%;
-    height: auto;
-    transition: all 0.3s ease-in-out;
-    border-radius: 8px;
-    opacity: 1;
-    margin-bottom: 15px;
-}
-
-.qr-section img:hover {
-    transform: scale(1.05);
-}
-
-.qr-section span {
-    font-weight: bold;
-    font-size: 1.5rem;
-    color: white;
-    margin-top: 8px;
-}
-
-.qr-source {
-    font-weight: bold;
-    font-size: 1.4rem;
-    color: #1a237e;
-    margin-top: 15px;
-    text-align: center;
-    transition: all 0.3s ease;
-    padding: 8px 15px;
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    border: 1px solid #e0e0e0;
-    position: relative;
-    display: inline-block;
-}
-
-.qr-source:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    color: #3f51b5;
-}
-
-.qr-source::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background-color: #3f51b5;
-    transition: all 0.3s ease;
-    transform: translateX(-50%);
-}
-
-.qr-source:hover::after {
-    width: 80%;
-}
-
-.news-content h2:first-of-type {
-    margin-top: 0;
-}
-
-.news-content h2 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-top: 0;
-    margin-bottom: 15px;
-}
-
-.news-content p {
-    font-size: 1.5rem;
-    line-height: 1.6;
-}
-
-.news-item {
-    margin-top: 0;
-    position: relative;
-}
-
-.news-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.navigation-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-.nav-button {
-    background-color: #231c5c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 15px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-.nav-button:hover {
-    background-color: #1a1461;
-    transform: translateY(-2px);
-}
-
-.nav-button:active {
-    transform: translateY(0);
-}
-
-.timer-container {
-    position: relative;
-    width: 40px;
-    height: 40px;
-}
-
-.timer-svg {
-    transform: rotate(-90deg);
-    width: 100%;
-    height: 100%;
-}
-
-.timer-circle-bg {
-    fill: none;
-    stroke: #e6e6e6;
-    stroke-width: 3.5;
-}
-
-.timer-circle-progress {
-    fill: none;
-    stroke: #231c5c;
-    stroke-width: 3.5;
-    stroke-linecap: round;
-    stroke-dasharray: 125.6;
-    stroke-dashoffset: 125.6;
-    animation: countdown 20s linear forwards;
-}
-
-@keyframes countdown {
-    from {
-        stroke-dashoffset: 125.6;
-    }
-    to {
-        stroke-dashoffset: 0;
-    }
-}
-
-.timer-center {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 30px;
-    height: 30px;
-    background-color: white;
-    border-radius: 50%;
-    z-index: 1;
-}
-
-.news-ratings {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.rating-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background: none;
-    cursor: pointer;
-    padding: 5px;
-    transition: transform 0.2s, opacity 0.3s;
-    opacity: 0.7;
-    color: #231c5c;
-}
-
-.rating-button:hover {
-    transform: scale(1.1);
-    opacity: 1;
-}
-
-.rating-button.active {
-    opacity: 1;
-}
-
-.like-button .rating-icon {
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    margin-right: 5px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23231c5c"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.01-.01L23 10z"/></svg>');
-}
-
-.dislike-button .rating-icon {
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    margin-right: 5px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23231c5c"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v1.91l.01.01L1 14c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>');
-}
-
-.comment-button .rating-icon {
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    margin-right: 5px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23231c5c"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>');
-}
-
-.like-button.active .rating-icon {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233949ab"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.01-.01L23 10z"/></svg>');
-}
-
-.dislike-button.active .rating-icon {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233949ab"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v1.91l.01.01L1 14c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>');
-}
-
-.rating-count {
-    font-size: 0.9rem;
-}
-
-.background-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-    opacity: 0.5;
-}
-
-/* Стили для модального окна с комментариями */
-.comments-modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.comments-modal-content {
-    position: relative;
-    background-color: #fefefe;
-    margin: 5% auto;
-    padding: 20px;
-    border-radius: 15px;
-    width: 60%;
-    max-width: 800px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    animation: modalopen 0.3s;
-}
-
-@keyframes modalopen {
-    from {opacity: 0; transform: scale(0.9);}
-    to {opacity: 1; transform: scale(1);}
-}
-
-.close-modal {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.close-modal:hover,
-.close-modal:focus {
-    color: #231c5c;
-    text-decoration: none;
-}
-
-.comments-header {
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-}
-
-.comments-header h3 {
-    margin: 0;
-    font-size: 1.5rem;
-    color: #231c5c;
-}
-
-.comments-list {
-    max-height: 400px;
-    overflow-y: auto;
-    margin-bottom: 20px;
-}
-
-.comment-item {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-.comment-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
-}
-
-.comment-username {
-    font-weight: bold;
-    color: #231c5c;
-}
-
-.comment-date {
-    color: #777;
-    font-size: 0.8rem;
-}
-
-.comment-text {
-    margin-bottom: 5px;
-}
-
-.comment-form {
-    display: flex;
-    flex-direction: column;
-}
-
-.comment-textarea {
-    width: 100%;
-    min-height: 80px;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    resize: vertical;
-    font-family: inherit;
-}
-
-.comment-submit {
-    align-self: flex-end;
-    background-color: #231c5c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.comment-submit:hover {
-    background-color: #3949ab;
-}
-
-.no-comments {
-    text-align: center;
-    color: #777;
-    padding: 20px;
-}
-
-.error-message {
-    color: #f44336;
-    margin-bottom: 10px;
-}
-
-/* Медиа-запросы для отзывчивости */
-@media (max-width: 1200px) {
-    .main-content {
-        gap: 20px;
+    html, body {
+        background-color: transparent !important;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        scrollbar-width: thin;
     }
     
+    /* Стили для улучшенного звездного фона */
+    .enhanced-stars-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+    
+    /* Базовые стили для звезд */
+    .star {
+        position: absolute;
+        background-color: #fff;
+        border-radius: 50%;
+        opacity: 0;
+        animation: twinkle var(--duration, 4s) ease-in-out infinite;
+        animation-delay: var(--delay, 0s);
+    }
+    
+    /* Размеры звезд */
+    .star.tiny {
+        width: 1px;
+        height: 1px;
+        box-shadow: 0 0 1px rgba(255, 255, 255, 0.3);
+    }
+    
+    .star.small {
+        width: 2px;
+        height: 2px;
+        box-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+    }
+    
+    .star.medium {
+        width: 3px;
+        height: 3px;
+        box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.6);
+    }
+    
+    .star.large {
+        width: 4px;
+        height: 4px;
+        box-shadow: 0 0 4px 2px rgba(255, 255, 255, 0.8);
+    }
+    
+    /* Звезды с особым свечением */
+    .star.bright {
+        background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.3) 70%, rgba(255, 255, 255, 0) 100%);
+        width: 6px;
+        height: 6px;
+        box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.7);
+        animation: bright-twinkle var(--duration, 6s) ease-in-out infinite;
+        animation-delay: var(--delay, 0s);
+    }
+    
+    /* Падающие звезды (метеоры) */
+    .meteor {
+        position: absolute;
+        width: 2px;
+        height: 1px;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0));
+        transform: rotate(-35deg);
+        opacity: 0;
+        top: calc(var(--top, 0.3) * 100%);
+        left: calc(var(--left, 0.5) * 100%);
+        animation: meteor 8s linear infinite;
+        animation-delay: var(--delay, 0s);
+        z-index: 1;
+    }
+    
+    /* Туманности */
+    .nebula {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: radial-gradient(ellipse at center, 
+                                    rgba(63, 81, 181, 0.05) 0%, 
+                                    rgba(76, 0, 153, 0.03) 50%, 
+                                    rgba(15, 11, 50, 0) 70%);
+        opacity: 0.3;
+        animation: pulse 15s ease-in-out infinite;
+        animation-delay: var(--delay, 0s);
+        transform: scale(var(--scale, 1));
+        z-index: 0;
+        mix-blend-mode: screen;
+    }
+    
+    /* Анимации */
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.1; transform: scale(1); }
+        50% { opacity: 0.9; transform: scale(1.2); }
+    }
+    
+    @keyframes bright-twinkle {
+        0%, 100% { opacity: 0.5; transform: scale(1); filter: blur(0px); }
+        25% { opacity: 1; transform: scale(1.1); filter: blur(0px); }
+        50% { opacity: 0.7; transform: scale(1.3); filter: blur(1px); }
+        75% { opacity: 1; transform: scale(1.1); filter: blur(0px); }
+    }
+    
+    @keyframes meteor {
+        0% {
+            opacity: 0;
+            width: 0;
+            transform: translateX(0) translateY(0) rotate(-35deg);
+        }
+        5% {
+            opacity: 1;
+            width: 120px;
+        }
+        20% {
+            opacity: 1;
+        }
+        30% {
+            opacity: 0;
+            width: 0;
+            transform: translateX(900px) translateY(900px) rotate(-35deg);
+        }
+        100% {
+            opacity: 0;
+            width: 0;
+            transform: translateX(900px) translateY(900px) rotate(-35deg);
+        }
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 0.3; transform: scale(var(--scale, 1)); }
+        50% { opacity: 0.5; transform: scale(calc(var(--scale, 1) * 1.2)); }
+    }
+    
+    /* Стили для скроллбара body */
+    body::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    body::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    body::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        border: 2px solid transparent;
+    }
+
+    body::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Принудительно делаем все контейнеры с прозрачным фоном */
+    .container, 
+    .content-container,
+    .wrapper,
+    .page-wrapper,
+    .main-wrapper {
+        background-color: transparent !important;
+    }
+
+    .main-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex: 1;
+        overflow: hidden;
+        width: 100%;
+        gap: 25px;
+        padding: 15px 0;
+        background-color: transparent;
+        position: relative;
+        z-index: 2; /* Повышаем z-index, чтобы контент был над звездами */
+    }
+
+    .news-content, .qr-section {
+        align-self: flex-start;
+    }
+
     .news-content {
-        width: 58%;
-        margin-left: 10px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 30px;
+        width: 60%;
+        flex: 0 0 auto;
+        overflow-y: auto;
+        box-sizing: border-box;
+        font-size: 1.5rem;
+        margin-left: 15px;
         margin-top: 40px;
+        scrollbar-width: thin;
+        -ms-overflow-style: none;
+        max-height: 65vh;
+        position: relative;
     }
-    
-    .qr-section {
-        width: 38%;
-        margin-right: 10px;
-    }
-}
 
-@media (max-width: 992px) {
-    .main-content {
+    /* Настраиваем скроллбар для Chrome, Edge и других браузеров */
+    .news-content::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .news-content::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .news-content::-webkit-scrollbar-thumb {
+        background-color: rgba(35, 28, 92, 0.5);
+        border-radius: 10px;
+    }
+
+    .news-content::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(35, 28, 92, 0.8);
+    }
+
+    .qr-section {
+        display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 10px 0;
+        padding: 20px;
+        padding-top: 20px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 30px;
+        margin-right: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 35%;
+        flex: 0 0 auto;
     }
-    
-    .news-content {
-        width: 90%;
-        max-height: 50vh;
-        margin-left: 0;
-        margin-top: 25px;
+
+    .qr-section img {
+        width: 85%;
+        height: auto;
+        transition: all 0.3s ease-in-out;
+        border-radius: 8px;
+        opacity: 1;
         margin-bottom: 15px;
     }
-    
-    .qr-section {
-        width: 40%;
-        margin-right: 0;
-    }
-    
-    .qr-section img {
-        width: 70%;
-    }
-    
-    .qr-source {
-        font-size: 1.3rem;
-        padding: 6px 12px;
-    }
-}
 
-@media (max-width: 576px) {
-    .main-content {
-        padding: 5px 0;
+    .qr-section img:hover {
+        transform: scale(1.05);
     }
-    
-    .news-content {
-        width: 95%;
-        padding: 15px;
+
+    .qr-section span {
+        font-weight: bold;
+        font-size: 1.5rem;
+        color: white;
+        margin-top: 8px;
+    }
+
+    .qr-source {
+        font-weight: bold;
+        font-size: 1.4rem;
+        color: #1a237e;
         margin-top: 15px;
+        text-align: center;
+        transition: all 0.3s ease;
+        padding: 8px 15px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        border: 1px solid #e0e0e0;
+        position: relative;
+        display: inline-block;
+    }
+
+    .qr-source:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        color: #3f51b5;
+    }
+
+    .qr-source::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: #3f51b5;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+
+    .qr-source:hover::after {
+        width: 80%;
+    }
+
+    .news-content h2:first-of-type {
+        margin-top: 0;
+    }
+
+    .news-content h2 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+
+    .news-content p {
+        font-size: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .news-item {
+        margin-top: 0;
+        position: relative;
+    }
+
+    .news-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .navigation-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .nav-button {
+        background-color: #231c5c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 15px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .nav-button:hover {
+        background-color: #1a1461;
+        transform: translateY(-2px);
+    }
+
+    .nav-button:active {
+        transform: translateY(0);
+    }
+
+    .timer-container {
+        position: relative;
+        width: 40px;
+        height: 40px;
+    }
+
+    .timer-svg {
+        transform: rotate(-90deg);
+        width: 100%;
+        height: 100%;
+    }
+
+    .timer-circle-bg {
+        fill: none;
+        stroke: #e6e6e6;
+        stroke-width: 3.5;
+    }
+
+    .timer-circle-progress {
+        fill: none;
+        stroke: #231c5c;
+        stroke-width: 3.5;
+        stroke-linecap: round;
+        stroke-dasharray: 125.6;
+        stroke-dashoffset: 125.6;
+        animation: countdown 20s linear forwards;
+    }
+
+    @keyframes countdown {
+        from {
+            stroke-dashoffset: 125.6;
+        }
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    .timer-center {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        width: 30px;
+        height: 30px;
+        background-color: white;
+        border-radius: 50%;
+        z-index: 1;
+    }
+
+    .news-ratings {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .rating-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background: none;
+        cursor: pointer;
+        padding: 5px;
+        transition: transform 0.2s, opacity 0.3s;
+        opacity: 0.7;
+        color: #231c5c;
+    }
+
+    .rating-button:hover {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+
+    .rating-button.active {
+        opacity: 1;
+    }
+
+    .like-button .rating-icon {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        margin-right: 5px;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23231c5c"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.01-.01L23 10z"/></svg>');
+    }
+
+    .dislike-button .rating-icon {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        margin-right: 5px;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23231c5c"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v1.91l.01.01L1 14c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>');
+    }
+
+    .comment-button .rating-icon {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        margin-right: 5px;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23231c5c"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>');
+    }
+
+    .like-button.active .rating-icon {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233949ab"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.01-.01L23 10z"/></svg>');
+    }
+
+    .dislike-button.active .rating-icon {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233949ab"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v1.91l.01.01L1 14c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>');
+    }
+
+    .rating-count {
+        font-size: 0.9rem;
+    }
+
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+        opacity: 0.5;
+    }
+
+    /* Стили для модального окна с комментариями */
+    .comments-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(8, 15, 30, 0.85); /* Тёмно-синий оттенок, как звездное небо, но с высокой прозрачностью */
+        backdrop-filter: blur(5px); /* Добавляем размытие фона */
+    }
+
+    .comments-modal-content {
+        position: relative;
+        background-color: rgba(255, 255, 255, 0.95);
+        margin: 5% auto;
+        padding: 20px;
+        border-radius: 15px;
+        width: 60%;
+        max-width: 800px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+        animation: modalopen 0.3s;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes modalopen {
+        from {opacity: 0; transform: scale(0.9);}
+        to {opacity: 1; transform: scale(1);}
+    }
+
+    .close-modal {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s;
+    }
+
+    .close-modal:hover,
+    .close-modal:focus {
+        color: #231c5c;
+        text-decoration: none;
+    }
+
+    .comments-header {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+
+    .comments-header h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: #231c5c;
+    }
+
+    .comments-list {
+        max-height: 400px;
+        overflow-y: auto;
+        margin-bottom: 20px;
+    }
+
+    .comment-item {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .comment-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+
+    .comment-username {
+        font-weight: bold;
+        color: #231c5c;
+    }
+
+    .comment-date {
+        color: #777;
+        font-size: 0.8rem;
+    }
+
+    .comment-text {
+        margin-bottom: 5px;
+    }
+
+    .comment-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .comment-textarea {
+        width: 100%;
+        min-height: 80px;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        resize: vertical;
+        font-family: inherit;
+    }
+
+    .comment-submit {
+        align-self: flex-end;
+        background-color: #231c5c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 15px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .comment-submit:hover {
+        background-color: #3949ab;
+    }
+
+    .no-comments {
+        text-align: center;
+        color: #777;
+        padding: 20px;
+    }
+
+    .error-message {
+        color: #f44336;
         margin-bottom: 10px;
     }
-    
-    .news-content h2 {
-        font-size: 2rem;
+
+    /* Медиа-запросы для отзывчивости */
+    @media (max-width: 1200px) {
+        .main-content {
+            gap: 20px;
+        }
+        
+        .news-content {
+            width: 58%;
+            margin-left: 10px;
+            margin-top: 40px;
+        }
+        
+        .qr-section {
+            width: 38%;
+            margin-right: 10px;
+        }
     }
-    
-    .news-content p {
-        font-size: 1.2rem;
+
+    @media (max-width: 992px) {
+        .main-content {
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0;
+        }
+        
+        .news-content {
+            width: 90%;
+            max-height: 50vh;
+            margin-left: 0;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .qr-section {
+            width: 40%;
+            margin-right: 0;
+        }
+        
+        .qr-section img {
+            width: 70%;
+        }
+        
+        .qr-source {
+            font-size: 1.3rem;
+            padding: 6px 12px;
+        }
     }
-    
-    .qr-section {
-        width: 60%;
+
+    @media (max-width: 576px) {
+        .main-content {
+            padding: 5px 0;
+        }
+        
+        .news-content {
+            width: 95%;
+            padding: 15px;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .news-content h2 {
+            font-size: 2rem;
+        }
+        
+        .news-content p {
+            font-size: 1.2rem;
+        }
+        
+        .qr-section {
+            width: 60%;
+        }
+        
+        .qr-source {
+            font-size: 1.2rem;
+            padding: 5px 10px;
+        }
     }
-    
-    .qr-source {
-        font-size: 1.2rem;
-        padding: 5px 10px;
-    }
-}
 </style>
 {% endblock %}
 
 {% block content %}
+<!-- Улучшенный звездный фон -->
+<div class="enhanced-stars-container" id="enhanced-stars">
+    <!-- Здесь будут динамически созданные звезды и метеоры -->
+</div>
+
 <div class="main-content">
     <div class="news-content">
         {% for news in news_list %}
@@ -563,6 +761,110 @@
 {% block script %}
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // Создаем улучшенный звездный фон
+        function createEnhancedStarryBackground() {
+            const container = document.getElementById('enhanced-stars');
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            
+            // Добавляем мерцающие звезды разных размеров
+            const starTypes = ['tiny', 'small', 'medium', 'large', 'bright'];
+            const starCounts = [150, 100, 50, 25, 10]; // Количество звезд каждого типа
+            
+            starTypes.forEach((type, index) => {
+                for (let i = 0; i < starCounts[index]; i++) {
+                    const star = document.createElement('div');
+                    star.className = `star ${type}`;
+                    
+                    // Распределяем звезды по экрану
+                    star.style.left = `${Math.random() * 100}%`;
+                    star.style.top = `${Math.random() * 100}%`;
+                    
+                    // Назначаем случайные длительности и задержки для анимации
+                    const duration = type === 'bright' ? 6 + Math.random() * 6 : 3 + Math.random() * 4;
+                    star.style.setProperty('--duration', `${duration}s`);
+                    star.style.setProperty('--delay', `${Math.random() * 5}s`);
+                    
+                    container.appendChild(star);
+                }
+            });
+            
+            // Создаем туманности с разными параметрами
+            for (let i = 0; i < 4; i++) {
+                const nebula = document.createElement('div');
+                nebula.className = 'nebula';
+                
+                // Распределяем туманности по экрану
+                nebula.style.left = `${Math.random() * 100}%`;
+                nebula.style.top = `${Math.random() * 100}%`;
+                
+                // Добавляем случайные параметры для анимации
+                nebula.style.setProperty('--delay', `${Math.random() * 10}s`);
+                nebula.style.setProperty('--scale', `${1 + Math.random() * 1.5}`);
+                
+                // Случайный поворот для разнообразия
+                nebula.style.transform = `scale(var(--scale, 1)) rotate(${Math.random() * 360}deg)`;
+                
+                container.appendChild(nebula);
+            }
+            
+            // Функция для периодического создания метеоров
+            function createMeteor() {
+                const meteor = document.createElement('div');
+                meteor.className = 'meteor';
+                
+                // Случайная позиция для начала метеора (в верхней части экрана)
+                const topPosition = Math.random() * 0.3; // 0-30% сверху
+                const leftPosition = 0.1 + Math.random() * 0.8; // 10-90% слева
+                
+                meteor.style.setProperty('--top', `${topPosition}`);
+                meteor.style.setProperty('--left', `${leftPosition}`);
+                
+                // Добавляем метеор на страницу
+                container.appendChild(meteor);
+                
+                // Удаляем метеор после завершения анимации
+                setTimeout(() => {
+                    meteor.remove();
+                }, 8000); // Время жизни метеора (должно быть >= времени анимации)
+            }
+            
+            // Изначально создаем несколько метеоров
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    createMeteor();
+                }, i * 2000); // Распределяем создание по времени
+            }
+            
+            // Периодически создаем новые метеоры
+            setInterval(() => {
+                createMeteor();
+            }, 8000 + Math.random() * 5000); // Случайный интервал между метеорами
+        }
+        
+        // Вызываем функцию создания звездного фона
+        createEnhancedStarryBackground();
+        
+        // Обеспечиваем прозрачный фон для всех родительских элементов
+        function setTransparentBg() {
+            // Получаем текущий элемент
+            let currentElement = document.querySelector('.main-content');
+            
+            // Пока не дошли до body, делаем фон родителей прозрачным
+            while (currentElement && currentElement.parentElement) {
+                currentElement = currentElement.parentElement;
+                if (currentElement.tagName !== 'HTML') {
+                    currentElement.style.backgroundColor = 'transparent';
+                }
+            }
+        }
+        
+        // Выполняем при загрузке страницы
+        setTransparentBg();
+        
+        // И также при прокрутке для надежности
+        window.addEventListener('scroll', setTransparentBg);
+        
         const newsItems = document.querySelectorAll('.news-item');
         const skipButtons = document.querySelectorAll('.skip-button');
         const likeButtons = document.querySelectorAll('.like-button');
