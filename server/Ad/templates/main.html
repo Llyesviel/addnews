@@ -194,10 +194,10 @@
     }
 
     .news-content {
-        background-color: rgba(255, 255, 255, 0.97);
-        padding: 25px 30px;
+        background-color: white;
+        padding: 20px;
         border-radius: 30px;
-        width: 68%;
+        width: 60%;
         flex: 0 0 auto;
         overflow-y: auto;
         box-sizing: border-box;
@@ -206,19 +206,11 @@
         margin-top: 100px;
         scrollbar-width: thin;
         -ms-overflow-style: none;
-        max-height: 75vh;
+        max-height: 65vh;
         position: relative;
-        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
-        backdrop-filter: blur(4px);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        transition: all 0.3s ease;
     }
 
-    .news-content:hover {
-        box-shadow: 0 8px 32px rgba(13, 17, 68, 0.3);
-        transform: translateY(-3px);
-    }
-
+    /* Настраиваем скроллбар для Chrome, Edge и других браузеров */
     .news-content::-webkit-scrollbar {
         width: 6px;
     }
@@ -256,8 +248,10 @@
     }
 
     .qr-section img {
-        width: 85%;
+        width: 60%;
         height: auto;
+        min-width: 150px;
+        min-height: 150px;
         transition: all 0.3s ease-in-out;
         border-radius: 15px;
         opacity: 1;
@@ -309,44 +303,25 @@
         width: 80%;
     }
 
+    .news-content h2:first-of-type {
+        margin-top: 0;
+    }
+
     .news-content h2 {
         font-size: 2.5rem;
         font-weight: bold;
         margin-top: 0;
-        margin-bottom: 25px;
-        color: #231c5c;
-        border-bottom: 2px solid rgba(35, 28, 92, 0.15);
-        padding-bottom: 12px;
-        position: relative;
-    }
-
-    .news-content h2::after {
-        content: '';
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        width: 60px;
-        height: 2px;
-        background: linear-gradient(90deg, #3949ab, #231c5c);
+        margin-bottom: 15px;
     }
 
     .news-content p {
         font-size: 1.5rem;
-        line-height: 1.7;
-        margin-bottom: 20px;
-        color: #333;
+        line-height: 1.6;
     }
 
     .news-item {
         margin-top: 0;
         position: relative;
-        padding-bottom: 15px;
-        animation: fadeIn 0.5s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
     }
 
     .news-controls {
@@ -643,13 +618,13 @@
         }
         
         .news-content {
-            width: 65%;
+            width: 58%;
             margin-left: 10px;
             margin-top: 40px;
         }
         
         .qr-section {
-            width: 30%;
+            width: 38%;
             margin-right: 10px;
         }
     }
@@ -663,7 +638,7 @@
         
         .news-content {
             width: 90%;
-            max-height: 55vh;
+            max-height: 50vh;
             margin-left: 0;
             margin-top: 25px;
             margin-bottom: 15px;
@@ -678,6 +653,8 @@
         .qr-section img {
             width: 70%;
             border-radius: 12px;
+            min-width: 100px;
+            min-height: 100px;
         }
         
         .qr-source {
