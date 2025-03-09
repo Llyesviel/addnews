@@ -523,8 +523,43 @@ body::-webkit-scrollbar-thumb:hover {
         
         // Функция для очистки холста
         function clearCanvas() {
-            ctx.fillStyle = 'rgba(21, 15, 56, 0.3)';
+            // Создаем градиент с размытым эффектом для фона
+            const bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            bgGradient.addColorStop(0, 'rgba(21, 15, 56, 0.5)');
+            bgGradient.addColorStop(1, 'rgba(35, 28, 92, 0.7)');
+            
+            // Заполняем фон
+            ctx.fillStyle = bgGradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Добавляем эффект размытия через наложение полупрозрачных слоев
+            ctx.fillStyle = 'rgba(30, 20, 70, 0.2)';
+            
+            // Наносим несколько слоев с небольшим смещением для эффекта размытия
+            for (let i = 0; i < 5; i++) {
+                const offset = i * 2;
+                ctx.globalAlpha = 0.03;
+                ctx.fillRect(offset, offset, canvas.width - offset * 2, canvas.height - offset * 2);
+            }
+            
+            // Восстанавливаем прозрачность
+            ctx.globalAlpha = 1.0;
+            
+            // Добавляем несколько размытых "облаков" для эффекта атмосферы
+            for (let i = 0; i < 3; i++) {
+                const radius = 50 + Math.random() * 100;
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                
+                const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+                gradient.addColorStop(0, 'rgba(40, 30, 80, 0.1)');
+                gradient.addColorStop(1, 'rgba(21, 15, 56, 0)');
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
             
         // Рисуем звезды на фоне
