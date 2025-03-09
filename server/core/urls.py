@@ -20,8 +20,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin', admin.site.urls),
-    path('', include('Ad.urls')),  # Маршруты приложения Ad
+    path('admin/', admin.site.urls),  # Маршрут с завершающим слешем
+    path('admin', admin.site.urls),   # Маршрут без завершающего слеша для совместимости
+    path('', include('Ad.urls')),     # Маршруты приложения Ad
 ]
 
 # Добавляем URL для статических и медиа файлов в режиме разработки

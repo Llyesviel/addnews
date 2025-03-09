@@ -35,8 +35,8 @@ urlpatterns = [
     path('api/', include(api_patterns)),
     
     # Перенаправление остальных URL на страницу 404
-    # Важно: этот маршрут должен быть последним
-    re_path(r'^.*$', views.redirect_to_404, name='catch_all'),
+    # Исключая маршруты, начинающиеся с 'admin'
+    re_path(r'^(?!admin).*$', views.redirect_to_404, name='catch_all'),
 ]
 
 # Обработчик для 404 ошибок

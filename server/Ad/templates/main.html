@@ -8,22 +8,29 @@
 .main-content {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     flex: 1;
     overflow: hidden;
     width: 100%;
+    gap: 25px;
+    padding: 15px 0;
+}
+
+.news-content, .qr-section {
+    align-self: flex-start;
 }
 
 .news-content {
     background-color: white;
     padding: 20px;
     border-radius: 30px;
-    width: calc(63% - 20px);
-    flex: 1;
+    width: 60%;
+    flex: 0 0 auto;
     overflow-y: auto;
     box-sizing: border-box;
     font-size: 1.5rem;
-    margin-left: 20px;
+    margin-left: 15px;
+    margin-top: 40px;
     scrollbar-width: none;
     -ms-overflow-style: none;
     max-height: 65vh;
@@ -34,27 +41,83 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 15px;
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 8px;
-    margin-top: 15px;
+    padding: 20px;
+    padding-top: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    margin-right: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 35%;
+    flex: 0 0 auto;
 }
 
 .qr-section img {
-    width: 80%;
+    width: 85%;
     height: auto;
+    transition: all 0.3s ease-in-out;
+    border-radius: 8px;
+    opacity: 1;
+    margin-bottom: 15px;
+}
+
+.qr-section img:hover {
+    transform: scale(1.05);
 }
 
 .qr-section span {
     font-weight: bold;
-    font-size: 2rem;
+    font-size: 1.5rem;
     color: white;
-    margin-top: 10px;
+    margin-top: 8px;
+}
+
+.qr-source {
+    font-weight: bold;
+    font-size: 1.4rem;
+    color: #1a237e;
+    margin-top: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+    padding: 8px 15px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e0e0e0;
+    position: relative;
+    display: inline-block;
+}
+
+.qr-source:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #3f51b5;
+}
+
+.qr-source::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #3f51b5;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.qr-source:hover::after {
+    width: 80%;
+}
+
+.news-content h2:first-of-type {
+    margin-top: 0;
 }
 
 .news-content h2 {
     font-size: 2.5rem;
     font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 15px;
 }
 
 .news-content p {
@@ -63,7 +126,7 @@
 }
 
 .news-item {
-    margin-top: -20px;
+    margin-top: 0;
     position: relative;
 }
 
@@ -351,6 +414,84 @@
     color: #f44336;
     margin-bottom: 10px;
 }
+
+/* Медиа-запросы для отзывчивости */
+@media (max-width: 1200px) {
+    .main-content {
+        gap: 20px;
+    }
+    
+    .news-content {
+        width: 58%;
+        margin-left: 10px;
+        margin-top: 40px;
+    }
+    
+    .qr-section {
+        width: 38%;
+        margin-right: 10px;
+    }
+}
+
+@media (max-width: 992px) {
+    .main-content {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 0;
+    }
+    
+    .news-content {
+        width: 90%;
+        max-height: 50vh;
+        margin-left: 0;
+        margin-top: 25px;
+        margin-bottom: 15px;
+    }
+    
+    .qr-section {
+        width: 40%;
+        margin-right: 0;
+    }
+    
+    .qr-section img {
+        width: 70%;
+    }
+    
+    .qr-source {
+        font-size: 1.3rem;
+        padding: 6px 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .main-content {
+        padding: 5px 0;
+    }
+    
+    .news-content {
+        width: 95%;
+        padding: 15px;
+        margin-top: 15px;
+        margin-bottom: 10px;
+    }
+    
+    .news-content h2 {
+        font-size: 2rem;
+    }
+    
+    .news-content p {
+        font-size: 1.2rem;
+    }
+    
+    .qr-section {
+        width: 60%;
+    }
+    
+    .qr-source {
+        font-size: 1.2rem;
+        padding: 5px 10px;
+    }
+}
 </style>
 {% endblock %}
 
@@ -358,7 +499,7 @@
 <div class="main-content">
     <div class="news-content">
         {% for news in news_list %}
-        <div class="news-item" data-index="{{ forloop.counter0 }}" data-id="{{ news.id }}">
+        <div class="news-item" data-index="{{ forloop.counter0 }}" data-id="{{ news.id }}" data-source-url="{% if news.source %}{{ news.source.feed_url }}{% endif %}">
             <h2>{{ news.title }}</h2>
             <p>{{ news.description }}</p>
             <div class="news-controls">
@@ -392,7 +533,8 @@
         {% endfor %}
     </div>
     <div class="qr-section">
-        <img src="{% static 'Ad/images/qr-placeholder.png' %}" alt="QR код">
+        <img id="qr-image" src="{% static 'Ad/images/qr-placeholder.png' %}" alt="QR код">
+        <div class="qr-source" id="qr-source">Источник новости</div>
     </div>
 </div>
 
@@ -434,9 +576,27 @@
         const commentText = document.getElementById('comment-text');
         const commentSubmit = document.getElementById('comment-submit');
         const commentError = document.getElementById('comment-error');
+        const qrImage = document.getElementById('qr-image');
+        const qrSource = document.getElementById('qr-source');
         
         // Переменные для хранения текущего ID новости в модальном окне
         let currentNewsId = null;
+        
+        // Карта QR-кодов для разных источников
+        const qrCodeSources = {
+            'cbr.ru': {
+                url: "{% static 'Ad/images/cb.png' %}",
+                name: "Центральный Банк РФ"
+            },
+            'kommersant.ru': {
+                url: "{% static 'Ad/images/kom.png' %}",
+                name: "Коммерсант"
+            },
+            'rambler.ru': {
+                url: "{% static 'Ad/images/rem.png' %}",
+                name: "Рамблер"
+            }
+        };
         
         // Получаем информацию об аутентификации пользователя из шаблона Django
         const userAuthenticated = "{{ user.is_authenticated|yesno:'true,false' }}";
@@ -466,12 +626,50 @@
             newsItems.forEach((item, i) => {
                 item.style.display = (i === index) ? 'block' : 'none';
             });
+            
+            // Обновляем QR-код в зависимости от источника новости
+            updateQRCode(newsItems[index]);
 
             // Очищаем предыдущий таймер и устанавливаем новый
             clearTimeout(timer);
             timer = setTimeout(() => {
                 showNews((currentNewsIndex + 1) % newsItems.length);
             }, 20000);
+        }
+        
+        // Функция для определения источника новости и обновления QR-кода
+        function updateQRCode(newsItem) {
+            // Получаем URL источника из атрибута data-source-url
+            const sourceUrl = newsItem.dataset.sourceUrl || '';
+            
+            // По умолчанию ЦБ РФ
+            let qrCode = qrCodeSources['cbr.ru'];
+            
+            // Определяем источник по URL
+            if (sourceUrl.includes('cbr.ru') || sourceUrl.includes('centralbank')) {
+                qrCode = qrCodeSources['cbr.ru'];
+            } else if (sourceUrl.includes('kommersant.ru') || sourceUrl.includes('kommersant')) {
+                qrCode = qrCodeSources['kommersant.ru'];
+            } else if (sourceUrl.includes('rambler.ru') || sourceUrl.includes('rambler')) {
+                qrCode = qrCodeSources['rambler.ru'];
+            }
+            
+            // Для отладки
+            console.log('Источник новости:', sourceUrl, 'выбран QR-код:', qrCode.name);
+            
+            // Добавляем анимацию fadeout/fadein
+            qrImage.style.opacity = '0';
+            qrSource.style.opacity = '0';
+            
+            setTimeout(() => {
+                // Обновляем изображение и текст
+                qrImage.src = qrCode.url;
+                qrSource.textContent = qrCode.name;
+                
+                // Плавно возвращаем видимость
+                qrImage.style.opacity = '1';
+                qrSource.style.opacity = '1';
+            }, 300);
         }
 
         // Инициализация показа новостей
