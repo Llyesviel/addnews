@@ -217,7 +217,33 @@ class RegisterAuthenticationTest(TestCase):
         
         # Проверяем, что пользователь автоматически авторизован
         self.assertTrue(response.wsgi_request.user.is_authenticated)
-        self.assertEqual(response.wsgi_request.user.username, self.valid_username) 
+        self.assertEqual(response.wsgi_request.user.username, self.valid_username)
+    
+    def test_redirects_to_main_after_registration(self):
+        """
+        Тест 13: Проверка, что после успешной регистрации происходит
+        перенаправление на главную страницу.
+        Ожидаемый результат: После регистрации пользователь перенаправляется
+        на главную страницу.
+        """
+        # Отправляем POST-запрос с корректными данными для регистрации
+        response = self.client.post(self.register_url, {
+            'username': self.valid_username,
+            'password1': self.valid_password,
+            'password2': self.valid_password
+        }, follow=True)  # follow=True для отслеживания редиректов
+        
+        # Проверяем, что произошло перенаправление на главную страницу
+        self.assertRedirects(response, reverse('main'))
+        
+        # Проверяем, что мы находимся на главной странице
+        self.assertTemplateUsed(response, 'main.html')
+        
+        # Проверяем, что пользователь был создан
+        self.assertTrue(User.objects.filter(username=self.valid_username).exists())
+        
+        # Проверяем, что пользователь авторизован
+        self.assertTrue(response.context['user'].is_authenticated)
 
 
 class LoginAuthenticationTest(TestCase):
@@ -555,4 +581,414 @@ class UserProfileTest(TestCase):
         
         # Пытаемся войти со старым паролем (он не должен был измениться)
         login_success = self.client.login(username=self.username, password=self.password)
-        self.assertTrue(login_success)  
+        self.assertTrue(login_success)
+
+
+class NewsNavigationTest(TestCase):
+    """
+    Тесты для проверки функциональности навигации по новостям на главной странице.
+    Проверяем работу кнопок "Назад" и "Пропустить".
+    """
+    
+    def setUp(self):
+        """Настройка данных перед каждым тестом"""
+        # Создаем тестовые новости
+        from Ad.models import News, NewsSource
+        
+        # Создаем источник новостей
+        self.source = NewsSource.objects.create(
+            name="Тестовый источник",
+            feed_url="https://example.com/feed"
+        )
+        
+        self.news1 = News.objects.create(
+            title="Тестовая новость 1",
+            description="Содержание первой тестовой новости",
+            source=self.source,
+            link="https://example.com/news1"
+        )
+        self.news2 = News.objects.create(
+            title="Тестовая новость 2",
+            description="Содержание второй тестовой новости",
+            source=self.source,
+            link="https://example.com/news2"
+        )
+        self.news3 = News.objects.create(
+            title="Тестовая новость 3",
+            description="Содержание третьей тестовой новости",
+            source=self.source,
+            link="https://example.com/news3"
+        )
+        
+        # Инициализируем клиент для отправки запросов
+        self.client = Client()
+        
+        # URL для главной страницы
+        self.main_url = reverse('main')
+        
+    def test_skip_news_button(self):
+        """
+        Тест 1: Проверка кнопки "Пропустить".
+        Ожидаемый результат: успешный AJAX-запрос на сервер.
+        """
+        # Отправляем POST-запрос на API-эндпоинт для пропуска новости
+        response = self.client.post(
+            reverse('skip_news'), 
+            {'direction': 'next'},
+            content_type='application/json'
+        )
+        
+        # Проверяем успешный ответ от API
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data['status'], 'success')
+        self.assertEqual(data['message'], 'News skip recorded')
+    
+    def test_back_news_button(self):
+        """
+        Тест 2: Проверка кнопки "Назад".
+        Ожидаемый результат: успешный AJAX-запрос на сервер.
+        """
+        # Отправляем POST-запрос на API-эндпоинт для возврата к предыдущей новости
+        response = self.client.post(
+            reverse('skip_news'), 
+            {'direction': 'back'},
+            content_type='application/json'
+        )
+        
+        # Проверяем успешный ответ от API
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data['status'], 'success')
+        self.assertEqual(data['message'], 'News skip recorded')
+    
+    def test_main_page_contains_navigation_buttons(self):
+        """
+        Тест 3: Проверка наличия кнопок навигации на главной странице.
+        Ожидаемый результат: на странице есть кнопки "Назад" и "Пропустить".
+        """
+        # Запрашиваем главную страницу
+        response = self.client.get(self.main_url)
+        
+        # Проверяем, что страница загружена успешно
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что в HTML-коде страницы есть кнопки навигации
+        self.assertContains(response, 'class="nav-button back-button"')
+        self.assertContains(response, 'class="nav-button skip-button"')
+        self.assertContains(response, '>Назад<')
+        self.assertContains(response, '>Пропустить<')
+    
+    def test_navigation_client_side(self):
+        """
+        Тест 4: Проверка клиентской логики навигации.
+        Поскольку тесты не могут выполнять JavaScript, проверяем наличие
+        необходимого кода для обработки нажатий на кнопки.
+        """
+        # Запрашиваем главную страницу
+        response = self.client.get(self.main_url)
+        
+        # Проверяем наличие JavaScript-функций для навигации
+        self.assertContains(response, 'const skipButtons = document.querySelectorAll')
+        self.assertContains(response, 'const backButtons = document.querySelectorAll')
+        self.assertContains(response, 'showNews(currentNewsIndex + 1)')
+        self.assertContains(response, 'showNews(currentNewsIndex - 1)')
+        self.assertContains(response, 'fetch("/api/skip-news/"')
+        
+        # Проверяем, что функция showNews присутствует
+        self.assertContains(response, 'function showNews(index)')
+
+
+class NavigationButtonsTest(TestCase):
+    """
+    Тесты для проверки работы кнопок навигации между страницами сайта.
+    Проверяем, что кнопки на разных страницах корректно перенаправляют пользователя.
+    """
+    
+    def setUp(self):
+        """Настройка данных перед каждым тестом"""
+        # Создаем тестового пользователя
+        self.username = 'testnavuser'
+        self.password = 'testnavpassword123'
+        self.user = User.objects.create_user(
+            username=self.username,
+            password=self.password
+        )
+        
+        # Инициализируем клиент для отправки запросов
+        self.client = Client()
+        
+        # URL-адреса страниц
+        self.main_url = reverse('main')
+        self.login_url = reverse('login')
+        self.register_url = reverse('register')
+        self.profile_url = reverse('profile')
+        self.logout_url = reverse('logout')
+    
+    # === ТЕСТЫ НАВИГАЦИИ С ГЛАВНОЙ СТРАНИЦЫ ===
+    
+    def test_main_to_main_button(self):
+        """
+        Тест 1: Кнопка 'Главная страница' на главной странице.
+        Ожидаемый результат: пользователь остается на главной странице.
+        """
+        # Переходим на главную страницу
+        response = self.client.get(self.main_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что на странице есть ссылка на главную страницу
+        self.assertContains(response, f'href="{self.main_url}"')
+        
+        # Переходим по ссылке на главную страницу
+        response = self.client.get(self.main_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что мы на главной странице
+        self.assertTemplateUsed(response, 'main.html')
+    
+    def test_main_to_login_button(self):
+        """
+        Тест 2: Кнопка 'Вход' на главной странице.
+        Ожидаемый результат: пользователь переходит на страницу входа.
+        """
+        # Переходим на главную страницу
+        response = self.client.get(self.main_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что на странице есть ссылка на страницу входа
+        self.assertContains(response, f'href="{self.login_url}"')
+        
+        # Переходим по ссылке на страницу входа
+        response = self.client.get(self.login_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что мы на странице входа
+        self.assertTemplateUsed(response, 'login.html')
+    
+    def test_main_to_register_button(self):
+        """
+        Тест 3: Кнопка 'Регистрация' на главной странице.
+        Ожидаемый результат: пользователь переходит на страницу регистрации.
+        """
+        # Переходим на главную страницу
+        response = self.client.get(self.main_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что на странице есть ссылка на страницу регистрации
+        self.assertContains(response, f'href="{self.register_url}"')
+        
+        # Переходим по ссылке на страницу регистрации
+        response = self.client.get(self.register_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что мы на странице регистрации
+        self.assertTemplateUsed(response, 'register.html')
+    
+    # === ТЕСТЫ НАВИГАЦИИ СО СТРАНИЦЫ ВХОДА ===
+    
+    def test_login_to_main_button(self):
+        """
+        Тест 4: Кнопка 'Главная страница' на странице входа.
+        Ожидаемый результат: пользователь переходит на главную страницу.
+        """
+        # Переходим на страницу входа
+        response = self.client.get(self.login_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что на странице есть ссылка на главную страницу
+        self.assertContains(response, f'href="{self.main_url}"')
+        
+        # Переходим по ссылке на главную страницу
+        response = self.client.get(self.main_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что мы на главной странице
+        self.assertTemplateUsed(response, 'main.html')
+    
+    def test_login_to_login_button(self):
+        """
+        Тест 5: Кнопка 'Вход' на странице входа.
+        Ожидаемый результат: пользователь остается на странице входа.
+        """
+        # Переходим на страницу входа
+        response = self.client.get(self.login_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что на странице есть ссылка на страницу входа
+        self.assertContains(response, f'href="{self.login_url}"')
+        
+        # Переходим по ссылке на страницу входа
+        response = self.client.get(self.login_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что мы на странице входа
+        self.assertTemplateUsed(response, 'login.html')
+    
+    def test_login_to_register_button(self):
+        """
+        Тест 6: Кнопка 'Регистрация' на странице входа.
+        Ожидаемый результат: пользователь переходит на страницу регистрации.
+        """
+        # Переходим на страницу входа
+        response = self.client.get(self.login_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что на странице есть ссылка на страницу регистрации
+        self.assertContains(response, f'href="{self.register_url}"')
+        
+        # Переходим по ссылке на страницу регистрации
+        response = self.client.get(self.register_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что мы на странице регистрации
+        self.assertTemplateUsed(response, 'register.html')
+    
+    # === ТЕСТЫ НАВИГАЦИИ СО СТРАНИЦЫ РЕГИСТРАЦИИ ===
+    
+    def test_register_to_main_button(self):
+        """
+        Тест 7: Кнопка 'Главная страница' на странице регистрации.
+        Ожидаемый результат: пользователь переходит на главную страницу.
+        """
+        # Переходим на страницу регистрации
+        response = self.client.get(self.register_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что на странице есть ссылка на главную страницу
+        self.assertContains(response, f'href="{self.main_url}"')
+        
+        # Переходим по ссылке на главную страницу
+        response = self.client.get(self.main_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что мы на главной странице
+        self.assertTemplateUsed(response, 'main.html')
+    
+    def test_register_to_login_button(self):
+        """
+        Тест 8: Кнопка 'Вход' на странице регистрации.
+        Ожидаемый результат: пользователь переходит на страницу входа.
+        """
+        # Переходим на страницу регистрации
+        response = self.client.get(self.register_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что на странице есть ссылка на страницу входа
+        self.assertContains(response, f'href="{self.login_url}"')
+        
+        # Переходим по ссылке на страницу входа
+        response = self.client.get(self.login_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что мы на странице входа
+        self.assertTemplateUsed(response, 'login.html')
+    
+    def test_register_to_register_button(self):
+        """
+        Тест 9: Кнопка 'Регистрация' на странице регистрации.
+        Ожидаемый результат: пользователь остается на странице регистрации.
+        """
+        # Переходим на страницу регистрации
+        response = self.client.get(self.register_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что на странице есть ссылка на страницу регистрации
+        self.assertContains(response, f'href="{self.register_url}"')
+        
+        # Переходим по ссылке на страницу регистрации
+        response = self.client.get(self.register_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что мы на странице регистрации
+        self.assertTemplateUsed(response, 'register.html')
+    
+    # === ТЕСТЫ НАВИГАЦИИ СО СТРАНИЦЫ ЛИЧНОГО КАБИНЕТА ===
+    
+    def test_profile_to_main_button(self):
+        """
+        Тест 10: Кнопка 'Главная страница' на странице личного кабинета.
+        Ожидаемый результат: пользователь переходит на главную страницу.
+        """
+        # Авторизуемся
+        self.client.login(username=self.username, password=self.password)
+        
+        # Переходим на страницу личного кабинета
+        response = self.client.get(self.profile_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что на странице есть ссылка на главную страницу
+        self.assertContains(response, f'href="{self.main_url}"')
+        
+        # Переходим по ссылке на главную страницу
+        response = self.client.get(self.main_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что мы на главной странице
+        self.assertTemplateUsed(response, 'main.html')
+    
+    def test_profile_to_profile_button(self):
+        """
+        Тест 11: Кнопка 'Личный кабинет' на странице личного кабинета.
+        Ожидаемый результат: пользователь остается на странице личного кабинета.
+        """
+        # Авторизуемся
+        self.client.login(username=self.username, password=self.password)
+        
+        # Переходим на страницу личного кабинета
+        response = self.client.get(self.profile_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что на странице есть ссылка на страницу личного кабинета
+        self.assertContains(response, f'href="{self.profile_url}"')
+        
+        # Переходим по ссылке на страницу личного кабинета
+        response = self.client.get(self.profile_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что мы на странице личного кабинета
+        self.assertTemplateUsed(response, 'profile.html')
+    
+    def test_profile_to_logout_button(self):
+        """
+        Тест 12: Кнопка 'Выход' на странице личного кабинета.
+        Ожидаемый результат: пользователь выходит из аккаунта и переходит на главную страницу.
+        """
+        # Авторизуемся
+        self.client.login(username=self.username, password=self.password)
+        
+        # Переходим на страницу личного кабинета
+        response = self.client.get(self.profile_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что на странице есть ссылка на выход
+        self.assertContains(response, f'href="{self.logout_url}"')
+        
+        # Переходим по ссылке на выход
+        response = self.client.get(self.logout_url, follow=True)
+        
+        # Проверяем, что произошло перенаправление на главную страницу
+        self.assertRedirects(response, self.main_url)
+        
+        # Проверяем, что пользователь не авторизован
+        self.assertFalse(response.context['user'].is_authenticated)
+    
+    def test_register_to_login_button_bottom(self):
+        """
+        Тест 14: Кнопка 'Войти' внизу страницы регистрации (под полями ввода).
+        Ожидаемый результат: пользователь переходит на страницу входа.
+        """
+        # Переходим на страницу регистрации
+        response = self.client.get(self.register_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что на странице есть ссылка на страницу входа в нижней части
+        # (ищем конкретно ссылку, которая не в навигационной панели)
+        content = response.content.decode('utf-8')
+        self.assertIn('Уже есть аккаунт? <a href="{}"'.format(self.login_url), content)
+        
+        # Переходим по ссылке на страницу входа
+        response = self.client.get(self.login_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что мы на странице входа
+        self.assertTemplateUsed(response, 'login.html')  
