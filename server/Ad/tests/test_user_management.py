@@ -1,8 +1,11 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client, LiveServerTestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+import json
+from Ad.models import News, NewsComment, NewsRating, NewsSource
 
 
 class RegisterAuthenticationTest(TestCase):
@@ -625,7 +628,7 @@ class NewsNavigationTest(TestCase):
         
         # URL для главной страницы
         self.main_url = reverse('main')
-        
+    
     def test_skip_news_button(self):
         """
         Тест 1: Проверка кнопки "Пропустить".
@@ -991,4 +994,288 @@ class NavigationButtonsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         
         # Проверяем, что мы на странице входа
-        self.assertTemplateUsed(response, 'login.html')  
+        self.assertTemplateUsed(response, 'login.html')
+
+
+class AdditionalNavigationTests(TestCase):
+    """
+    Дополнительные тесты для проверки навигации в приложении.
+    """
+    
+    def setUp(self):
+        """Настройка данных перед каждым тестом"""
+        # Создаем тестового пользователя
+        self.username = 'testuser_additional'
+        self.password = 'testpassword123'
+        self.valid_username = 'newuser_additional'
+        self.valid_password = 'ValidPassword123'
+        
+        # Инициализируем клиент для отправки запросов
+        self.client = Client()
+        
+        # URL для страниц
+        self.main_url = reverse('main')
+        self.login_url = reverse('login')
+        self.register_url = reverse('register')
+    
+    def test_redirects_to_main_after_registration(self):
+        """
+        Тест 13: Проверка, что после успешной регистрации происходит
+        перенаправление на главную страницу.
+        Ожидаемый результат: После регистрации пользователь перенаправляется
+        на главную страницу.
+        """
+        # Отправляем POST-запрос с корректными данными для регистрации
+        response = self.client.post(self.register_url, {
+            'username': self.valid_username,
+            'password1': self.valid_password,
+            'password2': self.valid_password
+        }, follow=True)  # follow=True для отслеживания редиректов
+        
+        # Проверяем, что произошло перенаправление на главную страницу
+        self.assertRedirects(response, self.main_url)
+        
+        # Проверяем, что мы находимся на главной странице
+        self.assertTemplateUsed(response, 'main.html')
+        
+        # Проверяем, что пользователь был создан
+        self.assertTrue(User.objects.filter(username=self.valid_username).exists())
+        
+        # Проверяем, что пользователь авторизован
+        self.assertTrue(response.context['user'].is_authenticated)
+    
+    def test_register_to_login_button_bottom(self):
+        """
+        Тест 14: Кнопка 'Войти' внизу страницы регистрации (под полями ввода).
+        Ожидаемый результат: пользователь переходит на страницу входа.
+        """
+        # Переходим на страницу регистрации
+        response = self.client.get(self.register_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что на странице есть ссылка на страницу входа в нижней части
+        # (ищем конкретно ссылку, которая не в навигационной панели)
+        content = response.content.decode('utf-8')
+        self.assertIn('Уже есть аккаунт? <a href="{}"'.format(self.login_url), content)
+        
+        # Переходим по ссылке на страницу входа
+        response = self.client.get(self.login_url)
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что мы на странице входа
+        self.assertTemplateUsed(response, 'login.html')
+
+
+class NewsInteractionTest(TestCase):
+    """
+    Тесты для проверки взаимодействия с новостями: лайки, дизлайки и комментарии.
+    """
+    
+    def setUp(self):
+        """Настройка данных перед каждым тестом"""
+        # Создаем тестовых пользователей
+        self.username = 'testuser_interaction'
+        self.password = 'testpassword123'
+        self.user = User.objects.create_user(
+            username=self.username,
+            password=self.password
+        )
+        
+        # Создаем источник новостей
+        self.source = NewsSource.objects.create(
+            name="Тестовый источник",
+            feed_url="https://example.com/feed"
+        )
+        
+        # Создаем тестовую новость
+        self.news = News.objects.create(
+            title="Тестовая новость для взаимодействия",
+            description="Описание тестовой новости",
+            source=self.source,
+            link="https://example.com/news1"
+        )
+        
+        # Инициализируем клиент для отправки запросов
+        self.client = Client()
+        
+        # URL-адреса для лайков, дизлайков и комментариев
+        self.rate_news_url = reverse('rate_news')
+        self.comments_url = reverse('get_comments', args=[self.news.id])
+        self.add_comment_url = reverse('add_comment')
+    
+    def test_like_button(self):
+        """
+        Тест 15: Проверка работы кнопки лайк.
+        Ожидаемый результат: Лайк успешно добавляется к новости.
+        """
+        # Авторизуемся
+        self.client.login(username=self.username, password=self.password)
+        
+        # Отправляем POST-запрос для лайка новости
+        response = self.client.post(
+            self.rate_news_url,
+            json.dumps({
+                'news_id': self.news.id,
+                'rating_type': 'like'
+            }),
+            content_type='application/json'
+        )
+        
+        # Проверяем успешный ответ от сервера
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data['status'], 'success')
+        
+        # Проверяем, что лайк был добавлен в базу данных
+        like_exists = NewsRating.objects.filter(
+            news=self.news,
+            user=self.user,
+            is_like=True
+        ).exists()
+        self.assertTrue(like_exists)
+    
+    def test_dislike_button(self):
+        """
+        Тест 16: Проверка работы кнопки дизлайк.
+        Ожидаемый результат: Дизлайк успешно добавляется к новости.
+        """
+        # Авторизуемся
+        self.client.login(username=self.username, password=self.password)
+        
+        # Отправляем POST-запрос для дизлайка новости
+        response = self.client.post(
+            self.rate_news_url,
+            json.dumps({
+                'news_id': self.news.id,
+                'rating_type': 'dislike'
+            }),
+            content_type='application/json'
+        )
+        
+        # Проверяем успешный ответ от сервера
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data['status'], 'success')
+        
+        # Проверяем, что дизлайк был добавлен в базу данных
+        dislike_exists = NewsRating.objects.filter(
+            news=self.news,
+            user=self.user,
+            is_like=False
+        ).exists()
+        self.assertTrue(dislike_exists)
+    
+    def test_comment_button_opens_comments_window(self):
+        """
+        Тест 17: Проверка, что при нажатии на кнопку комментария открывается окно комментариев.
+        Ожидаемый результат: AJAX-запрос за комментариями возвращает успешный ответ.
+        """
+        # Авторизуемся
+        self.client.login(username=self.username, password=self.password)
+        
+        # Отправляем GET-запрос за комментариями (имитируем действие JavaScript при нажатии на кнопку)
+        response = self.client.get(self.comments_url)
+        
+        # Проверяем успешный ответ от сервера
+        self.assertEqual(response.status_code, 200)
+        
+        # Проверяем, что ответ содержит нужные поля в JSON
+        data = response.json()
+        self.assertIn('comments', data)
+        self.assertIn('status', data)
+        self.assertEqual(data['status'], 'success')
+    
+    def test_add_comment_success(self):
+        """
+        Тест 18: Проверка успешной отправки комментария.
+        Ожидаемый результат: Комментарий успешно добавляется к новости.
+        """
+        # Авторизуемся
+        self.client.login(username=self.username, password=self.password)
+        
+        # Текст комментария
+        comment_text = "Это тестовый комментарий"
+        
+        # Отправляем POST-запрос для добавления комментария
+        response = self.client.post(
+            self.add_comment_url,
+            json.dumps({
+                'news_id': self.news.id,
+                'comment_text': comment_text
+            }),
+            content_type='application/json'
+        )
+        
+        # Проверяем успешный ответ от сервера
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data['status'], 'success')
+        
+        # Проверяем, что комментарий был добавлен в базу данных
+        comment_exists = NewsComment.objects.filter(
+            news=self.news,
+            user=self.user,
+            text=comment_text
+        ).exists()
+        self.assertTrue(comment_exists)
+    
+    def test_comment_appears_after_submission(self):
+        """
+        Тест 19: Проверка, что после отправки комментарий появляется в списке.
+        Ожидаемый результат: Комментарий появляется в списке комментариев.
+        """
+        # Авторизуемся
+        self.client.login(username=self.username, password=self.password)
+        
+        # Текст комментария
+        comment_text = "Это тестовый комментарий для проверки отображения"
+        
+        # Создаем комментарий напрямую в базе данных для уверенности
+        comment = NewsComment.objects.create(
+            news=self.news,
+            user=self.user,
+            text=comment_text
+        )
+        
+        # Запрашиваем список комментариев
+        response = self.client.get(self.comments_url)
+        
+        # Проверяем успешный ответ от сервера
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Проверяем, что комментарий присутствует в списке
+        comments = data['comments']
+        self.assertTrue(len(comments) > 0)
+        self.assertTrue(any(comment_text == comment['text'] for comment in comments))
+    
+    def test_empty_comment_error(self):
+        """
+        Тест 20: Проверка, что при отправке пустого комментария выдается ошибка.
+        Ожидаемый результат: Сервер возвращает сообщение об ошибке.
+        """
+        # Авторизуемся
+        self.client.login(username=self.username, password=self.password)
+        
+        # Отправляем POST-запрос с пустым комментарием
+        response = self.client.post(
+            self.add_comment_url,
+            json.dumps({
+                'news_id': self.news.id,
+                'comment_text': ""
+            }),
+            content_type='application/json'
+        )
+        
+        # Проверяем статус ответа (ожидаем ошибку)
+        self.assertEqual(response.status_code, 400)
+        
+        # Проверяем, что комментарий не был добавлен в базу данных
+        comment_exists = NewsComment.objects.filter(
+            news=self.news,
+            user=self.user,
+            text=""
+        ).exists()
+        self.assertFalse(comment_exists)
+
+        
