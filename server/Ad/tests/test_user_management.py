@@ -596,7 +596,6 @@ class NewsNavigationTest(TestCase):
     def setUp(self):
         """Настройка данных перед каждым тестом"""
         # Создаем тестовые новости
-        from Ad.models import News, NewsSource
         
         # Создаем источник новостей
         self.source = NewsSource.objects.create(

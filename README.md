@@ -78,3 +78,4 @@ pip install opencv-python
 ```bash
 pip install -r server/requirements.txt
 ```
+
