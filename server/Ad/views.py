@@ -12,6 +12,8 @@ from django.urls import reverse
 import json
 import logging
 from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import calendar
 
 
 def redirect_to_main(request):
@@ -352,3 +354,31 @@ def add_comment(request):
             'message': str(e)
         }, status=500)
 
+
+class CustomHTMLCalendar(calendar.HTMLCalendar):
+    def formatmonth(self, theyear, themonth, withyear=True):
+        v = []
+        a = v.append
+        a('<table border="0" cellpadding="0" cellspacing="0" class="month">')
+        a('\n')
+        a(self.formatmonthname(theyear, themonth, withyear=withyear))
+        a('\n')
+        a(self.formatweekheader())
+        a('\n')
+        for week in self.monthdays2calendar(theyear, themonth):
+            a(self.formatweek(week))
+            a('\n')
+        a('</table>')
+        a('\n')
+        return ''.join(v)
+
+    def formatday(self, day, weekday):
+        if day == 0:
+            return '<td class="noday">&nbsp;</td>'  # Пустая ячейка
+        else:
+            return f'<td class="{self.cssclasses[weekday]}">{day}</td>'
+
+def get_calendar(request, year, month):
+    cal = CustomHTMLCalendar(firstweekday=calendar.MONDAY)
+    html_calendar = cal.formatmonth(year, month)
+    return JsonResponse({'calendar': html_calendar})

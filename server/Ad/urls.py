@@ -36,6 +36,7 @@ urlpatterns = [
     
     # Перенаправление остальных URL на страницу 404
     # Исключая маршруты, начинающиеся с 'admin'
+    path('calendar/<int:year>/<int:month>/', views.get_calendar, name='get_calendar'),
     re_path(r'^(?!admin).*$', views.redirect_to_404, name='catch_all'),
 ]
 
