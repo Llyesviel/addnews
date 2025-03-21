@@ -14,6 +14,7 @@ import logging
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import calendar
+import requests
 
 
 def redirect_to_main(request):
@@ -382,3 +383,228 @@ def get_calendar(request, year, month):
     cal = CustomHTMLCalendar(firstweekday=calendar.MONDAY)
     html_calendar = cal.formatmonth(year, month)
     return JsonResponse({'calendar': html_calendar})
+
+def currency_charts(request):
+    """View function for the currency charts page."""
+    currency_rates = CurrencyRate.objects.all()
+    
+    # Получаем список валют для отображения в селекторе
+    available_currencies = [
+        {'code': rate.currency_name, 'symbol': rate.symbol, 'rate': float(rate.rate)}
+        for rate in currency_rates
+    ]
+    
+    return render(request, 'currency_charts.html', {
+        'currency_rates': currency_rates,
+        'available_currencies': available_currencies
+    })
+
+
+@require_POST
+def get_currency_history(request):
+    """API-endpoint для получения исторических данных о курсах валют."""
+    try:
+        data = json.loads(request.body)
+        currency_code = data.get('currency_code')
+        period = data.get('period', 'month')
+        
+        if not currency_code:
+            return JsonResponse({'status': 'error', 'message': 'Не указан код валюты'})
+            
+        # Для криптовалют используем тестовые данные, так как ЦБ не предоставляет их историю
+        if currency_code in ['BTC', 'ETH']:
+            # Генерируем тестовые данные для криптовалют
+            return JsonResponse({
+                'status': 'success',
+                'data': generate_test_crypto_data(currency_code, period)
+            })
+        
+        # Для обычных валют пытаемся получить данные из RSS ЦБ РФ
+        try:
+            history_data = fetch_currency_history_from_cb(currency_code, period)
+            return JsonResponse({
+                'status': 'success',
+                'data': history_data
+            })
+        except Exception as e:
+            logging.error(f"Ошибка при получении истории курсов: {str(e)}")
+            # Если не удалось получить реальные данные, используем тестовые
+            return JsonResponse({
+                'status': 'success',
+                'data': generate_test_currency_data(currency_code, period)
+            })
+            
+    except Exception as e:
+        logging.error(f"Ошибка в get_currency_history: {str(e)}")
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)
+
+
+def fetch_currency_history_from_cb(currency_code, period):
+    """Получает исторические данные о курсах валют из ЦБ РФ."""
+    import xml.etree.ElementTree as ET
+    from datetime import datetime, timedelta
+    
+    today = datetime.now()
+    
+    # Определяем период для запроса
+    if period == 'week':
+        start_date = today - timedelta(days=7)
+    elif period == 'month':
+        start_date = today - timedelta(days=30)
+    elif period == 'year':
+        start_date = today - timedelta(days=365)
+    else:  # day
+        start_date = today - timedelta(days=1)
+    
+    # Форматируем даты для запроса
+    date_format = "%d/%m/%Y"
+    date1 = start_date.strftime(date_format)
+    date2 = today.strftime(date_format)
+    
+    # URL для запроса курсов валют за период
+    # Документация: http://www.cbr.ru/development/SXML/
+    url = f"http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1={date1}&date_req2={date2}&VAL_NM_RQ={get_cb_currency_code(currency_code)}"
+    
+    response = requests.get(url)
+    response.raise_for_status()
+    
+    # Парсим XML
+    root = ET.fromstring(response.content)
+    result = []
+    
+    for record in root.findall('Record'):
+        date_str = record.get('Date')
+        value_str = record.find('Value').text.replace(',', '.')
+        
+        # Преобразуем дату из формата ЦБ в ISO
+        date_obj = datetime.strptime(date_str, "%d.%m.%Y")
+        
+        result.append({
+            'date': date_obj.strftime("%Y-%m-%d"),
+            'value': float(value_str)
+        })
+    
+    return result
+
+
+def get_cb_currency_code(currency_code):
+    """Возвращает код валюты для API ЦБ РФ."""
+    # Коды валют для API ЦБ
+    # Полный список кодов: http://www.cbr.ru/scripts/XML_val.asp?d=0
+    cb_codes = {
+        'USD': 'R01235',  # Доллар США
+        'EUR': 'R01239',  # Евро
+        'CNY': 'R01375',  # Китайский юань
+        'GBP': 'R01035'   # Фунт стерлингов
+    }
+    
+    return cb_codes.get(currency_code, 'R01235')  # По умолчанию USD
+
+
+def generate_test_currency_data(currency_code, period):
+    """Генерирует тестовые данные для обычных валют."""
+    from datetime import datetime, timedelta
+    import random
+    
+    today = datetime.now()
+    result = []
+    
+    # Базовые значения для разных валют
+    base_values = {
+        'USD': 90,
+        'EUR': 100,
+        'GBP': 115,
+        'CNY': 12
+    }
+    
+    base_value = base_values.get(currency_code, 90)
+    
+    # Определяем количество точек и временной шаг
+    if period == 'day':
+        days = 1
+        points = 24
+        delta = timedelta(hours=1)
+        start_date = today - timedelta(days=days)
+    elif period == 'week':
+        days = 7
+        points = days
+        delta = timedelta(days=1)
+        start_date = today - timedelta(days=days)
+    elif period == 'month':
+        days = 30
+        points = days
+        delta = timedelta(days=1)
+        start_date = today - timedelta(days=days)
+    else:  # year
+        days = 365
+        points = 12
+        delta = timedelta(days=30)
+        start_date = today - timedelta(days=days)
+    
+    # Создаем массив данных с некоторой волатильностью
+    for i in range(points):
+        date = start_date + delta * i
+        volatility = base_value * 0.05  # 5% волатильность
+        value = base_value + (random.random() - 0.5) * volatility
+        
+        result.append({
+            'date': date.strftime("%Y-%m-%d"),
+            'value': round(value, 2)
+        })
+    
+    return result
+
+
+def generate_test_crypto_data(currency_code, period):
+    """Генерирует тестовые данные для криптовалют."""
+    from datetime import datetime, timedelta
+    import random
+    
+    today = datetime.now()
+    result = []
+    
+    # Базовые значения для криптовалют
+    base_values = {
+        'BTC': 30000,
+        'ETH': 1600
+    }
+    
+    base_value = base_values.get(currency_code, 30000)
+    
+    # Определяем количество точек и временной шаг
+    if period == 'day':
+        days = 1
+        points = 24
+        delta = timedelta(hours=1)
+        start_date = today - timedelta(days=days)
+    elif period == 'week':
+        days = 7
+        points = days
+        delta = timedelta(days=1)
+        start_date = today - timedelta(days=days)
+    elif period == 'month':
+        days = 30
+        points = days
+        delta = timedelta(days=1)
+        start_date = today - timedelta(days=days)
+    else:  # year
+        days = 365
+        points = 12
+        delta = timedelta(days=30)
+        start_date = today - timedelta(days=days)
+    
+    # Создаем массив данных с некоторой волатильностью
+    for i in range(points):
+        date = start_date + delta * i
+        volatility = base_value * 0.1  # 10% волатильность для крипты (больше, чем для обычных валют)
+        value = base_value + (random.random() - 0.5) * volatility
+        
+        result.append({
+            'date': date.strftime("%Y-%m-%d"),
+            'value': round(value, 2)
+        })
+    
+    return result

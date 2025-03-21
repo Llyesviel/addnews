@@ -1,0 +1,659 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Орбита Новостей - Курсы валют{% endblock %}
+
+{% block style %}
+<style>
+    /* Стили для страницы курсов валют */
+    html, body {
+        background-color: transparent !important;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        scrollbar-width: thin;
+    }
+    
+    .currency-dashboard {
+        width: 90%;
+        max-width: 1400px;
+        margin: 10px auto;
+        padding: 15px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 5;
+    }
+    
+    .currency-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .currency-title {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #231c5c;
+    }
+    
+    .currency-selector {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .currency-button {
+        padding: 8px 15px;
+        background-color: #f0f0f0;
+        border: 2px solid #231c5c;
+        border-radius: 50px;
+        color: #231c5c;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .currency-button:hover {
+        background-color: #d8d8ff;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(35, 28, 92, 0.2);
+    }
+    
+    .currency-button.active {
+        background-color: #231c5c;
+        color: white;
+    }
+    
+    .period-selector {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .period-button {
+        padding: 6px 12px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 30px;
+        color: #231c5c;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .period-button:hover {
+        background-color: #d8d8ff;
+    }
+    
+    .period-button.active {
+        background-color: #231c5c;
+        color: white;
+        border-color: #231c5c;
+    }
+    
+    .chart-container {
+        width: 100%;
+        height: 45vh;
+        margin: 15px 0;
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .currency-info {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .info-card {
+        flex: 1;
+        min-width: 200px;
+        background-color: #f8f8ff;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    .info-title {
+        font-size: 1rem;
+        font-weight: bold;
+        color: #231c5c;
+        margin-bottom: 5px;
+    }
+    
+    .info-value {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #231c5c;
+    }
+    
+    .info-change {
+        font-size: 1rem;
+        margin-top: 3px;
+    }
+    
+    .info-change.positive {
+        color: #4caf50;
+    }
+    
+    .info-change.negative {
+        color: #f44336;
+    }
+    
+    .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+        border-radius: 10px;
+    }
+    
+    .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #231c5c;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    /* Адаптивность для мобильных устройств */
+    @media (max-width: 768px) {
+        .currency-title {
+            font-size: 1.8rem;
+        }
+        
+        .currency-header {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        
+        .currency-selector {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .currency-button {
+            padding: 5px 10px;
+            font-size: 0.9rem;
+        }
+        
+        .chart-container {
+            height: 40vh;
+        }
+        
+        .info-card {
+            min-width: calc(50% - 20px);
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .currency-dashboard {
+            padding: 10px;
+            width: 95%;
+        }
+        
+        .currency-title {
+            font-size: 1.6rem;
+        }
+        
+        .info-card {
+            min-width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="currency-dashboard">
+    <div class="currency-header">
+        <h1 class="currency-title">Курсы валют</h1>
+        <div class="currency-selector">
+            {% for currency in available_currencies %}
+            <button class="currency-button {% if currency.code == 'USD' %}active{% endif %}" 
+                    data-currency="{{ currency.code }}" 
+                    data-rate="{{ currency.rate }}">
+                {{ currency.code }} {% if currency.symbol %}({{ currency.symbol }}){% endif %}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="period-selector">
+        <button class="period-button active" data-period="day">День</button>
+        <button class="period-button" data-period="week">Неделя</button>
+        <button class="period-button" data-period="month">Месяц</button>
+        <button class="period-button" data-period="year">Год</button>
+    </div>
+    
+    <div class="chart-container">
+        <canvas id="currencyChart"></canvas>
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+    
+    <div class="currency-info">
+        <div class="info-card">
+            <div class="info-title">Текущий курс</div>
+            <div class="info-value" id="currentRate">--</div>
+        </div>
+        <div class="info-card">
+            <div class="info-title">Изменение за период</div>
+            <div class="info-value" id="changeValue">--</div>
+            <div class="info-change" id="changePercent">--</div>
+        </div>
+        <div class="info-card">
+            <div class="info-title">Максимум за период</div>
+            <div class="info-value" id="maxValue">--</div>
+            <div class="info-change" id="maxDate">--</div>
+        </div>
+        <div class="info-card">
+            <div class="info-title">Минимум за период</div>
+            <div class="info-value" id="minValue">--</div>
+            <div class="info-change" id="minDate">--</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Переменные для хранения текущего состояния
+        let currentCurrency = 'USD';
+        let currentPeriod = 'day';
+        let chart = null;
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        
+        // Получаем элементы для обновления информации
+        const currentRateElement = document.getElementById('currentRate');
+        const changeValueElement = document.getElementById('changeValue');
+        const changePercentElement = document.getElementById('changePercent');
+        const maxValueElement = document.getElementById('maxValue');
+        const maxDateElement = document.getElementById('maxDate');
+        const minValueElement = document.getElementById('minValue');
+        const minDateElement = document.getElementById('minDate');
+        
+        // Настройка прослушивателей событий для кнопок валют
+        document.querySelectorAll('.currency-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Убираем класс active у всех кнопок
+                document.querySelectorAll('.currency-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Добавляем класс active текущей кнопке
+                this.classList.add('active');
+                
+                // Обновляем текущую валюту
+                currentCurrency = this.dataset.currency;
+                
+                // Загружаем новые данные
+                loadChartData();
+            });
+        });
+        
+        // Настройка прослушивателей событий для кнопок периода
+        document.querySelectorAll('.period-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Убираем класс active у всех кнопок
+                document.querySelectorAll('.period-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Добавляем класс active текущей кнопке
+                this.classList.add('active');
+                
+                // Обновляем текущий период
+                currentPeriod = this.dataset.period;
+                
+                // Загружаем новые данные
+                loadChartData();
+            });
+        });
+        
+        // Функция для форматирования даты
+        function formatDate(date) {
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            return new Date(date).toLocaleDateString('ru-RU', options);
+        }
+        
+        // Функция для получения CSRF-токена из cookie
+        function getCsrfToken() {
+            const name = 'csrftoken';
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        // Функция для загрузки данных курсов валют с сервера
+        function loadChartData() {
+            // Показываем индикатор загрузки
+            loadingOverlay.style.display = 'flex';
+            
+            // Получаем текущий курс валюты из атрибута кнопки
+            const activeButton = document.querySelector(`.currency-button[data-currency="${currentCurrency}"]`);
+            let currentRate = activeButton ? parseFloat(activeButton.dataset.rate) : 0;
+            
+            // Запрашиваем исторические данные через AJAX
+            fetch('/api/currency-history/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken(),
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    currency_code: currentCurrency,
+                    period: currentPeriod
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    // Обновляем график с полученными данными
+                    updateChart(data.data);
+                    
+                    // Обновляем информацию
+                    updateInfo(data.data, currentRate);
+                }
+                else {
+                    console.error('Ошибка при получении данных:', data.message);
+                    // В случае ошибки используем пустые данные
+                    updateChart([]);
+                    updateInfo([], currentRate);
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка при запросе данных:', error);
+                // В случае ошибки используем пустые данные
+                updateChart([]);
+                updateInfo([], currentRate);
+            })
+            .finally(() => {
+                // Скрываем индикатор загрузки
+                loadingOverlay.style.display = 'none';
+            });
+        }
+        
+        // Функция для обновления графика
+        function updateChart(data) {
+            const ctx = document.getElementById('currencyChart').getContext('2d');
+            
+            // Если данных нет, показываем пустой график
+            if (!data || data.length === 0) {
+                if (chart) {
+                    chart.destroy();
+                }
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: `Курс ${currentCurrency}`,
+                            data: [],
+                            borderColor: '#231c5c',
+                            backgroundColor: 'rgba(35, 28, 92, 0.1)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+                return;
+            }
+            
+            // Форматируем данные для Chart.js
+            const labels = data.map(item => {
+                if (currentPeriod === 'day') {
+                    // Если в данных есть время, используем его, иначе используем только дату
+                    const date = new Date(item.date);
+                    if (date.getHours() !== 0 || date.getMinutes() !== 0) {
+                        return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                    }
+                }
+                return formatDate(item.date);
+            });
+            
+            const values = data.map(item => item.value);
+            
+            // Определяем цвет графика
+            let gradientColor = '#231c5c';
+            switch(currentCurrency) {
+                case 'USD': gradientColor = '#231c5c'; break;
+                case 'EUR': gradientColor = '#4caf50'; break;
+                case 'GBP': gradientColor = '#9c27b0'; break;
+                case 'CNY': gradientColor = '#f44336'; break;
+                case 'BTC': gradientColor = '#ff9800'; break;
+                case 'ETH': gradientColor = '#2196f3'; break;
+            }
+            
+            // Создаем градиент для заливки под линией
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, `${gradientColor}60`); // Полупрозрачный
+            gradient.addColorStop(1, `${gradientColor}00`); // Полностью прозрачный
+            
+            // Удаляем предыдущий график, если он существует
+            if (chart) {
+                chart.destroy();
+            }
+            
+            // Создаем новый график
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `Курс ${currentCurrency}`,
+                        data: values,
+                        borderColor: gradientColor,
+                        backgroundColor: gradient,
+                        borderWidth: 3,
+                        tension: 0.3,
+                        fill: true,
+                        pointBackgroundColor: gradientColor,
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: '#333',
+                            bodyColor: '#333',
+                            borderColor: '#ddd',
+                            borderWidth: 1,
+                            padding: 10,
+                            cornerRadius: 8,
+                            displayColors: false,
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    return `Дата: ${item.label}`;
+                                },
+                                label: function(context) {
+                                    let value = context.raw;
+                                    if (currentCurrency === 'BTC' || currentCurrency === 'ETH') {
+                                        return `${currentCurrency}: ${value.toLocaleString('ru-RU')} $`;
+                                    } else {
+                                        return `${currentCurrency}: ${value.toLocaleString('ru-RU')} ₽`;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#666',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: '#eee'
+                            },
+                            ticks: {
+                                color: '#666',
+                                font: {
+                                    size: 12
+                                },
+                                callback: function(value) {
+                                    return value.toLocaleString('ru-RU');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Функция для обновления информационных карточек
+        function updateInfo(data, currentRate) {
+            // Если данных нет, показываем прочерки
+            if (!data || data.length === 0) {
+                currentRateElement.textContent = currentCurrency === 'BTC' || currentCurrency === 'ETH' ? 
+                    `${currentRate.toLocaleString('ru-RU')} $` : 
+                    `${currentRate.toLocaleString('ru-RU')} ₽`;
+                changeValueElement.textContent = '--';
+                changePercentElement.textContent = '--';
+                maxValueElement.textContent = '--';
+                maxDateElement.textContent = '--';
+                minValueElement.textContent = '--';
+                minDateElement.textContent = '--';
+                return;
+            }
+            
+            // Получаем текущий и начальный курс из данных
+            const initialValue = data[0].value;
+            let finalValue = data[data.length - 1].value;
+            
+            // Для последнего значения используем текущий курс, если он доступен
+            if (currentRate > 0) {
+                finalValue = currentRate;
+            }
+            
+            // Расчет изменения
+            const change = finalValue - initialValue;
+            const changePercent = (change / initialValue) * 100;
+            
+            // Находим максимальное и минимальное значения
+            let maxValue = Number.MIN_SAFE_INTEGER;
+            let minValue = Number.MAX_SAFE_INTEGER;
+            let maxDate, minDate;
+            
+            data.forEach(item => {
+                if (item.value > maxValue) {
+                    maxValue = item.value;
+                    maxDate = new Date(item.date);
+                }
+                if (item.value < minValue) {
+                    minValue = item.value;
+                    minDate = new Date(item.date);
+                }
+            });
+            
+            // Обновляем элементы интерфейса
+            if (currentCurrency === 'BTC' || currentCurrency === 'ETH') {
+                currentRateElement.textContent = `${finalValue.toLocaleString('ru-RU')} $`;
+                maxValueElement.textContent = `${maxValue.toLocaleString('ru-RU')} $`;
+                minValueElement.textContent = `${minValue.toLocaleString('ru-RU')} $`;
+                changeValueElement.textContent = change >= 0 ? 
+                    `+${change.toLocaleString('ru-RU')} $` : 
+                    `${change.toLocaleString('ru-RU')} $`;
+            } else {
+                currentRateElement.textContent = `${finalValue.toLocaleString('ru-RU')} ₽`;
+                maxValueElement.textContent = `${maxValue.toLocaleString('ru-RU')} ₽`;
+                minValueElement.textContent = `${minValue.toLocaleString('ru-RU')} ₽`;
+                changeValueElement.textContent = change >= 0 ? 
+                    `+${change.toLocaleString('ru-RU')} ₽` : 
+                    `${change.toLocaleString('ru-RU')} ₽`;
+            }
+            
+            // Обновляем процентное изменение
+            changePercentElement.textContent = changePercent >= 0 ? 
+                `+${changePercent.toFixed(2)}%` : 
+                `${changePercent.toFixed(2)}%`;
+            
+            // Добавляем класс для цвета (зеленый для положительного, красный для отрицательного)
+            changePercentElement.className = 'info-change ' + (changePercent >= 0 ? 'positive' : 'negative');
+            changeValueElement.className = 'info-value ' + (changePercent >= 0 ? 'positive' : 'negative');
+            
+            // Форматируем даты для максимального и минимального значений
+            if (currentPeriod === 'day' && maxDate.getHours() !== 0) {
+                maxDateElement.textContent = maxDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                minDateElement.textContent = minDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            } else {
+                maxDateElement.textContent = formatDate(maxDate);
+                minDateElement.textContent = formatDate(minDate);
+            }
+        }
+        
+        // Загружаем начальные данные
+        loadChartData();
+    });
+</script>
+{% endblock %} 

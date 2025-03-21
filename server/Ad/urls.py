@@ -14,6 +14,7 @@ api_patterns = [
     path('change-password/', views.change_password, name='change_password'),
     path('comments/<int:news_id>/', views.get_comments, name='get_comments'),
     path('add-comment/', views.add_comment, name='add_comment'),
+    path('currency-history/', views.get_currency_history, name='currency_history'),
 ]
 
 # Явно указываем основные маршруты приложения
@@ -24,6 +25,7 @@ main_patterns = [
     path('register/', views.register_view, name='register'),
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.profile_view, name='profile'),
+    path('currency/', views.currency_charts, name='currency_charts'),
     path('test-404/', views.test_404, name='test_404'),
 ]
 

@@ -468,6 +468,7 @@
             <span>Орбита Новостей</span>
             <div class="nav-menu">
                 <a href="{% url 'main' %}" class="nav-link">Главная</a>
+                <a href="{% url 'currency_charts' %}" class="nav-link">Курсы валют</a>
                 {% if user.is_authenticated %}
                     <a href="{% url 'profile' %}" class="nav-link">Личный кабинет</a>
                     <a href="{% url 'logout' %}" class="nav-link">Выход</a>
