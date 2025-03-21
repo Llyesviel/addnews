@@ -177,8 +177,8 @@
 
     .main-content {
         display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
+        justify-content: center;
+        align-items: center;
         flex: 1;
         overflow: hidden;
         width: 100%;
@@ -186,11 +186,14 @@
         padding: 15px 0;
         background-color: transparent;
         position: relative;
-        z-index: 2; /* Повышаем z-index, чтобы контент был над звездами */
+        z-index: 2;
+        height: 100vh;
+        max-width: 95%;
+        margin: 0 auto;
     }
 
     .news-content, .qr-section {
-        align-self: flex-start;
+        align-self: center;
     }
 
     .news-content {
@@ -202,11 +205,10 @@
         overflow-y: auto;
         box-sizing: border-box;
         font-size: 1.5rem;
-        margin-left: 15px;
-        margin-top: 100px;
+        margin: 0;
         scrollbar-width: thin;
         -ms-overflow-style: none;
-        max-height: 65vh;
+        max-height: 75vh;
         position: relative;
     }
 
@@ -232,14 +234,16 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 25px;
+        justify-content: center;
+        padding: 30px;
         background-color: rgba(255, 255, 255, 0.9);
         border-radius: 50px;
-        margin-right: 15px;
+        margin: 0;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-        width: 28%;
+        width: 30%;
         flex: 0 0 auto;
         transition: all 0.3s ease;
+        max-height: 70vh;
     }
 
     .qr-section:hover {
@@ -248,10 +252,12 @@
     }
 
     .qr-section img {
-        width: 70%;
+        width: 85%;
         height: auto;
-        min-width: 150px;
-        min-height: 150px;
+        min-width: 200px;
+        min-height: 200px;
+        max-width: 300px;
+        max-height: 300px;
         transition: all 0.3s ease-in-out;
         border-radius: 15px;
         opacity: 1;
@@ -267,15 +273,15 @@
 
     .qr-source {
         font-weight: bold;
-        font-size: 1.4rem;
+        font-size: 1.6rem;
         color: #1a237e;
-        margin-top: 15px;
+        margin-top: 20px;
         text-align: center;
         transition: all 0.3s ease;
-        padding: 8px 15px;
+        padding: 10px 20px;
         background-color: rgba(255, 255, 255, 0.95);
-        border-radius: 8px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        border-radius: 10px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
         border: 1px solid #e0e0e0;
         position: relative;
         display: inline-block;
@@ -615,17 +621,24 @@
     @media (max-width: 1200px) {
         .main-content {
             gap: 20px;
+            max-width: 95%;
         }
         
         .news-content {
             width: 58%;
-            margin-left: 10px;
-            margin-top: 40px;
+            margin: 0;
         }
         
         .qr-section {
-            width: 38%;
-            margin-right: 10px;
+            width: 35%;
+            margin: 0;
+        }
+        
+        .qr-section img {
+            min-width: 180px;
+            min-height: 180px;
+            max-width: 250px;
+            max-height: 250px;
         }
     }
 
@@ -638,28 +651,28 @@
         
         .news-content {
             width: 90%;
-            max-height: 50vh;
-            margin-left: 0;
-            margin-top: 25px;
-            margin-bottom: 15px;
+            max-height: 60vh;
+            margin: 0 0 15px 0;
         }
         
         .qr-section {
-            width: 40%;
-            margin-right: 0;
+            width: 50%; /* Увеличиваю ширину для планшетов */
+            margin: 0;
             border-radius: 40px;
         }
         
         .qr-section img {
-            width: 70%;
+            width: 80%;
             border-radius: 12px;
-            min-width: 100px;
-            min-height: 100px;
+            min-width: 200px;
+            min-height: 200px;
+            max-width: 250px;
+            max-height: 250px;
         }
         
         .qr-source {
-            font-size: 1.3rem;
-            padding: 6px 12px;
+            font-size: 1.5rem;
+            padding: 8px 15px;
         }
     }
 
@@ -671,8 +684,7 @@
         .news-content {
             width: 95%;
             padding: 15px;
-            margin-top: 15px;
-            margin-bottom: 10px;
+            margin: 0 0 10px 0;
         }
         
         .news-content h2 {
@@ -684,17 +696,15 @@
         }
         
         .qr-section {
-            width: 60%;
+            width: 70%; /* Увеличиваю ширину для мобильных устройств */
             border-radius: 35px;
-        }
-        
-        .qr-section img {
-            border-radius: 10px;
+            padding: 20px;
+            margin: 0;
         }
         
         .qr-source {
-            font-size: 1.2rem;
-            padding: 5px 10px;
+            font-size: 1.4rem;
+            padding: 8px 15px;
         }
     }
 </style>
