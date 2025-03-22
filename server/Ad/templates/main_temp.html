@@ -443,7 +443,6 @@
         height: 20px;
         display: inline-block;
         margin-right: 5px;
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23231c5c"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.01-.01L23 10z"/></svg>');
     }
 
     .dislike-button .rating-icon {
@@ -451,7 +450,6 @@
         height: 20px;
         display: inline-block;
         margin-right: 5px;
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23231c5c"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v1.91l.01.01L1 14c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>');
     }
 
     .comment-button .rating-icon {
@@ -459,15 +457,12 @@
         height: 20px;
         display: inline-block;
         margin-right: 5px;
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23231c5c"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>');
     }
 
     .like-button.active .rating-icon {
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233949ab"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.01-.01L23 10z"/></svg>');
     }
 
     .dislike-button.active .rating-icon {
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233949ab"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v1.91l.01.01L1 14c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>');
     }
 
     .rating-count {
@@ -813,7 +808,7 @@
     }
     
     .rainy-theme .theme-color {
-        background: linear-gradient(135deg, #78909c 0%, #546e7a 100%);
+        background: linear-gradient(135deg, #274272 0%, #0D1433 100%);
     }
     
     /* Стили для дождливого фона */
@@ -826,7 +821,7 @@
         z-index: 0;
         pointer-events: none;
         overflow: hidden;
-        background: linear-gradient(to bottom, #374046 0%, #546e7a 100%);
+        background: linear-gradient(to bottom, #0D1433 0%, #171F55 50%, #274272 100%);
         display: none;
     }
     
@@ -834,19 +829,19 @@
         position: absolute;
         width: 2px;
         height: 15px;
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.6));
+        background: linear-gradient(to bottom, rgba(108, 144, 195, 0.1), rgba(108, 144, 195, 0.6));
         border-radius: 20px;
         opacity: 0;
         animation: falling var(--duration, 1s) linear infinite;
         animation-delay: var(--delay, 0s);
-        box-shadow: 0 0 2px rgba(255, 255, 255, 0.3);
+        box-shadow: 0 0 3px rgba(108, 144, 195, 0.5);
     }
     
     .splash {
         position: absolute;
         width: 10px;
         height: 2px;
-        background: rgba(255, 255, 255, 0.4);
+        background: rgba(108, 144, 195, 0.5);
         border-radius: 50%;
         opacity: 0;
         transform-origin: center;
@@ -857,8 +852,8 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        background: linear-gradient(to bottom, rgba(192, 210, 222, 0.1) 0%, rgba(176, 198, 209, 0.2) 100%);
-        opacity: 0.3;
+        background: linear-gradient(to bottom, rgba(108, 144, 195, 0.15) 0%, rgba(39, 66, 114, 0.25) 100%);
+        opacity: 0.4;
         pointer-events: none;
     }
     
@@ -897,49 +892,49 @@
     /* Дополнительные стили для дождливой темы */
     body.rainy-theme .news-content {
         background-color: rgba(245, 250, 255, 0.92);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 6px 20px rgba(13, 20, 51, 0.3);
     }
     
     body.rainy-theme .news-content h2 {
-        color: #37474f;
+        color: #171F55;
     }
     
     body.rainy-theme .news-content p {
-        color: #455a64;
+        color: #274272;
     }
     
     body.rainy-theme .qr-section {
         background-color: rgba(245, 250, 255, 0.9);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 6px 20px rgba(13, 20, 51, 0.3);
     }
     
     body.rainy-theme .qr-source {
-        color: #37474f;
+        color: #171F55;
         background-color: rgba(236, 239, 241, 0.95);
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 3px 8px rgba(13, 20, 51, 0.2);
     }
     
     body.rainy-theme .qr-source:hover {
-        color: #546e7a;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        color: #274272;
+        box-shadow: 0 4px 10px rgba(13, 20, 51, 0.25);
     }
     
     body.rainy-theme .qr-source:hover::after {
-        background-color: #546e7a;
+        background-color: #274272;
     }
     
     body.rainy-theme .nav-button {
-        background-color: #546e7a;
+        background-color: #274272;
     }
     
     body.rainy-theme .nav-button:hover {
-        background-color: #455a64;
+        background-color: #171F55;
     }
     
     body.rainy-theme .like-button .rating-icon,
     body.rainy-theme .dislike-button .rating-icon,
     body.rainy-theme .comment-button .rating-icon {
-        filter: hue-rotate(220deg) saturate(0.8);
+        filter: hue-rotate(210deg) saturate(1.2);
     }
     
     body.rainy-theme .timer-circle-progress {
@@ -1190,9 +1185,9 @@
         position: fixed;
         width: var(--width, 3px);
         height: var(--height, 15px);
-        background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 100%);
+        background: radial-gradient(ellipse at center, rgba(108, 144, 195, 0.7) 0%, rgba(39, 66, 114, 0.4) 100%);
         border-radius: 100% 100% 10% 10%;
-        box-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+        box-shadow: 0 0 5px rgba(108, 144, 195, 0.5);
         opacity: 0;
         z-index: 98;
         pointer-events: none;
@@ -1205,27 +1200,19 @@
     @keyframes flowing {
         0% {
             opacity: 0;
-            transform: translateY(0) scaleY(1) translateX(0);
+            transform: translateY(0) scaleY(0.5);
         }
         5% {
             opacity: 0.7;
+            transform: translateY(0) scaleY(1);
         }
-        20% {
-            transform: translateY(var(--y1, 50px)) scaleY(1.2) translateX(var(--x1, 5px));
-        }
-        40% {
-            transform: translateY(var(--y2, 100px)) scaleY(1.5) translateX(var(--x2, -8px));
-        }
-        60% {
-            transform: translateY(var(--y3, 150px)) scaleY(1.8) translateX(var(--x3, 5px));
-        }
-        80% {
-            transform: translateY(var(--y4, 200px)) scaleY(2) translateX(var(--x4, -5px));
+        95% {
             opacity: 0.7;
+            transform: translateY(var(--distance, 100px)) scaleY(1);
         }
         100% {
-            transform: translateY(var(--y5, 300px)) scaleY(0.8) translateX(var(--x5, 0));
             opacity: 0;
+            transform: translateY(var(--distance, 100px)) scaleY(0.5);
         }
     }
 
@@ -1532,6 +1519,202 @@
     .theme-circle-toggle {
         background: linear-gradient(135deg, #3b1b78, #1a237e);
     }
+
+    /* Стили для эффекта молнии */
+    .lightning {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(108, 144, 195, 0);
+        opacity: 0;
+        z-index: 1;
+        pointer-events: none;
+        transition: opacity 50ms ease-out;
+        box-shadow: 0 0 100px 5px rgba(108, 144, 195, 0);
+    }
+
+    /* Стили для стекающих капель на поверхностях */
+    .flowing-drop {
+        position: absolute;
+        width: 2px;
+        height: 10px;
+        background: linear-gradient(to bottom, rgba(108, 144, 195, 0.1), rgba(108, 144, 195, 0.7));
+        border-radius: 10px;
+        transform-origin: top center;
+        box-shadow: 0 0 3px rgba(108, 144, 195, 0.4);
+        z-index: 2;
+        pointer-events: none;
+        opacity: 0.7;
+    }
+
+    .bottom-mist {
+        opacity: 0.5;
+        animation: mistPulse 10s ease-in-out infinite;
+    }
+
+    /* Анимация пульсации тумана */
+    @keyframes mistPulse {
+        0% { opacity: 0.4; }
+        50% { opacity: 0.7; }
+        100% { opacity: 0.4; }
+    }
+
+    @keyframes falling {
+        0% {
+            transform: translateY(-100px);
+            opacity: 0;
+        }
+        5% {
+            opacity: 0.5;
+        }
+        95% {
+            opacity: 0.5;
+        }
+        100% {
+            transform: translateY(calc(100vh + 100px));
+            opacity: 0;
+        }
+    }
+
+    @keyframes splash {
+        0% {
+            transform: scale(0, 0);
+            opacity: 0.7;
+        }
+        80% {
+            transform: scale(1, 1);
+            opacity: 0.5;
+        }
+        100% {
+            transform: scale(2, 2);
+            opacity: 0;
+        }
+    }
+
+        if (!document.body.classList.contains('rainy-theme')) {
+            return;
+        }
+        
+        const MAX_FLOWING_DROPS = 30;
+        
+        const currentDrops = document.querySelectorAll('.flowing-drop');
+        if (currentDrops.length > MAX_FLOWING_DROPS) {
+            return;
+        }
+        
+        const drop = document.createElement('div');
+        drop.className = 'flowing-drop';
+        
+        drop.style.left = `${startPosX}%`;
+        
+        const width = 1 + Math.random() * 3;
+        const height = 8 + Math.random() * 15;
+        drop.style.setProperty('--width', `${width}px`);
+        drop.style.setProperty('--height', `${height}px`);
+        
+        const distance = 100 + Math.random() * 300;
+        drop.style.setProperty('--distance', `${distance}px`);
+        
+        const duration = 4 + Math.random() * 8;
+        drop.style.setProperty('--duration', `${duration}s`);
+        
+        drop.style.setProperty('--delay', `${Math.random() * 2}s`);
+        
+        document.body.appendChild(drop);
+        
+        setTimeout(() => {
+            if (drop.parentNode) {
+                drop.parentNode.removeChild(drop);
+            }
+        }, (duration + 2) * 1000);
+    }
+
+        if (!document.body.classList.contains('rainy-theme')) {
+            return;
+        }
+        
+        for (let i = 0; i < 10; i++) {
+            setTimeout(() => {
+                createFlowingDrops();
+            }, i * 300);
+        }
+        
+        setInterval(() => {
+            if (document.body.classList.contains('rainy-theme')) {
+                createFlowingDrops();
+            }
+        }, 500);
+    }
+
+        if (!document.body.classList.contains('rainy-theme')) {
+            return;
+        }
+        
+        const lightning = document.createElement('div');
+        lightning.className = 'lightning';
+        lightning.style.position = 'fixed';
+        lightning.style.top = '0';
+        lightning.style.left = '0';
+        lightning.style.width = '100%';
+        lightning.style.height = '100%';
+        lightning.style.pointerEvents = 'none';
+        lightning.style.zIndex = '1';
+        
+        lightning.style.backgroundColor = `rgba(108, 144, 195, ${0.1 + Math.random() * 0.3})`;
+        lightning.style.boxShadow = `0 0 100px 5px rgba(108, 144, 195, ${0.3 + Math.random() * 0.5})`;
+        document.body.appendChild(lightning);
+        
+        let currentFlash = 0;
+        
+            if (currentFlash < flashCount) {
+                lightning.style.opacity = 0.1 + Math.random() * 0.4;
+                
+                const flashDuration = 50 + Math.random() * 150;
+                
+                setTimeout(() => {
+                    lightning.style.opacity = '0';
+                    
+                    const pauseDuration = 50 + Math.random() * 300;
+                    setTimeout(() => {
+                        currentFlash++;
+                        flash();
+                    }, pauseDuration);
+                }, flashDuration);
+            } else {
+                setTimeout(() => {
+                    if (lightning.parentNode) {
+                        lightning.parentNode.removeChild(lightning);
+                    }
+                }, 100);
+            }
+        }
+        
+        const addThunderSound = () => {
+            setTimeout(() => {
+                if (document.body.classList.contains('rainy-theme')) {
+                    console.log('Thunder sound effect would play here');
+                }
+        };
+        
+        flash();
+        addThunderSound();
+    }
+
+        setTimeout(() => {
+            if (document.body.classList.contains('rainy-theme')) {
+                createLightningEffect();
+            }
+        }, 2000 + Math.random() * 3000);
+        
+        setInterval(() => {
+            if (document.body.classList.contains('rainy-theme')) {
+                if (Math.random() < 0.7) {
+                    createLightningEffect();
+                }
+            }
+    }
 </style>
 {% endblock %}
 
@@ -1638,11 +1821,8 @@
 
 {% block script %}
 <script>
-    // Инициализация и обработка всех переключателей тем
-    document.addEventListener('DOMContentLoaded', function() {
         console.log('== Инициализация всех переключателей тем ==');
         
-        // Проверяем DOM-структуру
         const rainyBackground = document.getElementById('rainy-background');
         const enhancedStars = document.getElementById('enhanced-stars');
         
@@ -1650,11 +1830,9 @@
         console.log('- rainy-background:', rainyBackground ? 'найден' : 'НЕ НАЙДЕН');
         console.log('- enhanced-stars:', enhancedStars ? 'найден' : 'НЕ НАЙДЕН');
         
-        // Глобальные переменные для использования в других функциях
         window.rainyBackground = rainyBackground;
         window.enhancedStars = enhancedStars;
         
-        // *** 1. Инициализация стандартного переключателя тем ***
         const themeToggle = document.getElementById('theme-toggle-button');
         const themeMenu = document.getElementById('theme-menu');
         const themeOptions = document.querySelectorAll('.theme-menu .theme-option');
@@ -1662,15 +1840,11 @@
         if (themeToggle && themeMenu) {
             console.log('Стандартное меню тем найдено, добавляем обработчики');
             
-            // Обработчик клика по кнопке - открывает/закрывает меню
-            themeToggle.addEventListener('click', function(e) {
                 e.stopPropagation();
                 themeMenu.classList.toggle('visible');
                 console.log('Стандартное меню тем переключено');
             });
             
-            // Закрытие меню при клике вне его
-            document.addEventListener('click', function(e) {
                 if (themeMenu.classList.contains('visible') && 
                     !themeMenu.contains(e.target) && 
                     e.target !== themeToggle) {
@@ -1679,9 +1853,7 @@
                 }
             });
             
-            // Обработчик выбора темы
             themeOptions.forEach(option => {
-                option.addEventListener('click', function() {
                     const theme = this.getAttribute('data-theme');
                     console.log(`Выбрана тема (стандартное меню): ${theme}`);
                     applyTheme(theme);
@@ -1692,7 +1864,6 @@
             console.warn('Стандартное меню тем не найдено');
         }
         
-        // *** 4. Инициализация круглого меню тем ***
         const themeCircleToggle = document.getElementById('theme-circle-toggle');
         const themeCircleMenuItems = document.getElementById('theme-circle-menu-items');
         const circleThemeOptions = document.querySelectorAll('.theme-circle-menu-items .theme-option');
@@ -1701,11 +1872,9 @@
         if (themeCircleToggle && themeCircleMenuItems) {
             console.log('Круглое меню тем найдено, добавляем обработчики');
             
-            // === Код для перемещения круглого меню ===
             if (themeCircleMenu) {
                 console.log('Добавляем функцию перетаскивания для круглого меню');
                 
-                // Восстанавливаем сохраненную позицию
                 const savedPosition = JSON.parse(localStorage.getItem('themeCirclePosition') || '{}');
                 if (savedPosition.bottom !== undefined && savedPosition.right !== undefined) {
                     themeCircleMenu.style.bottom = savedPosition.bottom + 'px';
@@ -1725,13 +1894,11 @@
                     themeCircleMenu.style.left = savedPosition.left + 'px';
                 }
                 
-                // Переменные для перетаскивания
                 let isDragging = false;
                 let lastX = 0;
                 let lastY = 0;
                 let animationFrameId = null;
                 
-                // Состояние позиции меню
                 let menuState = {
                     top: null,
                     left: null,
@@ -1739,8 +1906,6 @@
                     right: null
                 };
                 
-                // Инициализация начального состояния
-                function updateMenuState() {
                     const rect = themeCircleMenu.getBoundingClientRect();
                     const isTop = rect.top <= window.innerHeight / 2;
                     const isLeft = rect.left <= window.innerWidth / 2;
@@ -1755,46 +1920,34 @@
                     };
                 }
                 
-                // Вызываем один раз для начальной инициализации
                 updateMenuState();
                 
-                // Когда пользователь нажимает на меню
-                themeCircleToggle.addEventListener('mousedown', function(e) {
                     if (themeCircleMenuItems.classList.contains('active')) {
-                        // Если меню открыто, не начинаем перетаскивание
                         return;
                     }
                     
                     isDragging = true;
                     
-                    // Запоминаем начальную позицию курсора
                     lastX = e.clientX;
                     lastY = e.clientY;
                     
-                    // Обновляем состояние меню
                     updateMenuState();
                     
-                    // Запрещаем стандартное поведение при перетаскивании
                     e.preventDefault();
                     
-                    // Добавляем класс анимации для визуальной обратной связи
                     themeCircleMenu.classList.add('dragging');
                     
-                    // Отменяем предыдущий запрос анимации если он был
                     if (animationFrameId) {
                         cancelAnimationFrame(animationFrameId);
                     }
                 });
                 
-                // Функция для обновления положения меню
-                function updateMenuPosition(clientX, clientY) {
                     const deltaX = clientX - lastX;
                     const deltaY = clientY - lastY;
                     
                     lastX = clientX;
                     lastY = clientY;
                     
-                    // Обновляем значения в зависимости от привязки
                     if (menuState.isTop) {
                         menuState.top = Math.max(0, menuState.top + deltaY);
                     } else {
@@ -1807,8 +1960,6 @@
                         menuState.right = Math.max(0, menuState.right - deltaX);
                     }
                     
-                    // Применяем позицию с использованием transform вместо top/right/bottom/left
-                    // для большей производительности
                     if (menuState.isTop) {
                         themeCircleMenu.style.top = menuState.top + 'px';
                         themeCircleMenu.style.bottom = 'auto';
@@ -1826,11 +1977,8 @@
                     }
                 }
                 
-                // Когда пользователь двигает мышью
-                document.addEventListener('mousemove', function(e) {
                     if (!isDragging) return;
                     
-                    // Используем requestAnimationFrame для оптимизации производительности
                     if (animationFrameId) {
                         cancelAnimationFrame(animationFrameId);
                     }
@@ -1840,22 +1988,17 @@
                 });
             });
                 
-                // Когда пользователь отпускает кнопку мыши
-                document.addEventListener('mouseup', function() {
                     if (!isDragging) return;
                     
                     isDragging = false;
                     
-                    // Отменяем анимационный фрейм если он активен
                     if (animationFrameId) {
                         cancelAnimationFrame(animationFrameId);
                         animationFrameId = null;
                     }
                     
-                    // Удаляем класс анимации
                     themeCircleMenu.classList.remove('dragging');
                     
-                    // Сохраняем позицию в localStorage
                     const position = {};
                     
                     if (menuState.isTop) {
@@ -1874,37 +2017,29 @@
                     console.log('Сохранена позиция меню:', position);
                 });
                 
-                // Добавляем поддержку тач-интерфейса для мобильных устройств
-                themeCircleToggle.addEventListener('touchstart', function(e) {
                     if (themeCircleMenuItems.classList.contains('active')) return;
                     
                     isDragging = true;
                     
-                    // Запоминаем начальную позицию
                     const touch = e.touches[0];
                     lastX = touch.clientX;
                     lastY = touch.clientY;
                     
-                    // Обновляем состояние меню
                     updateMenuState();
                     
-                    // Запрещаем стандартное поведение при перетаскивании
                     e.preventDefault();
                     
                     themeCircleMenu.classList.add('dragging');
                     
-                    // Отменяем предыдущий запрос анимации если он был
                     if (animationFrameId) {
                         cancelAnimationFrame(animationFrameId);
                     }
                 });
                 
-                document.addEventListener('touchmove', function(e) {
                     if (!isDragging) return;
                     
                     const touch = e.touches[0];
                     
-                    // Используем requestAnimationFrame для оптимизации производительности
                     if (animationFrameId) {
                         cancelAnimationFrame(animationFrameId);
                     }
@@ -1914,12 +2049,10 @@
                     });
                 });
                 
-                document.addEventListener('touchend', function() {
                     if (!isDragging) return;
                     
                     isDragging = false;
                     
-                    // Отменяем анимационный фрейм если он активен
                     if (animationFrameId) {
                         cancelAnimationFrame(animationFrameId);
                         animationFrameId = null;
@@ -1927,7 +2060,6 @@
                     
                     themeCircleMenu.classList.remove('dragging');
                     
-                    // Сохраняем позицию в localStorage
                     const position = {};
                     
                     if (menuState.isTop) {
@@ -1947,23 +2079,17 @@
                 });
             }
             
-            // Добавляем эффект пульсации
             themeCircleToggle.classList.add('pulse');
             
-            // Убираем пульсацию через 5 секунд
             setTimeout(() => {
                 themeCircleToggle.classList.remove('pulse');
             }, 5000);
             
-            // Обработчик клика по кружку - открывает/закрывает меню
-            themeCircleToggle.addEventListener('click', function(e) {
                 e.stopPropagation();
                 themeCircleMenuItems.classList.toggle('active');
                 console.log('Меню тем переключено');
             });
             
-            // Закрытие меню при клике вне его
-            document.addEventListener('click', function(e) {
                 if (themeCircleMenuItems.classList.contains('active') && 
                     !themeCircleMenuItems.contains(e.target) && 
                     e.target !== themeCircleToggle) {
@@ -1972,9 +2098,7 @@
                 }
             });
             
-            // Обработчик выбора темы
             circleThemeOptions.forEach(option => {
-                option.addEventListener('click', function() {
                     const theme = this.getAttribute('data-theme');
                     console.log(`Выбрана тема (круглое меню): ${theme}`);
                     applyTheme(theme);
@@ -1986,33 +2110,25 @@
             console.warn('Круглое меню тем не найдено');
         }
         
-        // Применяем сохраненную тему при загрузке
         const savedTheme = localStorage.getItem('theme') || 'cosmic';
         console.log('Загружена тема:', savedTheme);
         applyTheme(savedTheme);
         updateActiveButtons(savedTheme);
         updateActiveThemeOptions(savedTheme);
         
-        // Функция применения темы
-        function applyTheme(theme) {
             console.log('Основной applyTheme из main.html вызван с темой:', theme);
             
-            // Используем глобальную функцию из base.html, если она существует
-            if (window.applyTheme !== undefined && typeof window.applyTheme === 'function' && this !== window) {
                 console.log('Используем глобальную функцию window.applyTheme');
                 window.applyTheme(theme);
                 
-                // Дополнительные действия для специфичных элементов на этой странице
                 const rainyBackground = document.getElementById('rainy-background');
                 const enhancedStars = document.getElementById('enhanced-stars');
                 
-                // Обновляем видимость фонов
                 if (enhancedStars && rainyBackground) {
                     if (theme === 'cosmic') {
                         enhancedStars.style.display = 'block';
                         rainyBackground.style.display = 'none';
                         
-                        // Удаляем все капли дождя
                         const allDrops = document.querySelectorAll('.raindrop');
                         allDrops.forEach(drop => {
                             if (drop.parentNode) drop.parentNode.removeChild(drop);
@@ -2021,7 +2137,6 @@
                         enhancedStars.style.display = 'none';
                         rainyBackground.style.display = 'block';
                         
-                        // Создаем дождливый фон, если его еще нет
                         if (!rainyBackground.querySelector('.raindrop')) {
                             window.createRainyBackground();
                         }
@@ -2030,21 +2145,17 @@
                 return;
             }
             
-            // Оригинальная реализация, если глобальная функция недоступна
             console.log('Используем локальную функцию applyTheme');
             
-            // Обновляем классы на body для совместимости с новым стилем
             document.body.className = '';
             document.body.classList.add('theme-' + theme);
             
-            // Для обратной совместимости добавляем и старые классы
             if (theme === 'cosmic') {
                 document.body.classList.add('cosmic-theme');
             } else if (theme === 'rainy') {
                 document.body.classList.add('rainy-theme');
             }
             
-            // Обновляем видимость фонов
             const rainyBackground = document.getElementById('rainy-background');
             const enhancedStars = document.getElementById('enhanced-stars');
             
@@ -2053,7 +2164,6 @@
                     enhancedStars.style.display = 'block';
                     rainyBackground.style.display = 'none';
                     
-                    // Удаляем все капли дождя
                     const allDrops = document.querySelectorAll('.raindrop');
                     allDrops.forEach(drop => {
                         if (drop.parentNode) drop.parentNode.removeChild(drop);
@@ -2062,20 +2172,15 @@
                     enhancedStars.style.display = 'none';
                     rainyBackground.style.display = 'block';
                     
-                    // Создаем дождливый фон, если его еще нет
                     if (!rainyBackground.querySelector('.raindrop')) {
                         window.createRainyBackground();
                     }
                 }
             }
             
-            // Сохраняем выбор в localStorage
             localStorage.setItem('theme', theme);
         }
         
-        // Функция обновления активных кнопок
-        function updateActiveButtons(theme) {
-            // Обновляем простой переключатель
             if (simpleCosmicButton && simpleRainyButton) {
                 if (theme === 'cosmic') {
                     simpleCosmicButton.classList.add('active');
@@ -2087,14 +2192,10 @@
             }
         }
         
-        // Функция обновления активных опций в круглом меню
-        function updateActiveThemeOptions(theme) {
-            // Обновляем опции в круглом меню
             circleThemeOptions.forEach(option => {
                 option.classList.toggle('active', option.getAttribute('data-theme') === theme);
             });
             
-            // Обновляем опции в стандартном меню
             themeOptions.forEach(option => {
                 option.classList.toggle('active', option.getAttribute('data-theme') === theme);
             });
@@ -2103,34 +2204,26 @@
         console.log('== Инициализация всех переключателей тем завершена ==');
     });
 
-    // Создаем улучшенный звездный фон
     document.addEventListener('DOMContentLoaded', () => {
         const enhancedStars = document.getElementById('enhanced-stars');
         if (enhancedStars) {
-            // Создаем звезды
             for (let i = 0; i < 200; i++) {
                 createStar();
             }
             
-            // Создаем метеоры
             setInterval(createMeteor, 10000);
         }
         
-        // Функция создания звезды
-        function createStar() {
             const star = document.createElement('div');
             star.className = 'enhanced-star';
             
-            // Случайный размер
             const size = Math.random() * 3;
             star.style.width = `${size}px`;
             star.style.height = `${size}px`;
             
-            // Случайное положение
             star.style.left = `${Math.random() * 100}%`;
             star.style.top = `${Math.random() * 100}%`;
             
-            // Случайная яркость и мерцание
             const brightness = Math.random() * 0.8 + 0.2;
             star.style.opacity = brightness;
             star.style.animationDelay = `${Math.random() * 5}s`;
@@ -2139,22 +2232,17 @@
             enhancedStars.appendChild(star);
         }
         
-        // Функция создания метеора
-        function createMeteor() {
             const meteor = document.createElement('div');
             meteor.className = 'meteor';
             
-            // Случайное положение сверху и слева
             meteor.style.left = `${Math.random() * 80 + 10}%`;
             meteor.style.top = '0';
             
-            // Случайная длина и скорость
             const speed = Math.random() * 2 + 1;
             meteor.style.setProperty('--speed', `${speed}s`);
             
             enhancedStars.appendChild(meteor);
             
-            // Удаляем метеор после анимации
             setTimeout(() => {
                 if (meteor.parentNode) {
                     meteor.parentNode.removeChild(meteor);
@@ -2163,10 +2251,8 @@
         }
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
         console.log('== DOMContentLoaded: НАЧАЛО ==');
         
-        // Проверка DOM-структуры
         const rainyBackgroundCheck = document.getElementById('rainy-background');
         const enhancedStarsCheck = document.getElementById('enhanced-stars');
         const lightningContainerCheck = document.getElementById('lightning-container');
@@ -2176,14 +2262,10 @@
         console.log('- enhanced-stars:', enhancedStarsCheck ? 'найден' : 'НЕ НАЙДЕН');
         console.log('- lightning-container:', lightningContainerCheck ? 'найден' : 'НЕ НАЙДЕН');
         
-        // Предварительная инициализация переменных
         window.rainyBackground = rainyBackgroundCheck;
         window.enhancedStars = enhancedStarsCheck;
         window.lightningContainer = lightningContainerCheck;
         
-        // Глобальная функция для создания дождливого фона,
-        // чтобы гарантировать доступность во всех частях кода
-        window.createRainyBackgroundGlobal = function() {
             console.log('Вызвана глобальная функция createRainyBackgroundGlobal');
             
             const rainyBg = document.getElementById('rainy-background');
@@ -2192,54 +2274,42 @@
                 return;
             }
             
-            // Очищаем возможные остатки предыдущей инициализации
             rainyBg.innerHTML = '<div class="mist"></div>';
             
-            // Установка градиентного фона
-            rainyBg.style.background = 'linear-gradient(to bottom, #1c262b 0%, #37474f 40%, #455a64 100%)';
+            rainyBg.style.background = 'linear-gradient(to bottom, #0D1433 0%, #171F55 40%, #274272 100%)';
             
-            // Остальной код инициализации...
             const mist = rainyBg.querySelector('.mist');
             if (mist) {
-                mist.style.background = 'linear-gradient(to bottom, rgba(192, 210, 222, 0.15) 0%, rgba(176, 198, 209, 0.25) 100%)';
+                mist.style.background = 'linear-gradient(to bottom, rgba(108, 144, 195, 0.15) 0%, rgba(39, 66, 114, 0.25) 100%)';
                 mist.style.opacity = '0.4';
             }
             
-            // Создаем начальные капли дождя
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 80; i++) {
                 setTimeout(() => {
                     createRaindrop(rainyBg);
-                }, i * 100);
+                }, i * 80);
             }
             
-            // Постоянное добавление новых капель
             const rainInterval = setInterval(() => {
                 if (document.body.classList.contains('rainy-theme')) {
                     createRaindrop(rainyBg);
                 } else {
                     clearInterval(rainInterval);
                 }
-            }, 100);
+            }, 80);
         };
         
-        function createRaindrop(container) {
             const drop = document.createElement('div');
             drop.className = 'raindrop';
             
-            // Случайное положение
             drop.style.left = `${Math.random() * 100}%`;
             
-            // Случайная скорость падения
-            const duration = 0.5 + Math.random() * 1.5; // от 0.5 до 2 секунды
             drop.style.setProperty('--duration', `${duration}s`);
             
-            // Случайная задержка начала анимации
             drop.style.setProperty('--delay', `${Math.random() * 2}s`);
             
-            // Добавляем каплю в контейнер
             container.appendChild(drop);
             
-            // Создаем всплеск при падении капли
             setTimeout(() => {
                 const splash = document.createElement('div');
                 splash.className = 'splash';
@@ -2247,7 +2317,6 @@
                 splash.style.bottom = '0';
                 container.appendChild(splash);
                 
-                // Удаляем всплеск после анимации
                 setTimeout(() => {
                     if (splash.parentNode) {
                         splash.parentNode.removeChild(splash);
@@ -2255,7 +2324,6 @@
                 }, 600);
             }, (duration + parseFloat(drop.style.getPropertyValue('--delay'))) * 1000);
             
-            // Удаляем каплю после падения
             setTimeout(() => {
                 if (drop.parentNode) {
                     drop.parentNode.removeChild(drop);
@@ -2265,41 +2333,32 @@
         
         console.log('== DOMContentLoaded: ЗАВЕРШЕНО ==');
         
-        // Обработчик для большой кнопки переключения на дождливую тему
         const bigRainyButton = document.getElementById('big-rainy-button');
         if (bigRainyButton) {
             console.log('Большая кнопка дождливой темы найдена, добавляем обработчик');
             
-            bigRainyButton.addEventListener('click', function() {
                 console.log('Нажата БОЛЬШАЯ кнопка дождливой темы');
                 
-                // Наиболее прямой и надежный способ переключения на дождливую тему
                 try {
-                    // 1. Устанавливаем класс темы на body
                     document.body.classList.add('rainy-theme');
                     document.body.classList.remove('cosmic-theme');
                     
-                    // 2. Находим и показываем дождливый фон
                     const rainyBg = document.getElementById('rainy-background');
                     if (rainyBg) {
                         rainyBg.style.display = 'block';
                         console.log('Дождливый фон показан');
                         
-                        // 3. Создаем элементы дождя, если их еще нет
                         if (!rainyBg.querySelector('.raindrop')) {
                             console.log('Генерируем капли дождя');
                             
-                            // Создаем элемент тумана, если его нет
                             if (!rainyBg.querySelector('.mist')) {
                                 const mist = document.createElement('div');
                                 mist.className = 'mist';
                                 rainyBg.appendChild(mist);
                             }
                             
-                            // Устанавливаем градиентный фон
                             rainyBg.style.background = 'linear-gradient(to bottom, #1c262b 0%, #37474f 40%, #455a64 100%)';
                             
-                            // Создаем капли дождя
                             for (let i = 0; i < 50; i++) {
                                 const drop = document.createElement('div');
                                 drop.className = 'raindrop';
@@ -2309,8 +2368,6 @@
                                 rainyBg.appendChild(drop);
                             }
                             
-                            // Добавляем интервал для постоянного создания капель
-                            setInterval(function() {
                                 if (document.body.classList.contains('rainy-theme')) {
                                     const drop = document.createElement('div');
                                     drop.className = 'raindrop';
@@ -2319,7 +2376,6 @@
                                     drop.style.setProperty('--delay', '0s');
                                     rainyBg.appendChild(drop);
                                     
-                                    // Удаляем каплю после анимации
                                     setTimeout(() => {
                                         if (drop.parentNode) {
                                             drop.parentNode.removeChild(drop);
@@ -2332,18 +2388,15 @@
                         console.error('Элемент дождливого фона не найден!');
                     }
                     
-                    // 4. Скрываем звездный фон
                     const stars = document.getElementById('enhanced-stars');
                     if (stars) {
                         stars.style.display = 'none';
                         console.log('Звездный фон скрыт');
                     }
                     
-                    // 5. Сохраняем выбор в локальное хранилище
                     localStorage.setItem('theme', 'rainy');
                     console.log('Тема сохранена в localStorage');
                     
-                    // 6. Обновляем состояние кнопок
                     const simpleRainyBtn = document.getElementById('simple-rainy-button');
                     const simpleCosmicBtn = document.getElementById('simple-cosmic-button');
                     
@@ -2352,7 +2405,6 @@
                     
                     console.log('Переключение на дождливую тему успешно выполнено!');
                     
-                    // Скрываем кнопку
                     bigRainyButton.style.display = 'none';
                 } catch (error) {
                     console.error('Ошибка при переключении на дождливую тему:', error);
@@ -2362,7 +2414,6 @@
             console.error('Большая кнопка дождливой темы НЕ НАЙДЕНА!');
         }
         
-        // Инициализация круглого меню выбора тем
         const themeCircleToggle = document.getElementById('theme-circle-toggle');
         const themeCircleMenuItems = document.getElementById('theme-circle-menu-items');
         const themeOptions = document.querySelectorAll('.theme-option');
@@ -2370,23 +2421,16 @@
         if (themeCircleToggle && themeCircleMenuItems) {
             console.log('Круглое меню найдено, добавляем обработчики');
             
-            // Добавляем эффект пульсации при загрузке страницы
             themeCircleToggle.classList.add('pulse');
             
-            // Убираем пульсацию через 5 секунд
             setTimeout(() => {
                 themeCircleToggle.classList.remove('pulse');
             }, 5000);
             
-            // Обработчик нажатия на круглую кнопку (открытие/закрытие меню)
-            themeCircleToggle.addEventListener('click', function(e) {
-                e.stopPropagation(); // Предотвращаем всплытие события
                 themeCircleMenuItems.classList.toggle('active');
                 console.log('Переключение меню тем');
             });
             
-            // Закрытие меню при клике вне его
-            document.addEventListener('click', function(e) {
                 if (themeCircleMenuItems.classList.contains('active') && 
                     !themeCircleMenuItems.contains(e.target) && 
                     e.target !== themeCircleToggle) {
@@ -2395,15 +2439,11 @@
                 }
             });
             
-            // Обработчики для элементов меню
             themeOptions.forEach(option => {
-                option.addEventListener('click', function() {
                     const theme = this.getAttribute('data-theme');
                     console.log(`Выбрана тема через круглое меню: ${theme}`);
                     
-                    // Переключаем тему напрямую
                     if (theme === 'cosmic') {
-                        // Космическая тема
                         document.body.classList.remove('rainy-theme');
                         document.body.classList.add('cosmic-theme');
                         
@@ -2413,13 +2453,11 @@
                         if (rainyBg) rainyBg.style.display = 'none';
                         if (enhancedStars) enhancedStars.style.display = 'block';
                         
-                        // Удаляем существующие капли дождя
                         const allDrops = document.querySelectorAll('.raindrop, .flowing-drop');
                         allDrops.forEach(drop => {
                             if (drop.parentNode) drop.parentNode.removeChild(drop);
                         });
                     } else if (theme === 'rainy') {
-                        // Дождливая тема
                         document.body.classList.add('rainy-theme');
                         document.body.classList.remove('cosmic-theme');
                         
@@ -2431,31 +2469,23 @@
                         if (rainyBg) {
                             rainyBg.style.display = 'block';
                             
-                            // Если капель дождя еще нет, создаем их
                             if (!rainyBg.querySelector('.raindrop')) {
                                 console.log('Создаем дождливый фон через круглое меню');
                                 
-                                // Пробуем использовать глобальную функцию
-                                if (typeof window.createRainyBackgroundGlobal === 'function') {
                                     window.createRainyBackgroundGlobal();
                                 } else {
                                     console.warn('Глобальная функция создания дождя не найдена, используем встроенный метод');
                                     
-                                    // Встроенный метод создания дождя
-                                    // Очищаем контейнер
                                     rainyBg.innerHTML = '<div class="mist"></div>';
                                     
-                                    // Устанавливаем фон
                                     rainyBg.style.background = 'linear-gradient(to bottom, #1c262b 0%, #37474f 40%, #455a64 100%)';
                                     
-                                    // Создаем туман
                                     const mist = rainyBg.querySelector('.mist');
                                     if (mist) {
                                         mist.style.background = 'linear-gradient(to bottom, rgba(192, 210, 222, 0.15) 0%, rgba(176, 198, 209, 0.25) 100%)';
                                         mist.style.opacity = '0.4';
                                     }
                                     
-                                    // Создаем капли
                                     for (let i = 0; i < 50; i++) {
                                         const drop = document.createElement('div');
                                         drop.className = 'raindrop';
@@ -2465,7 +2495,6 @@
                                         rainyBg.appendChild(drop);
                                     }
                                     
-                                    // Интервал для постоянного создания капель
                                     const rainInterval = setInterval(() => {
                                         if (document.body.classList.contains('rainy-theme')) {
                                             const drop = document.createElement('div');
@@ -2475,7 +2504,6 @@
                                             drop.style.setProperty('--delay', '0s');
                                             rainyBg.appendChild(drop);
                                             
-                                            // Удаляем каплю после анимации
                                             setTimeout(() => {
                                                 if (drop.parentNode) {
                                                     drop.parentNode.removeChild(drop);
@@ -2492,10 +2520,8 @@
                         }
                     }
                     
-                    // Сохраняем выбор в localStorage
                     localStorage.setItem('theme', theme);
                     
-                    // Обновляем другие переключатели тем
                     const simpleCosmicBtn = document.getElementById('simple-cosmic-button');
                     const simpleRainyBtn = document.getElementById('simple-rainy-button');
                     
@@ -2507,12 +2533,10 @@
                         if (simpleRainyBtn) simpleRainyBtn.classList.add('active');
                     }
                     
-                    // Закрываем меню
                     themeCircleMenuItems.classList.remove('active');
                 });
             });
             
-            // Устанавливаем активную тему в меню
             const currentTheme = localStorage.getItem('theme') || 'cosmic';
             themeOptions.forEach(option => {
                 if (option.getAttribute('data-theme') === currentTheme) {
@@ -2527,26 +2551,20 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Создаем улучшенный звездный фон
-        function createEnhancedStarryBackground() {
             const container = document.getElementById('enhanced-stars');
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
             
-            // Добавляем мерцающие звезды разных размеров
             const starTypes = ['tiny', 'small', 'medium', 'large', 'bright'];
-            const starCounts = [150, 100, 50, 25, 10]; // Количество звезд каждого типа
             
             starTypes.forEach((type, index) => {
                 for (let i = 0; i < starCounts[index]; i++) {
                     const star = document.createElement('div');
                     star.className = `star ${type}`;
                     
-                    // Распределяем звезды по экрану
                     star.style.left = `${Math.random() * 100}%`;
                     star.style.top = `${Math.random() * 100}%`;
                     
-                    // Назначаем случайные длительности и задержки для анимации
                     const duration = type === 'bright' ? 6 + Math.random() * 6 : 3 + Math.random() * 4;
                     star.style.setProperty('--duration', `${duration}s`);
                     star.style.setProperty('--delay', `${Math.random() * 5}s`);
@@ -2555,68 +2573,47 @@
                 }
             });
             
-            // Создаем туманности с разными параметрами
             for (let i = 0; i < 4; i++) {
                 const nebula = document.createElement('div');
                 nebula.className = 'nebula';
                 
-                // Распределяем туманности по экрану
                 nebula.style.left = `${Math.random() * 100}%`;
                 nebula.style.top = `${Math.random() * 100}%`;
                 
-                // Добавляем случайные параметры для анимации
                 nebula.style.setProperty('--delay', `${Math.random() * 10}s`);
                 nebula.style.setProperty('--scale', `${1 + Math.random() * 1.5}`);
                 
-                // Случайный поворот для разнообразия
                 nebula.style.transform = `scale(var(--scale, 1)) rotate(${Math.random() * 360}deg)`;
                 
                 container.appendChild(nebula);
             }
             
-            // Функция для периодического создания метеоров
-            function createMeteor() {
                 const meteor = document.createElement('div');
                 meteor.className = 'meteor';
                 
-                // Случайная позиция для начала метеора (в верхней части экрана)
-                const topPosition = Math.random() * 0.3; // 0-30% сверху
-                const leftPosition = 0.1 + Math.random() * 0.8; // 10-90% слева
                 
                 meteor.style.setProperty('--top', `${topPosition}`);
                 meteor.style.setProperty('--left', `${leftPosition}`);
                 
-                // Добавляем метеор на страницу
                 container.appendChild(meteor);
                 
-                // Удаляем метеор после завершения анимации
                 setTimeout(() => {
                     meteor.remove();
-                }, 8000); // Время жизни метеора (должно быть >= времени анимации)
             }
             
-            // Изначально создаем несколько метеоров
             for (let i = 0; i < 3; i++) {
                 setTimeout(() => {
                     createMeteor();
-                }, i * 2000); // Распределяем создание по времени
             }
             
-            // Периодически создаем новые метеоры
             setInterval(() => {
                 createMeteor();
-            }, 8000 + Math.random() * 5000); // Случайный интервал между метеорами
         }
         
-        // Вызываем функцию создания звездного фона
         createEnhancedStarryBackground();
         
-        // Обеспечиваем прозрачный фон для всех родительских элементов
-        function setTransparentBg() {
-            // Получаем текущий элемент
             let currentElement = document.querySelector('.main-content');
             
-            // Пока не дошли до body, делаем фон родителей прозрачным
             while (currentElement && currentElement.parentElement) {
                 currentElement = currentElement.parentElement;
                 if (currentElement.tagName !== 'HTML') {
@@ -2625,10 +2622,8 @@
             }
         }
         
-        // Выполняем при загрузке страницы
         setTransparentBg();
         
-        // И также при прокрутке для надежности
         window.addEventListener('scroll', setTransparentBg);
         
         const newsItems = document.querySelectorAll('.news-item');
@@ -2647,10 +2642,8 @@
         const qrImage = document.getElementById('qr-image');
         const qrSource = document.getElementById('qr-source');
         
-        // Переменные для хранения текущего ID новости в модальном окне
         let currentNewsId = null;
         
-        // Карта QR-кодов для разных источников
         const qrCodeSources = {
             'cbr.ru': {
                 url: "{% static 'Ad/images/Cbr.png' %}",
@@ -2666,15 +2659,12 @@
             }
         };
         
-        // Получаем информацию об аутентификации пользователя из шаблона Django
         const userAuthenticated = "{{ user.is_authenticated|yesno:'true,false' }}";
         const loginUrl = "{% url 'login' %}";
 
         let currentNewsIndex = 0;
         let timer;
 
-        function showNews(index) {
-            // Убедимся, что индекс в допустимом диапазоне
             if (index < 0) {
                 index = newsItems.length - 1;
             } else if (index >= newsItems.length) {
@@ -2682,7 +2672,6 @@
             }
             currentNewsIndex = index;
 
-            // Сбрасываем и перезапускаем таймер анимации
             const timerProgressCircles = document.querySelectorAll('.timer-circle-progress');
             timerProgressCircles.forEach(circle => {
                 circle.style.animation = 'none';
@@ -2690,33 +2679,24 @@
                 circle.style.animation = 'countdown 20s linear forwards';
             });
 
-            // Скрываем все новости и показываем только текущую
             newsItems.forEach((item, i) => {
                 item.style.display = (i === index) ? 'block' : 'none';
             });
             
-            // Обновляем QR-код в зависимости от источника новости
             updateQRCode(newsItems[index]);
             
-            // Обновляем элементы темы
             updateThemeElements();
 
-            // Очищаем предыдущий таймер и устанавливаем новый
             clearTimeout(timer);
             timer = setTimeout(() => {
                 showNews((currentNewsIndex + 1) % newsItems.length);
             }, 20000);
         }
         
-        // Функция для определения источника новости и обновления QR-кода
-        function updateQRCode(newsItem) {
-            // Получаем URL источника из атрибута data-source-url
             const sourceUrl = newsItem.dataset.sourceUrl || '';
             
-            // По умолчанию ЦБ РФ
             let qrCode = qrCodeSources['cbr.ru'];
             
-            // Определяем источник по URL
             if (sourceUrl.includes('cbr.ru') || sourceUrl.includes('centralbank')) {
                 qrCode = qrCodeSources['cbr.ru'];
             } else if (sourceUrl.includes('kommersant.ru') || sourceUrl.includes('kommersant')) {
@@ -2725,35 +2705,28 @@
                 qrCode = qrCodeSources['rambler.ru'];
             }
             
-            // Для отладки
             console.log('Источник новости:', sourceUrl, 'выбран QR-код:', qrCode.name);
             
-            // Добавляем анимацию fadeout/fadein
             qrImage.style.opacity = '0';
             qrSource.style.opacity = '0';
             
             setTimeout(() => {
-                // Обновляем изображение и текст
                 qrImage.src = qrCode.url;
                 qrSource.textContent = qrCode.name;
                 
-                // Плавно возвращаем видимость
                 qrImage.style.opacity = '1';
                 qrSource.style.opacity = '1';
             }, 300);
         }
 
-        // Инициализация показа новостей
         if (newsItems.length > 0) {
             showNews(currentNewsIndex);
         }
 
-        // Обработчики для кнопки "Назад"
         backButtons.forEach(button => {
             button.addEventListener('click', () => {
                 showNews(currentNewsIndex - 1);
 
-                // AJAX запрос для уведомления сервера
                 fetch("/api/skip-news/", {
                     method: 'POST',
                     headers: {
@@ -2774,12 +2747,10 @@
             });
         });
 
-        // Добавляем обработчики для кнопки "Пропустить"
         skipButtons.forEach(button => {
             button.addEventListener('click', () => {
                 showNews(currentNewsIndex + 1);
 
-                // AJAX запрос для уведомления сервера
                 fetch("/api/skip-news/", {
                     method: 'POST',
                     headers: {
@@ -2800,18 +2771,14 @@
             });
         });
 
-        // Обработчики событий для кнопок оценки
-        function handleRatingClick(button, rating) {
             const newsId = button.dataset.newsId;
             const ratingType = button.dataset.rating;
 
-            // AJAX запрос для отправки оценки
             fetch("/api/rate-news/", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCsrfToken(),
-                    'Accept': 'application/json' // Явно указываем, что ожидаем JSON
                 },
                 body: JSON.stringify({
                     news_id: newsId,
@@ -2827,7 +2794,6 @@
                     });
                 }
                 
-                // Проверка типа содержимого на валидность JSON
                 const contentType = response.headers.get("content-type");
                 if (!contentType || !contentType.includes("application/json")) {
                     return response.text().then(text => {
@@ -2842,7 +2808,6 @@
             .then(data => {
                 console.log("Успешный ответ:", data);
                 if (data.status === 'success' || data.status === 'removed') {
-                    // Обновляем счетчики лайков и дизлайков
                     const newsItem = document.querySelector(`.news-item[data-id="${newsId}"]`);
                     const likeButton = newsItem.querySelector('.like-button');
                     const dislikeButton = newsItem.querySelector('.dislike-button');
@@ -2850,7 +2815,6 @@
                     likeButton.querySelector('.rating-count').textContent = data.likes;
                     dislikeButton.querySelector('.rating-count').textContent = data.dislikes;
 
-                    // Обновляем активный класс кнопок
                     if (data.status === 'success') {
                         if (ratingType === 'like') {
                             likeButton.classList.add('active');
@@ -2860,7 +2824,6 @@
                             likeButton.classList.remove('active');
                         }
                     } else {
-                        // Если оценка была удалена
                         button.classList.remove('active');
                     }
                 } else if (data.status === 'error') {
@@ -2874,8 +2837,6 @@
             });
         }
 
-        // Функция для проверки авторизации и вызова соответствующего действия
-        function handleRatingButtonClick(button, ratingType) {
             if (userAuthenticated === "true") {
                 handleRatingClick(button, ratingType);
             } else {
@@ -2884,23 +2845,18 @@
             }
         }
 
-        // Обработчик для кнопок лайков
         likeButtons.forEach(button => {
             button.addEventListener('click', () => handleRatingButtonClick(button, 'like'));
         });
 
-        // Обработчик для кнопок дизлайков
         dislikeButtons.forEach(button => {
             button.addEventListener('click', () => handleRatingButtonClick(button, 'dislike'));
         });
         
-        // Функция для загрузки комментариев к новости
-        function loadComments(newsId) {
             commentsList.innerHTML = '<div class="no-comments">Загрузка комментариев...</div>';
             
             fetch(`/api/comments/${newsId}/`, {
                 headers: {
-                    'Accept': 'application/json' // Явно указываем, что ожидаем JSON
                 }
             })
                 .then(response => {
@@ -2912,7 +2868,6 @@
                         });
                     }
                     
-                    // Проверка типа содержимого на валидность JSON
                     const contentType = response.headers.get("content-type");
                     if (!contentType || !contentType.includes("application/json")) {
                         return response.text().then(text => {
@@ -2956,8 +2911,6 @@
                 });
         }
         
-        // Функция для добавления нового комментария
-        function addComment(newsId, commentText) {
             if (!commentText.trim()) {
                 commentError.textContent = 'Пожалуйста, введите текст комментария';
                 commentError.style.display = 'block';
@@ -2972,7 +2925,6 @@
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCsrfToken(),
-                    'Accept': 'application/json' // Явно указываем, что ожидаем JSON
                 },
                 body: JSON.stringify({
                     news_id: newsId,
@@ -2992,7 +2944,6 @@
                     });
                 }
                 
-                // Проверка типа содержимого на валидность JSON
                 const contentType = response.headers.get("content-type");
                 if (!contentType || !contentType.includes("application/json")) {
                     return response.text().then(text => {
@@ -3007,16 +2958,13 @@
             .then(data => {
                 console.log("Ответ от API добавления комментария:", data);
                 if (data.status === 'success') {
-                    // Очищаем форму
                     commentText.value = '';
                     
-                    // Если это первый комментарий, очищаем сообщение "нет комментариев"
                     const noComments = commentsList.querySelector('.no-comments');
                     if (noComments) {
                         commentsList.innerHTML = '';
                     }
                     
-                    // Добавляем новый комментарий в начало списка
                     const commentItem = document.createElement('div');
                     commentItem.className = 'comment-item';
                     commentItem.innerHTML = `
@@ -3028,7 +2976,6 @@
                     `;
                     commentsList.insertBefore(commentItem, commentsList.firstChild);
                     
-                    // Обновляем счетчик комментариев на кнопке
                     const commentButton = document.querySelector(`.comment-button[data-news-id="${newsId}"]`);
                     const countElement = commentButton.querySelector('.rating-count');
                     const currentCount = parseInt(countElement.textContent) || 0;
@@ -3049,17 +2996,14 @@
             });
         }
         
-        // Обработчики для комментариев
         commentButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const newsId = button.dataset.newsId;
                 currentNewsId = newsId;
                 
-                // Очищаем предыдущие данные
                 commentText.value = '';
                 commentError.style.display = 'none';
                 
-                // Проверяем авторизацию для формы комментариев
                 if (userAuthenticated !== "true") {
                     commentForm.innerHTML = `
                         <div class="error-message">
@@ -3067,7 +3011,6 @@
                         </div>
                     `;
                 } else {
-                    // Восстанавливаем форму если она была изменена
                     if (!commentText) {
                         commentForm.innerHTML = `
                             <div class="error-message" id="comment-error" style="display: none;"></div>
@@ -3080,59 +3023,47 @@
                     }
                 }
                 
-                // Загружаем комментарии
                 loadComments(newsId);
                 
-                // Открываем модальное окно
                 commentsModal.style.display = 'block';
             });
         });
         
-        // Обработчик для отправки комментария
         commentSubmit.addEventListener('click', () => {
             if (currentNewsId) {
                 addComment(currentNewsId, commentText.value);
             }
         });
         
-        // Обработчик для закрытия модального окна
         closeModal.addEventListener('click', () => {
             commentsModal.style.display = 'none';
         });
         
-        // Закрытие модального окна при клике вне его области
         window.addEventListener('click', (event) => {
             if (event.target === commentsModal) {
                 commentsModal.style.display = 'none';
             }
         });
 
-        // Функция для получения CSRF токена
-        function getCsrfToken() {
             return document.cookie
                 .split('; ')
                 .find(row => row.startsWith('csrftoken='))
                 ?.split('=')[1];
         }
         
-        // ===== НОВЫЙ КОД ДЛЯ УПРАВЛЕНИЯ ТЕМАМИ =====
         
-        // Переключатель тем
         const themeToggle = document.getElementById('theme-toggle-button');
         const themeMenu = document.getElementById('theme-menu');
         const themeOptions = document.querySelectorAll('.theme-menu .theme-option');
         const rainyBackground = document.getElementById('rainy-background');
         const enhancedStars = document.getElementById('enhanced-stars');
         
-        // Получаем прямые ссылки на опции тем
         const cosmicThemeOption = document.querySelector('.theme-option.cosmic-theme');
         const rainyThemeOption = document.querySelector('.theme-option.rainy-theme');
         
-        // Проверяем сохраненную тему при загрузке страницы
         const savedTheme = localStorage.getItem('theme') || 'cosmic';
         setTheme(savedTheme);
         
-        // Проверка наличия элементов в DOM
         console.log('Проверка наличия элементов в DOM:');
         console.log('- themeToggle:', themeToggle ? 'найден' : 'НЕ НАЙДЕН');
         console.log('- themeMenu:', themeMenu ? 'найден' : 'НЕ НАЙДЕН');
@@ -3141,25 +3072,20 @@
         console.log('- rainyBackground:', rainyBackground ? 'найден' : 'НЕ НАЙДЕН');
         console.log('- enhancedStars:', enhancedStars ? 'найден' : 'НЕ НАЙДЕН');
         
-        // Показываем/скрываем меню тем при клике на иконку
         themeToggle.addEventListener('click', () => {
             console.log('Клик по переключателю тем');
             themeMenu.classList.toggle('visible');
             console.log('Меню тем видимо:', themeMenu.classList.contains('visible'));
         });
         
-        // Аварийное восстановление космической темы при двойном клике
         themeToggle.addEventListener('dblclick', () => {
-            // Принудительно устанавливаем космическую тему
             document.body.classList.remove('rainy-theme');
             rainyBackground.style.display = 'none';
             enhancedStars.style.display = 'block';
             localStorage.setItem('theme', 'cosmic');
             
-            // Удаляем все капли при переключении на космическую тему
             removeAllDrops();
             
-            // Обновляем активную опцию в меню
             themeOptions.forEach(option => {
                 if (option.dataset.theme === 'cosmic') {
                     option.classList.add('active');
@@ -3168,23 +3094,19 @@
                 }
             });
             
-            // Обновляем элементы интерфейса
             updateThemeElements();
             
-            // Закрываем меню если открыто
             themeMenu.classList.remove('visible');
             
             console.log('АВАРИЙНЫЙ СБРОС: восстановлена космическая тема');
         });
         
-        // Закрываем меню при клике вне его
         document.addEventListener('click', (event) => {
             if (!themeToggle.contains(event.target) && !themeMenu.contains(event.target)) {
                 themeMenu.classList.remove('visible');
             }
         });
         
-        // Прямые обработчики для выбора тем
         cosmicThemeOption.addEventListener('click', () => {
             console.log('Клик на космическую тему');
             setTheme('cosmic');
@@ -3202,7 +3124,6 @@
             themeMenu.classList.remove('visible');
         });
         
-        // Общий обработчик (на всякий случай)
         themeOptions.forEach(option => {
             option.addEventListener('click', () => {
                 const theme = option.dataset.theme;
@@ -3211,11 +3132,8 @@
             });
         });
         
-        // Функция для установки темы
-        function setTheme(theme) {
             console.log('Вызов setTheme с параметром:', theme);
             
-            // Обновляем простые кнопки тоже
             try {
                 const simpleCosmicBtn = document.getElementById('simple-cosmic-button');
                 const simpleRainyBtn = document.getElementById('simple-rainy-button');
@@ -3231,7 +3149,6 @@
                 console.error('Ошибка при обновлении простых кнопок:', error);
             }
             
-            // Проверяем существование элементов
             if (!rainyBackground) {
                 console.error('Ошибка: элемент rainyBackground не найден!');
                 rainyBackground = document.getElementById('rainy-background');
@@ -3250,10 +3167,8 @@
                 }
             }
             
-            // Сохраняем выбор пользователя
             localStorage.setItem('theme', theme);
             
-            // Обновляем активную опцию в меню
             themeOptions.forEach(option => {
                 if (option.dataset.theme === theme) {
                     option.classList.add('active');
@@ -3262,11 +3177,7 @@
                 }
             });
             
-            // Определяем функцию removeAllDrops если она еще не определена глобально
-            if (typeof window.removeAllDrops !== 'function') {
-                window.removeAllDrops = function() {
                     console.log('Удаление всех капель...');
-                    // Удаляем все flowing-drop
                     const allFlowingDrops = document.querySelectorAll('.flowing-drop');
                     allFlowingDrops.forEach(drop => {
                         if (drop.parentNode) {
@@ -3276,26 +3187,21 @@
                 };
             }
             
-            // Удаляем все капли при переключении темы
             try {
                 window.removeAllDrops();
             } catch (error) {
                 console.error('Ошибка при удалении капель:', error);
             }
             
-            // Останавливаем интервал молний если он активен
             if (lightningInterval) {
                 clearInterval(lightningInterval);
             }
             
-            // Применяем тему к body
             if (theme === 'rainy') {
                 console.log('Применяем дождливую тему...');
-                // Добавляем класс дождливой темы
                 document.body.classList.add('rainy-theme');
                 document.body.classList.remove('cosmic-theme');
                 
-                // Показываем/скрываем соответствующие фоны
                 if (rainyBackground) {
                 rainyBackground.style.display = 'block';
                     console.log('Дождливый фон активирован');
@@ -3310,7 +3216,6 @@
                     console.error('enhancedStars не определен!');
                 }
                 
-                // Создаем дождливый фон если его еще нет
                 console.log('Проверяем наличие капель дождя...');
                 try {
                     if (rainyBackground && !rainyBackground.querySelector('.raindrop')) {
@@ -3318,8 +3223,6 @@
                     createRainyBackground();
                 }
                     
-                    // Запускаем эффект молний
-                    if (typeof startLightningEffects === 'function') {
                         console.log('Запускаем эффект молний');
                         startLightningEffects();
             } else {
@@ -3330,7 +3233,6 @@
                 }
             } else {
                 console.log('Применяем космическую тему...');
-                // Космическая тема (по умолчанию)
                 document.body.classList.remove('rainy-theme');
                 document.body.classList.add('cosmic-theme');
                 
@@ -3343,71 +3245,71 @@
                 }
             }
             
-            // Принудительно обновляем видимость элементов
             updateThemeElements();
             
             console.log('Тема изменена на:', theme);
         }
         
-        // Дополнительная функция для обновления элементов при смене темы
-        function updateThemeElements() {
             const newsItems = document.querySelectorAll('.news-item');
             const timers = document.querySelectorAll('.timer-container');
             const newsControls = document.querySelectorAll('.news-controls');
             
-            // Убедимся что все таймеры видимы
             timers.forEach(timer => {
                 timer.style.opacity = '1';
                 timer.style.visibility = 'visible';
             });
             
-            // Убедимся, что все элементы управления видимы
             newsControls.forEach(control => {
                 control.style.opacity = '1';
                 control.style.visibility = 'visible';
             });
             
-            // Убедимся, что текущая новость отображается корректно
             if (newsItems.length > 0 && currentNewsIndex < newsItems.length) {
                 newsItems[currentNewsIndex].style.display = 'block';
             }
             
-            // Обновим прозрачность QR-секции в зависимости от темы
             const qrSection = document.querySelector('.qr-section');
             if (qrSection) {
                 if (document.body.classList.contains('rainy-theme')) {
                     qrSection.style.backgroundColor = 'rgba(245, 250, 255, 0.1)';
                     qrSection.style.backdropFilter = 'blur(5px)';
                 } else {
-                    // Восстановление стилей для космической темы
                     qrSection.style.backgroundColor = '';
                     qrSection.style.backdropFilter = '';
                 }
             }
         }
         
-        // Функция для создания дождливого фона
-        function createRainyBackground() {
             const container = rainyBackground;
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
             
-            // Меняем фон на более красивый градиент
-            container.style.background = 'linear-gradient(to bottom, #1c262b 0%, #37474f 40%, #455a64 100%)';
+            container.style.background = 'linear-gradient(to bottom, #0D1433 0%, #171F55 40%, #274272 100%)';
             
-            // Усиливаем эффект дымки для более красивого вида
             const mist = container.querySelector('.mist');
             if (mist) {
-                mist.style.background = 'linear-gradient(to bottom, rgba(192, 210, 222, 0.15) 0%, rgba(176, 198, 209, 0.25) 100%)';
-                mist.style.opacity = '0.4';
+                mist.style.background = 'linear-gradient(to bottom, rgba(108, 144, 195, 0.15) 0%, rgba(39, 66, 114, 0.25) 100%)';
+                mist.style.opacity = '0.5';
             }
             
-            // Создаем контейнер для капель на экране
+            const existingBottomMist = container.querySelector('.bottom-mist');
+            if (existingBottomMist) {
+                container.removeChild(existingBottomMist);
+            }
+            
+            const lowerMist = document.createElement('div');
+            lowerMist.className = 'bottom-mist';
+            lowerMist.style.position = 'absolute';
+            lowerMist.style.bottom = '0';
+            lowerMist.style.left = '0';
+            lowerMist.style.width = '100%';
+            lowerMist.style.height = '250px';
+            lowerMist.style.background = 'linear-gradient(to top, rgba(13, 20, 51, 0.3) 0%, rgba(39, 66, 114, 0.1) 70%, transparent 100%)';
+            lowerMist.style.pointerEvents = 'none';
+            container.appendChild(lowerMist);
+            
             const body = document.body;
             
-            // Удаляем любые существующие капли, которые могли остаться от предыдущих переключений тем
-            function removeAllDrops() {
-                // Удаляем все flowing-drop
                 const allFlowingDrops = document.querySelectorAll('.flowing-drop');
                 allFlowingDrops.forEach(drop => {
                     if (drop.parentNode) {
@@ -3416,219 +3318,15 @@
                 });
             }
             
-            // При переключении тем нужно удалить все капли
             removeAllDrops();
             
-            // Функция для создания стекающих капель
-            function createFlowingDrops() {
-                // Если не активна дождливая тема, не создаем капли
-                if (!document.body.classList.contains('rainy-theme')) {
-                    return;
-                }
-                
-                // Максимальное количество стекающих капель - увеличено
-                const MAX_FLOWING_DROPS = 30;
-                
-                // Удаляем старые капли если их слишком много
-                const currentDrops = document.querySelectorAll('.flowing-drop');
-                if (currentDrops.length > MAX_FLOWING_DROPS) {
-                    return;
-                }
-                
-                // Создаем новую стекающую каплю
-                const drop = document.createElement('div');
-                drop.className = 'flowing-drop';
-                
-                // Определяем начальную позицию (в верхней части экрана)
-                const startPosX = 5 + Math.random() * 90; // 5-95% ширины экрана
-                drop.style.left = `${startPosX}%`;
-                drop.style.top = `${Math.random() * 20}%`; // Начинаем в верхних 20% экрана
-                
-                // Задаем случайные размеры
-                const width = 2 + Math.random() * 4; // 2-6px ширина
-                const height = 10 + Math.random() * 20; // 10-30px высота
-                drop.style.setProperty('--width', `${width}px`);
-                drop.style.setProperty('--height', `${height}px`);
-                
-                // Задаем произвольный путь стекания
-                // Генерируем случайные смещения для каждой точки анимации
-                const windowHeight = window.innerHeight;
-                const y1 = 50 + Math.random() * 50;
-                const y2 = y1 + 50 + Math.random() * 50;
-                const y3 = y2 + 50 + Math.random() * 50;
-                const y4 = y3 + 50 + Math.random() * 50;
-                const y5 = Math.min(y4 + 100 + Math.random() * 100, windowHeight);
-                
-                const x1 = -10 + Math.random() * 20;
-                const x2 = -10 + Math.random() * 20;
-                const x3 = -10 + Math.random() * 20;
-                const x4 = -10 + Math.random() * 20;
-                const x5 = -10 + Math.random() * 20;
-                
-                drop.style.setProperty('--y1', `${y1}px`);
-                drop.style.setProperty('--y2', `${y2}px`);
-                drop.style.setProperty('--y3', `${y3}px`);
-                drop.style.setProperty('--y4', `${y4}px`);
-                drop.style.setProperty('--y5', `${y5}px`);
-                
-                drop.style.setProperty('--x1', `${x1}px`);
-                drop.style.setProperty('--x2', `${x2}px`);
-                drop.style.setProperty('--x3', `${x3}px`);
-                drop.style.setProperty('--x4', `${x4}px`);
-                drop.style.setProperty('--x5', `${x5}px`);
-                
-                // Случайная длительность и задержка анимации
-                const duration = 4 + Math.random() * 8; // 4-12 секунд
-                drop.style.setProperty('--duration', `${duration}s`);
-                drop.style.setProperty('--delay', `${Math.random() * 2}s`);
-                
-                // Добавляем каплю в контейнер дождливого фона, а не в body
-                container.appendChild(drop);
-                
-                // Удаляем каплю после анимации
-                setTimeout(() => {
-                    if (drop.parentNode) {
-                        drop.parentNode.removeChild(drop);
-                    }
-                }, (duration + 2) * 1000); // Добавляем 2 секунды для задержки
-            }
+            startFlowingDrops();
             
-            // Создаем начальные стекающие капли - увеличено количество
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => {
-                    createFlowingDrops();
-                }, i * 300); // создаем с интервалом 300мс для большей частоты
-            }
-            
-            // Периодически добавляем новые стекающие капли
-            const flowingDropInterval = setInterval(() => {
-                if (document.body.classList.contains('rainy-theme')) {
-                    createFlowingDrops();
-                    createFlowingDrops(); // Добавляем две капли за раз для большей плотности
-                } else {
-                    // Если тема не дождливая, удаляем все стекающие капли
-                    removeAllDrops();
-                    clearInterval(flowingDropInterval);
-                }
-            }, 800); // каждые 800мс
-            
-            // Функция для создания эффекта молнии
-            function createLightningEffect() {
-                const lightningContainer = document.getElementById('lightning-container');
-                const thunderSound = document.getElementById('thunder-sound');
-                
-                // Создаем элемент молнии (фоновая вспышка)
-                const lightning = document.createElement('div');
-                lightning.className = 'lightning';
-                lightningContainer.appendChild(lightning);
-                
-                // Создаем тонкую линию молнии (зигзагообразную)
-                const bolt = document.createElement('div');
-                bolt.className = 'lightning-bolt';
-                
-                // Случайное положение по горизонтали
-                const startLeftPos = 10 + Math.random() * 80; // от 10% до 90% ширины экрана
-                bolt.style.left = `${startLeftPos}%`;
-                
-                // Случайная высота и угол наклона
-                const boltHeight = 100 + Math.random() * 500; // от 100px до 600px
-                const rotateAngle = -5 + Math.random() * 10; // от -5 до 5 градусов
-                
-                bolt.style.setProperty('--bolt-height', `${boltHeight}px`);
-                bolt.style.setProperty('--bolt-rotate', `${rotateAngle}deg`);
-                
-                // Анимация болта молнии
-                bolt.style.animation = 'lightning-bolt-appear 0.5s linear forwards';
-                
-                lightningContainer.appendChild(bolt);
-                
-                // Создаем несколько ответвлений от главной линии молнии
-                const branchCount = 1 + Math.floor(Math.random() * 3); // 1-3 ответвления
-                
-                for (let i = 0; i < branchCount; i++) {
-                    // Создаем ответвление
-                    const branch = document.createElement('div');
-                    branch.className = 'lightning-bolt';
-                    
-                    // Определяем положение ответвления относительно основного болта
-                    const branchPos = 20 + Math.random() * 60; // относительная позиция по высоте болта (20-80%)
-                    const branchY = boltHeight * (branchPos / 100);
-                    const branchRotate = 20 + Math.random() * 40; // угол ответвления (20-60 градусов)
-                    const branchWidth = 50 + Math.random() * 150; // длина ответвления
-                    
-                    // Устанавливаем параметры ответвления
-                    branch.style.left = `${startLeftPos}%`;
-                    branch.style.top = `${branchY}px`;
-                    branch.style.width = '2px';
-                    branch.style.height = '2px';
-                    branch.style.setProperty('--branch-y', `${branchY}px`);
-                    branch.style.setProperty('--branch-rotate', `${Math.random() > 0.5 ? branchRotate : -branchRotate}deg`);
-                    branch.style.setProperty('--branch-width', `${branchWidth}px`);
-                    
-                    // Добавляем анимацию для ответвления
-                    branch.style.animation = `lightning-branch-appear ${0.3 + Math.random() * 0.2}s linear forwards`;
-                    branch.style.animationDelay = `${0.1 + Math.random() * 0.2}s`;
-                    
-                    lightningContainer.appendChild(branch);
-                    
-                    // Удаляем ответвление после анимации
-                    setTimeout(() => {
-                        if (branch.parentNode) {
-                            branch.parentNode.removeChild(branch);
-                        }
-                    }, 600);
-                }
-                
-                // Запускаем анимацию вспышки
-                setTimeout(() => {
-                    lightning.style.animation = 'none';
-                    lightning.offsetHeight; // Перезапуск анимации
-                    lightning.style.animation = 'lightning-flash 0.3s linear';
-                    
-                    // Воспроизводим звук грома, если элемент существует и с небольшой задержкой
-                    if (thunderSound) {
-                        setTimeout(() => {
-                            thunderSound.currentTime = 0;
-                            thunderSound.play().catch(e => console.log('Не удалось воспроизвести звук грома:', e));
-                        }, 300);
-                    }
-                }, 100);
-                
-                // Удаляем молнию после анимации
-                setTimeout(() => {
-                    if (lightning.parentNode) {
-                        lightning.parentNode.removeChild(lightning);
-                    }
-                    if (bolt.parentNode) {
-                        bolt.parentNode.removeChild(bolt);
-                    }
-                }, 600);
-            }
-            
-            // Периодически создаем молнии
-            function scheduleLightning() {
-                if (!document.body.classList.contains('rainy-theme')) {
-                    return;
-                }
-                
-                // Создаем молнию
-                createLightningEffect();
-                
-                // Планируем следующую молнию со случайной задержкой
-                const nextLightningDelay = 5000 + Math.random() * 25000; // От 5 до 30 секунд
-                setTimeout(scheduleLightning, nextLightningDelay);
-            }
-            
-            // Запускаем планировщик молний
             setTimeout(scheduleLightning, 5000);
             
-            // Создаем капли дождя с замыканием для управления ими
             const createRaindrops = (() => {
-                const MAX_DROPS = 200;
                 const drops = [];
                 
-                return function() {
-                    // Если слишком много капель, удаляем старые
                     while (drops.length > MAX_DROPS) {
                         const oldDrop = drops.shift();
                         if (oldDrop && oldDrop.parentNode) {
@@ -3636,54 +3334,32 @@
                         }
                     }
                     
-                    // Создаем новые капли
-                    for (let i = 0; i < 10; i++) {
+                    for (let i = 0; i < 15; i++) {
                         const drop = document.createElement('div');
                         drop.className = 'raindrop';
                         
-                        // Случайное положение
                         drop.style.left = `${Math.random() * 100}%`;
                         
-                        // Случайная скорость падения
-                        const duration = 0.7 + Math.random() * 0.7;
+                        const duration = 0.6 + Math.random() * 0.9;
                         drop.style.setProperty('--duration', `${duration}s`);
                         drop.style.setProperty('--delay', `${Math.random() * 0.5}s`);
                         
-                        // Случайная длина и ширина капли для разнообразия
-                        drop.style.height = `${10 + Math.random() * 15}px`;
-                        drop.style.width = `${1 + Math.random() * 1.5}px`;
+                        drop.style.height = `${8 + Math.random() * 18}px`;
+                        drop.style.width = `${1 + Math.random() * 2}px`;
                         
-                        // Случайная прозрачность для создания глубины
                         drop.style.opacity = `${0.3 + Math.random() * 0.7}`;
+                        
+                        const blueHue = Math.random() > 0.6 ? '108, 144, 195' : '39, 66, 114';
+                        drop.style.background = `linear-gradient(to bottom, rgba(${blueHue}, 0.1), rgba(${blueHue}, 0.6))`;
                         
                         container.appendChild(drop);
                         drops.push(drop);
-                        
-                        // Создаем брызги когда капля достигает "земли"
-                        setTimeout(() => {
-                            if (document.body.classList.contains('rainy-theme')) {
-                                const splash = document.createElement('div');
-                                splash.className = 'splash';
-                                splash.style.left = drop.style.left;
-                                splash.style.top = `${windowHeight - 5}px`;
-                                container.appendChild(splash);
-                                
-                                // Удаляем брызги после анимации
-                                setTimeout(() => {
-                                    if (splash.parentNode) {
-                                        splash.parentNode.removeChild(splash);
-                                    }
-                                }, 600);
-                            }
-                        }, duration * 1000);
                     }
                 };
             })();
             
-            // Создаем первоначальные капли
             createRaindrops();
 
-            // Добавляем легкий эффект тумана внизу экрана для красоты
             const bottomMist = document.createElement('div');
             bottomMist.className = 'bottom-mist';
             bottomMist.style.position = 'absolute';
@@ -3695,58 +3371,44 @@
             bottomMist.style.pointerEvents = 'none';
             container.appendChild(bottomMist);
             
-            // Запускаем периодические молнии для дождливой темы
             let lightningInterval;
             
-            function startLightningEffects() {
-                // Проверяем, активен ли дождливый режим
                 if (!document.body.classList.contains('rainy-theme')) {
                     return;
                 }
                 
-                // Первая молния с небольшой задержкой
                 setTimeout(() => {
                     createLightningEffect();
                 }, 2000);
                 
-                // Создаем молнии с случайными интервалами
                 lightningInterval = setInterval(() => {
-                    // Проверяем, активен ли еще дождливый режим
                     if (!document.body.classList.contains('rainy-theme')) {
                         clearInterval(lightningInterval);
                         return;
                     }
                     
-                    // Вероятность молнии (примерно 75%)
                     if (Math.random() > 0.25) {
                         createLightningEffect();
                     }
-                }, 8000 + Math.random() * 15000); // Интервал от 8 до 23 секунд
             }
             
-            // Запускаем молнии если активна дождливая тема
             if (document.body.classList.contains('rainy-theme')) {
                 startLightningEffects();
             }
             
-            // Постоянно добавляем новые капли
             const rainInterval = setInterval(() => {
-                // Проверяем, активна ли дождливая тема
                 if (document.body.classList.contains('rainy-theme')) {
                     createRaindrops();
                 } else {
-                    // Если тема не активна, можно приостановить создание капель
                     clearInterval(rainInterval);
                 }
             }, 100);
         }
         
-        // Добавим прямой обработчик при загрузке страницы для дополнительной надежности
         try {
             const directRainyOption = document.querySelector('.theme-option.rainy-theme');
             if (directRainyOption) {
                 console.log('Добавляем прямой обработчик onclick для дождливой темы');
-                directRainyOption.onclick = function() {
                     console.log('Прямой клик на дождливую тему');
                     try {
                         setTheme('rainy');
@@ -3754,18 +3416,15 @@
                         console.error('Ошибка в прямом обработчике:', error);
                     }
                     
-                    // Скрываем меню
                     const menu = document.getElementById('theme-menu');
                     if (menu) menu.classList.remove('visible');
                     
-                    return false; // Предотвращаем всплытие события
                 };
             }
         } catch (error) {
             console.error('Ошибка при установке прямого обработчика:', error);
         }
         
-        // Создаем дополнительную кнопку для переключения на дождливую тему
         try {
             const emergencyButton = document.createElement('button');
             emergencyButton.textContent = 'Дождливая тема';
@@ -3780,7 +3439,6 @@
             emergencyButton.style.borderRadius = '5px';
             emergencyButton.style.cursor = 'pointer';
             
-            emergencyButton.onclick = function() {
                 console.log('Нажата аварийная кнопка дождливой темы');
                 setTheme('rainy');
             };
@@ -3791,29 +3449,23 @@
             console.error('Ошибка при создании аварийной кнопки:', error);
         }
         
-        // Обработчики для нового простого переключателя тем
         const simpleCosmicButton = document.getElementById('simple-cosmic-button');
         const simpleRainyButton = document.getElementById('simple-rainy-button');
         
         if (simpleCosmicButton) {
-            simpleCosmicButton.addEventListener('click', function() {
                 console.log('Нажата простая кнопка: Космическая тема');
                 
-                // Прямое применение темы без использования общей функции
                 document.body.classList.remove('rainy-theme');
                 document.body.classList.add('cosmic-theme');
                 
                 if (rainyBackground) rainyBackground.style.display = 'none';
                 if (enhancedStars) enhancedStars.style.display = 'block';
                 
-                // Сохраняем выбор
                 localStorage.setItem('theme', 'cosmic');
                 
-                // Обновляем активные кнопки
                 simpleCosmicButton.classList.add('active');
                 simpleRainyButton.classList.remove('active');
                 
-                // Удаляем все капли
                 const allFlowingDrops = document.querySelectorAll('.flowing-drop');
                 allFlowingDrops.forEach(drop => {
                     if (drop.parentNode) drop.parentNode.removeChild(drop);
@@ -3824,10 +3476,8 @@
         }
         
         if (simpleRainyButton) {
-            simpleRainyButton.addEventListener('click', function() {
                 console.log('Нажата простая кнопка: Дождливая тема');
                 
-                // Прямое применение темы без использования общей функции
                 document.body.classList.add('rainy-theme');
                 document.body.classList.remove('cosmic-theme');
                 
@@ -3837,17 +3487,12 @@
                 if (rainyBg) {
                     rainyBg.style.display = 'block';
                     
-                    // Создаем дождливый фон, если его еще нет
                     if (!rainyBg.querySelector('.raindrop')) {
                         console.log('Создаем дождливый фон напрямую через глобальную функцию');
                         try {
-                            // Используем глобальную функцию
-                            if (typeof window.createRainyBackgroundGlobal === 'function') {
                                 window.createRainyBackgroundGlobal();
                             } else {
                                 console.error('Глобальная функция createRainyBackgroundGlobal не определена');
-                                // Пробуем локальную функцию как запасной вариант
-                                if (typeof createRainyBackground === 'function') {
                                     createRainyBackground();
                                 } else {
                                     console.error('Функция createRainyBackground тоже не определена');
@@ -3867,10 +3512,8 @@
                     console.error('Не удалось найти элемент enhanced-stars');
                 }
                 
-                // Сохраняем выбор
                 localStorage.setItem('theme', 'rainy');
                 
-                // Обновляем активные кнопки
                 const simpleCosmicBtn = document.getElementById('simple-cosmic-button');
                 if (simpleCosmicBtn) simpleCosmicBtn.classList.remove('active');
                 simpleRainyButton.classList.add('active');
@@ -3879,7 +3522,6 @@
             });
         }
         
-        // Установка начальной активной кнопки
         const currentTheme = localStorage.getItem('theme') || 'cosmic';
         if (currentTheme === 'cosmic') {
             simpleCosmicButton?.classList.add('active');
@@ -3888,8 +3530,6 @@
         }
     });
 
-    // Код для круглого меню переключения тем
-    document.addEventListener('DOMContentLoaded', function() {
         console.log('DOMContentLoaded: Инициализация круглого меню тем');
         
         /*
@@ -3898,7 +3538,6 @@
          * способ переключения между темами в приложении.
          */
         
-        // Проверяем DOM-структуру
         const rainyBackground = document.getElementById('rainy-background');
         const enhancedStars = document.getElementById('enhanced-stars');
         
@@ -3906,8 +3545,6 @@
         console.log('- rainy-background:', rainyBackground ? 'найден' : 'НЕ НАЙДЕН');
         console.log('- enhanced-stars:', enhancedStars ? 'найден' : 'НЕ НАЙДЕН');
         
-        // Глобальная функция для создания дождливого фона
-        window.createRainyBackground = function() {
             console.log('Создание дождливого фона');
             
             if (!rainyBackground) {
@@ -3915,55 +3552,73 @@
                 return;
             }
             
-            // Очищаем контейнер
             rainyBackground.innerHTML = '<div class="mist"></div>';
             
-            // Устанавливаем фон
-            rainyBackground.style.background = 'linear-gradient(to bottom, #1c262b 0%, #37474f 40%, #455a64 100%)';
+            rainyBackground.style.background = 'linear-gradient(to bottom, #0D1433 0%, #171F55 40%, #274272 100%)';
             
-            // Настраиваем туман
             const mist = rainyBackground.querySelector('.mist');
             if (mist) {
-                mist.style.background = 'linear-gradient(to bottom, rgba(192, 210, 222, 0.15) 0%, rgba(176, 198, 209, 0.25) 100%)';
-                mist.style.opacity = '0.4';
+                mist.style.background = 'linear-gradient(to bottom, rgba(108, 144, 195, 0.15) 0%, rgba(39, 66, 114, 0.25) 100%)';
+                mist.style.opacity = '0.5';
             }
             
-            // Создаем начальные капли
-            for (let i = 0; i < 50; i++) {
+            const existingBottomMist = rainyBackground.querySelector('.bottom-mist');
+            if (existingBottomMist) {
+                rainyBackground.removeChild(existingBottomMist);
+            }
+            
+            const lowerMist = document.createElement('div');
+            lowerMist.className = 'bottom-mist';
+            lowerMist.style.position = 'absolute';
+            lowerMist.style.bottom = '0';
+            lowerMist.style.left = '0';
+            lowerMist.style.width = '100%';
+            lowerMist.style.height = '250px';
+            lowerMist.style.background = 'linear-gradient(to top, rgba(13, 20, 51, 0.3) 0%, rgba(39, 66, 114, 0.1) 70%, transparent 100%)';
+            lowerMist.style.pointerEvents = 'none';
+            rainyBackground.appendChild(lowerMist);
+            
+                const allFlowingDrops = document.querySelectorAll('.flowing-drop');
+                allFlowingDrops.forEach(drop => {
+                    if (drop.parentNode) {
+                        drop.parentNode.removeChild(drop);
+                    }
+                });
+            }
+            
+            removeAllDrops();
+            
+            startFlowingDrops();
+            
+            setTimeout(scheduleLightning, 5000);
+            
+            for (let i = 0; i < 80; i++) {
                 setTimeout(() => {
                     createRaindrop();
-                }, i * 100);
+                }, i * 80);
             }
             
-            // Интервал для создания новых капель
             return setInterval(() => {
                 if (document.body.classList.contains('rainy-theme')) {
                     createRaindrop();
                 }
-            }, 100);
+            }, 80);
         };
         
-        // Функция создания одной капли дождя
-        function createRaindrop() {
             if (!rainyBackground) return;
             
             const drop = document.createElement('div');
             drop.className = 'raindrop';
             
-            // Случайное положение
             drop.style.left = `${Math.random() * 100}%`;
             
-            // Случайная скорость падения
             const duration = 0.5 + Math.random() * 1.5;
             drop.style.setProperty('--duration', `${duration}s`);
             
-            // Случайная задержка начала анимации
             drop.style.setProperty('--delay', `${Math.random() * 2}s`);
             
-            // Добавляем в контейнер
             rainyBackground.appendChild(drop);
             
-            // Удаляем каплю после анимации
             setTimeout(() => {
                 if (drop.parentNode) {
                     drop.parentNode.removeChild(drop);
@@ -3971,7 +3626,6 @@
             }, (duration + parseFloat(drop.style.getPropertyValue('--delay')) + 1) * 1000);
         }
         
-        // Инициализация круглого меню
         const themeCircleToggle = document.getElementById('theme-circle-toggle');
         const themeCircleMenuItems = document.getElementById('theme-circle-menu-items');
         const themeOptions = document.querySelectorAll('.theme-option');
@@ -3979,23 +3633,17 @@
         if (themeCircleToggle && themeCircleMenuItems) {
             console.log('Круглое меню найдено, добавляем обработчики');
             
-            // Добавляем эффект пульсации
             themeCircleToggle.classList.add('pulse');
             
-            // Убираем пульсацию через 5 секунд
             setTimeout(() => {
                 themeCircleToggle.classList.remove('pulse');
             }, 5000);
             
-            // Обработчик клика по кружку - открывает/закрывает меню
-            themeCircleToggle.addEventListener('click', function(e) {
                 e.stopPropagation();
                 themeCircleMenuItems.classList.toggle('active');
                 console.log('Меню тем переключено');
             });
             
-            // Закрытие меню при клике вне его
-            document.addEventListener('click', function(e) {
                 if (themeCircleMenuItems.classList.contains('active') && 
                     !themeCircleMenuItems.contains(e.target) && 
                     e.target !== themeCircleToggle) {
@@ -4004,31 +3652,24 @@
                 }
             });
             
-            // Обработчик выбора темы
             themeOptions.forEach(option => {
-                option.addEventListener('click', function() {
                     const theme = this.getAttribute('data-theme');
                     console.log(`Выбрана тема: ${theme}`);
                     
-                    // Применяем выбранную тему
                     applyTheme(theme);
                     
-                    // Обновляем активную тему в меню
                     themeOptions.forEach(opt => {
                         opt.classList.toggle('active', opt.getAttribute('data-theme') === theme);
                     });
                     
-                    // Закрываем меню
                     themeCircleMenuItems.classList.remove('active');
                 });
             });
             
-            // Применяем сохраненную тему при загрузке
             const savedTheme = localStorage.getItem('theme') || 'cosmic';
             console.log('Загружена тема:', savedTheme);
             applyTheme(savedTheme);
             
-            // Отмечаем активную тему в меню
             themeOptions.forEach(option => {
                 if (option.getAttribute('data-theme') === savedTheme) {
                     option.classList.add('active');
@@ -4040,11 +3681,8 @@
             console.error('Ошибка: круглое меню не найдено!');
         }
         
-        // Функция применения темы
-        function applyTheme(theme) {
             console.log('Применяется тема:', theme);
             
-            // Обновляем классы на body
             if (theme === 'cosmic') {
                 document.body.classList.remove('rainy-theme');
                 document.body.classList.add('cosmic-theme');
@@ -4053,13 +3691,11 @@
                 document.body.classList.add('rainy-theme');
             }
             
-            // Обновляем видимость фонов
             if (enhancedStars && rainyBackground) {
                 if (theme === 'cosmic') {
                     enhancedStars.style.display = 'block';
                     rainyBackground.style.display = 'none';
                     
-                    // Удаляем все капли дождя
                     const allDrops = document.querySelectorAll('.raindrop');
                     allDrops.forEach(drop => {
                         if (drop.parentNode) drop.parentNode.removeChild(drop);
@@ -4068,39 +3704,26 @@
                     enhancedStars.style.display = 'none';
                     rainyBackground.style.display = 'block';
                     
-                    // Создаем дождливый фон, если его еще нет
                     if (!rainyBackground.querySelector('.raindrop')) {
                         window.createRainyBackground();
                     }
                 }
             }
             
-            // Сохраняем выбор в localStorage
             localStorage.setItem('theme', theme);
         }
     });
 
-    // Инициализация кругового меню
-    function initThemeCircleMenu() {
-        // ... existing code ...
     }
 
-    // Добавление обработчика события для кнопки переключения темы в хедере
-    document.addEventListener('DOMContentLoaded', function() {
-        // Инициализация кругового меню (на случай, если оно понадобится)
         initThemeCircleMenu();
         
-        // Найти кнопку переключения темы в хедере
         const headerThemeToggle = document.querySelector('.theme-toggle');
         
-        // Добавить обработчик клика, если элемент найден
         if (headerThemeToggle) {
-            headerThemeToggle.addEventListener('click', function() {
-                // Переключение между темами
                 const currentTheme = localStorage.getItem('theme') || 'default';
                 let nextTheme;
                 
-                // Определить следующую тему
                 if (currentTheme === 'default') {
                     nextTheme = 'cosmic';
                 } else if (currentTheme === 'cosmic') {
@@ -4109,28 +3732,17 @@
                     nextTheme = 'default';
                 }
                 
-                // Установить новую тему
                 setTheme(nextTheme);
                 
-                // Обновить активные опции в круговом меню (если оно присутствует)
                 updateActiveThemeOption();
             });
         }
     });
 
-    // Функция обновления активной темы в меню
-    // ... existing code ...
 
-    // Добавление обработчика события для кнопки переключения темы в хедере
-    document.addEventListener('DOMContentLoaded', function() {
-        // Инициализация кругового меню (на случай, если оно понадобится)
-        // initThemeCircleMenu();
         
-        // Обработчик события изменения темы
-        document.addEventListener('themeChanged', function(event) {
             console.log('Событие themeChanged получено в main.html, тема:', event.detail.theme);
             
-            // Проверяем наличие круглого меню и обновляем активные опции
             const circleThemeOptions = document.querySelectorAll('.theme-circle-menu-items .theme-option');
             if (circleThemeOptions.length > 0) {
                 circleThemeOptions.forEach(option => {
@@ -4138,7 +3750,6 @@
                 });
             }
             
-            // Проверяем наличие стандартного меню и обновляем активные опции
             const standardThemeOptions = document.querySelectorAll('.theme-menu .theme-option');
             if (standardThemeOptions.length > 0) {
                 standardThemeOptions.forEach(option => {
@@ -4146,7 +3757,6 @@
                 });
             }
             
-            // Обновляем простые кнопки, если они есть
             try {
                 const simpleCosmicBtn = document.getElementById('simple-cosmic-button');
                 const simpleRainyBtn = document.getElementById('simple-rainy-button');
@@ -4166,7 +3776,5 @@
         });
     });
 
-    // Функция обновления активной темы в меню
-    // ... existing code ...
 </script>
 {% endblock %}

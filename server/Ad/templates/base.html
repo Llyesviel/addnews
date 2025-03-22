@@ -116,6 +116,20 @@
             min-height: 100vh;
             max-width: 100%;
             overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Фоны для разных тем */
+        body.theme-default {
+            background: linear-gradient(to bottom, #010105 0%, #150f38 100%);
+        }
+        
+        body.theme-cosmic {
+            background: linear-gradient(to bottom, #010105 0%, #150f38 100%);
+        }
+        
+        body.theme-rainy {
+            background: linear-gradient(to bottom, #1a2a33 0%, #2c3e50 100%);
         }
 
         .container {
@@ -252,6 +266,45 @@
 
         .header span:last-child {
             text-align: right;  /* Выравниваем RTUMIREA по правому краю */
+        }
+
+        .rtumirea-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex: 1;
+            gap: 10px;
+        }
+        
+        .theme-toggle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #3b1b78, #1a237e); /* Дефолтный стиль */
+            color: white;
+        }
+        
+        body.theme-default .theme-toggle {
+            background: linear-gradient(135deg, #283593, #1a237e);
+        }
+        
+        body.theme-cosmic .theme-toggle {
+            background: linear-gradient(135deg, #3b1b78, #1a237e);
+        }
+        
+        body.theme-rainy .theme-toggle {
+            background: linear-gradient(135deg, #37474f, #546e7a);
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
         }
 
         .nav-menu {
@@ -477,7 +530,12 @@
                     <a href="{% url 'register' %}" class="nav-link">Регистрация</a>
                 {% endif %}
             </div>
-            <span>RTUMIREA</span>
+            <div class="rtumirea-container">
+                <span>RTUMIREA</span>
+                <div class="theme-toggle" id="theme-toggle">
+                    <i>⚪️</i>
+                </div>
+            </div>
         </div>
 
         <div class="content">
@@ -828,6 +886,126 @@
                         item.classList.remove('active', 'clicked');
                         item.style.transform = 'translateY(0) scale(1)';
                     });
+                }
+            });
+        });
+
+        // Обработчик события для переключения темы при клике на иконку в хедере
+        document.addEventListener('DOMContentLoaded', function() {
+            // Создаем пользовательское событие для оповещения о смене темы
+            const themeChangeEvent = new CustomEvent('themeChanged', {
+                bubbles: true,
+                detail: { theme: '' }
+            });
+            
+            // Функция применения темы, которую можно вызвать из любого места
+            window.applyTheme = function(theme) {
+                console.log('Global applyTheme вызван с темой:', theme);
+                
+                // Проверяем валидность темы
+                if (!['default', 'cosmic', 'rainy'].includes(theme)) {
+                    console.error('Неправильный аргумент темы:', theme);
+                    theme = 'default';
+                }
+                
+                // Сохраняем выбранную тему в localStorage
+                localStorage.setItem('theme', theme);
+                
+                // Применяем тему к body
+                document.body.className = '';  // Очищаем все классы
+                document.body.classList.add('theme-' + theme);
+                
+                // Для обратной совместимости с main.html
+                if (theme === 'cosmic') {
+                    document.body.classList.add('cosmic-theme');
+                } else if (theme === 'rainy') {
+                    document.body.classList.add('rainy-theme');
+                }
+                
+                // Проверяем наличие специфичных элементов из main.html
+                try {
+                    const rainyBackground = document.getElementById('rainy-background');
+                    const enhancedStars = document.getElementById('enhanced-stars');
+                    
+                    // Обновляем видимость фонов, если они существуют
+                    if (enhancedStars && rainyBackground) {
+                        console.log('Обновляем специфичные элементы темы в main.html');
+                        
+                        if (theme === 'cosmic' || theme === 'default') {
+                            enhancedStars.style.display = 'block';
+                            rainyBackground.style.display = 'none';
+                            
+                            // Удаляем все капли дождя
+                            const allDrops = document.querySelectorAll('.raindrop, .flowing-drop');
+                            allDrops.forEach(drop => {
+                                if (drop.parentNode) drop.parentNode.removeChild(drop);
+                            });
+                        } else if (theme === 'rainy') {
+                            enhancedStars.style.display = 'none';
+                            rainyBackground.style.display = 'block';
+                            
+                            // Если есть функция создания дождя, вызываем её
+                            if (typeof window.createRainyBackground === 'function') {
+                                if (!rainyBackground.querySelector('.raindrop')) {
+                                    window.createRainyBackground();
+                                }
+                            }
+                        }
+                    } else {
+                        console.log('Специфичные элементы темы не найдены на странице');
+                    }
+                } catch (error) {
+                    console.error('Ошибка при обновлении специфичных элементов:', error);
+                }
+                
+                // Обновляем детали события
+                themeChangeEvent.detail.theme = theme;
+                
+                // Генерируем событие смены темы
+                document.dispatchEvent(themeChangeEvent);
+                
+                console.log('Тема успешно применена:', theme);
+            };
+            
+            // Найти кнопку переключения темы в хедере
+            const headerThemeToggle = document.querySelector('.theme-toggle');
+            
+            // Добавить обработчик клика, если элемент найден
+            if (headerThemeToggle) {
+                headerThemeToggle.addEventListener('click', function() {
+                    // Переключение между темами
+                    const currentTheme = localStorage.getItem('theme') || 'default';
+                    let nextTheme;
+                    
+                    // Определить следующую тему
+                    if (currentTheme === 'default') {
+                        nextTheme = 'cosmic';
+                    } else if (currentTheme === 'cosmic') {
+                        nextTheme = 'rainy';
+                    } else {
+                        nextTheme = 'default';
+                    }
+                    
+                    // Применяем следующую тему через общую функцию
+                    window.applyTheme(nextTheme);
+                });
+            }
+            
+            // Слушатель события для элементов, загруженных динамически
+            document.addEventListener('themeChanged', function(e) {
+                console.log('Событие смены темы получено, новая тема:', e.detail.theme);
+                // Здесь можно добавить код для обновления других компонентов
+            });
+            
+            // Применяем сохраненную тему при загрузке
+            const savedTheme = localStorage.getItem('theme') || 'default';
+            window.applyTheme(savedTheme);
+            
+            // Также добавляем слушатель события хранилища для синхронизации между вкладками
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'theme') {
+                    console.log('Тема изменена в другой вкладке:', e.newValue);
+                    window.applyTheme(e.newValue);
                 }
             });
         });
