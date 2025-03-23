@@ -288,6 +288,103 @@ body::-webkit-scrollbar-thumb:hover {
     background: #e9f2fc;
     cursor: pointer;
 }
+
+/* Стили для дождливой темы */
+body.rainy-theme .profile-container {
+    background-color: rgba(50, 50, 50, 0.85);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(80, 80, 80, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+body.rainy-theme .profile-container h2,
+body.rainy-theme .profile-container h3 {
+    color: #cccccc;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+body.rainy-theme .profile-container p,
+body.rainy-theme .profile-container label,
+body.rainy-theme .profile-container div.details-info {
+    color: #aaaaaa;
+}
+
+body.rainy-theme .form-group input,
+body.rainy-theme .form-group textarea {
+    background-color: rgba(40, 40, 40, 0.7);
+    border: 1px solid rgba(70, 70, 70, 0.5);
+    color: #cccccc;
+}
+
+body.rainy-theme .btn {
+    background-color: rgba(60, 60, 60, 0.8);
+    color: #cccccc;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+body.rainy-theme .btn:hover {
+    background-color: rgba(70, 70, 70, 0.9);
+    color: #ffffff;
+}
+
+body.rainy-theme .user-comment {
+    background-color: rgba(45, 45, 45, 0.8);
+    border: 1px solid rgba(70, 70, 70, 0.4);
+}
+
+body.rainy-theme .comment-date {
+    color: #888888;
+}
+
+/* Скрываем звездное небо для серой темы */
+body.rainy-theme .enhanced-stars-container {
+    display: none !important;
+}
+
+/* Стили для календаря в серой теме */
+body.rainy-theme .calendar-container {
+    background: rgba(45, 45, 45, 0.7);
+    border: 1px solid rgba(70, 70, 70, 0.4);
+}
+
+body.rainy-theme .calendar-btn {
+    background-color: rgba(60, 60, 60, 0.8);
+    color: #cccccc;
+    border: 1px solid rgba(80, 80, 80, 0.5);
+}
+
+body.rainy-theme .calendar-btn:hover {
+    background-color: rgba(70, 70, 70, 0.9);
+    color: #ffffff;
+}
+
+body.rainy-theme #calendar-container th {
+    background: rgba(60, 60, 60, 0.8);
+    color: #cccccc;
+}
+
+body.rainy-theme #calendar-container td {
+    border: 1px solid rgba(70, 70, 70, 0.5);
+    color: #aaaaaa;
+}
+
+body.rainy-theme #calendar-container td.noday {
+    background: rgba(40, 40, 40, 0.5);
+}
+
+body.rainy-theme #calendar-container td:hover:not(.noday) {
+    background: rgba(70, 70, 70, 0.7);
+}
+
+body.rainy-theme .form-submit {
+    background-color: rgba(60, 60, 60, 0.8);
+    color: #cccccc;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+body.rainy-theme .form-submit:hover {
+    background-color: rgba(70, 70, 70, 0.9);
+}
 </style>
 {% endblock %}
 
@@ -368,9 +465,20 @@ body::-webkit-scrollbar-thumb:hover {
 {% block script %}
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Создаем улучшенный звездный фон
+        // Проверяем, не используется ли серая тема
+        const isRainyTheme = document.body.classList.contains('rainy-theme');
+        
+        // Создаем улучшенный звездный фон только если не серая тема
+        if (!isRainyTheme) {
+            createEnhancedStarryBackground();
+        }
+        
+        // Функция создания звездного фона
         function createEnhancedStarryBackground() {
             const container = document.getElementById('enhanced-stars');
+            // Если элемент не найден или тема дождливая, ничего не делаем
+            if (!container || isRainyTheme) return;
+            
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
             
@@ -448,9 +556,6 @@ body::-webkit-scrollbar-thumb:hover {
                 createMeteor();
             }, 8000 + Math.random() * 5000); // Случайный интервал между метеорами
         }
-        
-        // Вызываем функцию создания звездного фона
-        createEnhancedStarryBackground();
         
         // Обеспечиваем прозрачный фон для всех родительских элементов
         function setTransparentBg() {

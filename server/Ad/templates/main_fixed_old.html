@@ -238,6 +238,7 @@
         padding: 30px;
         border-radius: 50px;
         margin: 0;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         width: 30%;
         flex: 0 0 auto;
         transition: all 0.3s ease;
@@ -246,6 +247,7 @@
 
     .qr-section:hover {
         transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     }
 
     .qr-section img {
@@ -278,6 +280,7 @@
         padding: 10px 20px;
         background-color: rgba(255, 255, 255, 0.95);
         border-radius: 10px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
         border: 1px solid #e0e0e0;
         position: relative;
         display: inline-block;
@@ -285,7 +288,7 @@
 
     .qr-source:hover {
         transform: translateY(-2px);
-
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         color: #3f51b5;
     }
 
@@ -791,7 +794,7 @@
 
     /* Стиль для дождливой темы */
     body.rainy-theme .theme-icon .icon-content {
-        background: linear-gradient(135deg, #333333 0%, #666666 100%);
+        background: linear-gradient(135deg, #546e7a 0%, #37474f 100%);
     }
     
     .theme-menu {
@@ -800,6 +803,7 @@
         right: 0;
         background-color: rgba(255, 255, 255, 0.95);
         border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
         padding: 10px;
         display: none;
         width: 200px;
@@ -844,193 +848,137 @@
     }
     
     .rainy-theme .theme-color {
-        background: linear-gradient(135deg, #333333 0%, #666666 100%);
+        background: linear-gradient(135deg, #78909c 0%, #546e7a 100%);
     }
     
-    /* Стили для дождливого фона с помехами */
+    /* Стили для дождливого фона */
     .rainy-background {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
+        z-index: 0;
         pointer-events: none;
-        z-index: -1;
         overflow: hidden;
-        background: linear-gradient(to bottom, #333333 0%, #666666 40%, #888888 100%);
+        background: linear-gradient(to bottom, #374046 0%, #546e7a 100%);
+        display: none;
     }
     
-    .glitch-effect {
+    .raindrop {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0.1;
-        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsSAAALEgHS3X78AAAHLUlEQVR4nO2cW49URxCFK1EUCYkfR0RKFCURLxFPkMtDIiRu4i5hYJwZ2GEXGPARPR6PZ4ZZYICxkYA/EGeXVT1n5vTpPqe7q6vrzEgrjQDPdJ9vr6quyzQ9PDw8IgA6O93OYDg6+qUY/5cAdBUCADAzpVRljdWlgMbqC6Ax0B3IGgPIGgPIGgPIGgPIGgPIGgMgaw7Ddo0BkDUHYA0AJfXpzdeL8S89ANLp9tmD51HPD6B6qLPE4E9rDICsMQCyxgDIGgMgawyArDEAssYAyBoDIGsMgKwxALLG6AFI9+jTnY+jnh9A9VBnidnpw93d6HsOoHpoaB3eXPrpLKXU6oY0BmQZZb8S9Q73P7YGNVqQHeyXY2g1uHkDZF1WH7LGAMgaAyBrDICsMQCyxgDIGgMgawyArDEAssZwAaR79PibL6KeH0D1UGeJ2enDw8Poew6gemjIHTnwARNYYwBkjQGQNQZA1hgAWWMAZI0BkDUGQNYYAFlj9ALk+Hj/t81Fuw7gqfwgS75bACl/jffvH2/vPZpzDeCp/CBLvlsAKX+N4+P9nUs99R/AU/lBlny3AFL+GtEgS75bACl/jagoi/qNc4CclypBgkSz3PxOAXK+UlmfIJpUbv5OhMhxAWRfIstI7yKA1aCUUs+/fVLlHF89vB/1/PzVqob6Fm8B5Jzl+fDTnZ9/XVm06wCeyg+y5LsFkPLXMEGgZBXoNYCn8oMs+W4BpPw1TED7dvQGUNlMYI0BkDUGQNYYIx/l9X2EcUoxIMOXLICUL1kAKV+yAFK+ZAGkfMkCSPmSBZDyJQsg5UsWQMqXLICUL1kAKV+yAFK+ZAGkfMkCSPmSBZDyJQsg5UsWQMqXLICUL1kAKV+yCwHpHr269s1gywHU8FRzCZNBz0+/fRP1/ACqh4aWy2KEmTk/P9vaujLYcgA1PNVcwiTfLYCUv4YJpJT65rvJYMsB1PBUcwmTfLcAUv4aJpBbm5tPNjc373U6nSdEtHXr8lzO8TdXv456fmKulQx1ljAJ8cPp6XQymTzZWp3sEtHW5nVbIGbm1o3rUc9PzLWSoc4SJiF+uLM/dHZ2tvbO1/fOOftEdLiy/vvvW5ejnp+YayVDnSVMQvzGzJydna2/vj6ZETM/3Lgc9fzEXCsZ6ixhEuI3gMzMzHFnCZMQvwFkxszZYgmTEL8BZMYgZoROTk5+vHv37sNoYjYDMmOQtZNJKTVrJyGt5MbqnKj9NwVSynvILCMz/8TMS+1O4ixh4uQfFEip7yFzgJyZWZkHDJMgfylApgxS1hvtCc+XUspkhM4SJkH+0oCUVLIaQJ5sbV15dPv244cPflt9+PDhKjNvlFa2mDle1J8NyDwgo5QNBMRl6WxexCgC5Ak5LmES4h81yDwgJVStJpBSSikzM9dXsoL8owWZB6S0kqVT/kL90YBYA+l757FSypo7l5MfNRAXIPPKlta4OkDateuiQFyB3NreWnl2737USZymr7EwEJe7vAv7F3+JOomTufPYNfkCgfiwEotOylWrCZB5QGYMslqhk1LqzbUi35V41wIIIFYgve/yGkCsQUYnpEO9L5CxCmmvDvH6AhmbkLbqEG8IkDEJabMO8YYCGVrIGx+L/W0F3pyVunY9OYQeBjI0IW0dW7nEwKuH7v4SkCG/h7TdIT7r77FCVwHS9/eQxd/2lHc96/JH3RNVC0jfJetWB8isXM8y+v6NddtjLVe/axynO5Qs1zPBVrRc45Cax15Dfme0+VdqhY5dSPsWf63Sk39sQtr3p+aWvQkYi5AOLdcT8bEI6dByzR9jENK+5ZpDxiCkfcs1h7y9OqjBvrXcnN8nhrZXBy32reXWJ75trgYKte/ubn8g5TvIbdVBIfatDpOvnv/QVh0UY986A7lxZ3P7o64OirV3VQe52Luqg1zsXeu4MrNNddCi9l2ZWW2qg8rYu/JH3vauPInZ3pW/9MkfLfauPGF+HdRi78ojNTpMmLfZuzKB9a0O6svezQTWuzqoT3s3HwD2rg7q297NB4C9q4P6tncDMmOQVceUXG/2MYDMGGStNiXXq3201Z4HOTm7lFxv9n2BzFOyvNrHAhkXkDW/lFyP9vGAmJV+6gTWt338QOrP25aS69l+PEDK/9qHvRMQ3ytqoX7aOwPx/f2vhfpp7w4kTcnt3T52yXI93e3dPnaJ8q324/0ecv4uo31sIF2FdMzvIcM/9jJCOubvIXVPe0MpubHah5esRSmksT+GGPaStSiFNPbHEKlAlhXS2B9DpAJZVkhjn/aEn7LanpCmPBMZ+7TH55XKPiGlPBMZe/7iA0h7E1KUZ6Kx5y91y5aPJ0UtkMbOX9JA2puQis5fUr+HtDchFZ+/1N2y5ftJUXRCKt6CmQykjQnJVB1UcgvGdCBtTEim6qCSp71UEW1LSE3VQaVP6dOBtC0hNVUHlT7tpQVpS0Jqqg6qcdxLDdKGhNRUHVTjuJcDpA0Jqa06qMZpLw9I6oTkt5Dt6teTw67qoDKnPZ7n+Rcq+YRKvkl/WAAAAABJRU5ErkJggg==');
-        animation: glitch-animation 8s infinite linear;
+        width: 2px;
+        height: 15px;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.6));
+        border-radius: 20px;
+        opacity: 0;
+        animation: falling var(--duration, 1s) linear infinite;
+        animation-delay: var(--delay, 0s);
+        box-shadow: 0 0 2px rgba(255, 255, 255, 0.3);
     }
     
-    .glitch-line {
+    .splash {
         position: absolute;
-        height: 1px;
-        width: 100%;
-        background-color: rgba(255, 255, 255, 0.4);
-        animation: glitch-line 3s infinite;
-        z-index: 1;
-    }
-    
-    .glitch-block {
-        position: absolute;
-        background-color: rgba(255, 255, 255, 0.2);
-        animation: glitch-block 2s infinite;
-        z-index: 2;
-    }
-    
-    @keyframes glitch-animation {
-        0% {
-            opacity: 0.1;
-            transform: translateX(0) skew(0deg);
-        }
-        20% {
-            opacity: 0.2;
-            transform: translateX(5px) skew(2deg);
-        }
-        40% {
-            opacity: 0.1;
-            transform: translateX(-5px) skew(-2deg);
-        }
-        60% {
-            opacity: 0.2;
-            transform: translateX(0) skew(0deg);
-        }
-        80% {
-            opacity: 0.1;
-            transform: translateX(3px) skew(1deg);
-        }
-        100% {
-            opacity: 0.2;
-            transform: translateX(-3px) skew(-1deg);
-        }
-    }
-    
-    @keyframes glitch-line {
-        0% {
-            transform: scaleX(0);
-            opacity: 0;
-        }
-        10% {
-            transform: scaleX(1);
-            opacity: 0.8;
-        }
-        30% {
-            transform: scaleX(1.1);
-            opacity: 0.9;
-        }
-        40% {
-            transform: scaleX(1);
-            opacity: 0.6;
-        }
-        100% {
-            transform: scaleX(0);
-            opacity: 0;
-        }
-    }
-    
-    @keyframes glitch-block {
-        0% {
-            transform: translateX(-100%) translateY(0);
-            opacity: 0;
-        }
-        10% {
-            transform: translateX(0) translateY(0);
-            opacity: 0.8;
-        }
-        20% {
-            transform: translateX(5px) translateY(0);
-            opacity: 0.6;
-        }
-        30% {
-            transform: translateX(-5px) translateY(0);
-            opacity: 0.8;
-        }
-        40% {
-            transform: translateX(0) translateY(0);
-            opacity: 0.4;
-        }
-        100% {
-            transform: translateX(100%) translateY(0);
-            opacity: 0;
-        }
+        width: 10px;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        opacity: 0;
+        transform-origin: center;
+        animation: splash 0.6s linear;
     }
     
     .mist {
         position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(to bottom, rgba(50, 50, 50, 0.1) 0%, rgba(90, 90, 90, 0.2) 100%);
+        background: linear-gradient(to bottom, rgba(192, 210, 222, 0.1) 0%, rgba(176, 198, 209, 0.2) 100%);
+        opacity: 0.3;
         pointer-events: none;
-        z-index: 3;
-        opacity: 0.2;
     }
-
-    /* Удаляем стили для капель дождя, так как они больше не нужны */
-    .raindrop, .splash {
-        display: none;
+    
+    @keyframes falling {
+        0% {
+            transform: translateY(-100px);
+            opacity: 0;
+        }
+        5% {
+            opacity: 0.5;
+        }
+        95% {
+            opacity: 0.5;
+        }
+        100% {
+            transform: translateY(calc(100vh + 100px));
+            opacity: 0;
+        }
+    }
+    
+    @keyframes splash {
+        0% {
+            transform: scale(0, 0);
+            opacity: 0.7;
+        }
+        80% {
+            transform: scale(1, 1);
+            opacity: 0.5;
+        }
+        100% {
+            transform: scale(2, 2);
+            opacity: 0;
+        }
     }
     
     /* Дополнительные стили для дождливой темы */
     body.rainy-theme .news-content {
-        background-color: rgba(230, 230, 230, 0.92);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+        background-color: rgba(245, 250, 255, 0.92);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
     }
     
     body.rainy-theme .news-content h2 {
-        color: #222222;
+        color: #37474f;
     }
     
     body.rainy-theme .news-content p {
-        color: #333333;
+        color: #455a64;
     }
     
     body.rainy-theme .qr-section {
-        background-color: rgba(230, 230, 230, 0.9);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+        background-color: rgba(245, 250, 255, 0.9);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
     }
     
     body.rainy-theme .qr-source {
-        color: #222222;
-        background-color: rgba(210, 210, 210, 0.95);
+        color: #37474f;
+        background-color: rgba(236, 239, 241, 0.95);
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
     }
     
     body.rainy-theme .qr-source:hover {
-        color: #444444;
+        color: #546e7a;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
     
     body.rainy-theme .qr-source:hover::after {
-        background-color: #444444;
+        background-color: #546e7a;
     }
     
     body.rainy-theme .nav-button {
-        background-color: #333333;
+        background-color: #546e7a;
     }
     
     body.rainy-theme .nav-button:hover {
-        background-color: #555555;
+        background-color: #455a64;
     }
     
     body.rainy-theme .like-button .rating-icon,
     body.rainy-theme .dislike-button .rating-icon,
     body.rainy-theme .comment-button .rating-icon {
-        filter: grayscale(100%) brightness(0.8);
+        filter: hue-rotate(220deg) saturate(0.8);
     }
     
     body.rainy-theme .timer-circle-progress {
-        stroke: #333333;
+        stroke: #546e7a;
     }
     
     body.rainy-theme .timer-container {
@@ -1039,15 +987,15 @@
     }
     
     body.rainy-theme .timer-circle-bg {
-        stroke: #cccccc;
+        stroke: #eceff1;
     }
     
     body.rainy-theme .timer-center {
-        background-color: #cccccc;
+        background-color: #eceff1;
     }
     
     body.rainy-theme .news-ratings {
-        color: #333333;
+        color: #455a64;
     }
     
     body.rainy-theme .news-controls {
@@ -1073,60 +1021,61 @@
     }
     
     body.rainy-theme .comments-modal {
-        background-color: rgba(40, 40, 40, 0.85);
+        background-color: rgba(55, 71, 79, 0.85);
     }
     
     body.rainy-theme .comments-modal-content {
-        background-color: rgba(220, 220, 220, 0.95);
+        background-color: rgba(245, 250, 255, 0.95);
         box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
-        border: 1px solid rgba(200, 200, 200, 0.6);
+        border: 1px solid rgba(236, 239, 241, 0.6);
     }
     
     body.rainy-theme .comments-header h3 {
-        color: #222222;
+        color: #37474f;
     }
     
     body.rainy-theme .comment-username {
-        color: #333333;
+        color: #455a64;
     }
     
     body.rainy-theme .comment-submit {
-        background-color: #333333;
+        background-color: #546e7a;
     }
     
     body.rainy-theme .comment-submit:hover {
-        background-color: #555555;
+        background-color: #455a64;
     }
     
     body.rainy-theme .close-modal:hover,
     body.rainy-theme .close-modal:focus {
-        color: #333333;
+        color: #546e7a;
     }
     
     body.rainy-theme .comment-textarea {
-        border-color: #888888;
+        border-color: #b0bec5;
     }
     
     body.rainy-theme .comment-textarea:focus {
-        border-color: #666666;
-        box-shadow: 0 0 5px rgba(80, 80, 80, 0.3);
+        border-color: #78909c;
+        box-shadow: 0 0 5px rgba(120, 144, 156, 0.3);
     }
     
     body.rainy-theme .error-message {
-        color: #d55555;
+        color: #e57373;
     }
     
     body.rainy-theme .theme-option.active {
-        background-color: rgba(50, 50, 50, 0.15);
+        background-color: rgba(84, 110, 122, 0.15);
     }
     
     body.rainy-theme .theme-option:hover {
-        background-color: rgba(50, 50, 50, 0.1);
+        background-color: rgba(84, 110, 122, 0.1);
     }
 
     body.rainy-theme .qr-section {
-        background-color: transparent;
-        box-shadow: none;
+        background-color: rgba(245, 250, 255, 0.1);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(5px);
     }
 
     /* Стили для отображения времени */
@@ -1143,15 +1092,48 @@
     }
 
     body.rainy-theme .time-display {
-        background-color: rgba(200, 200, 200, 0.7);
-        color: #222222;
+        background-color: rgba(236, 239, 241, 0.7);
+        color: #37474f;
+    }
+
+    /* Стили для переключателя тем */
+    .theme-switcher {
+        position: absolute;
+        top: 12px;
+        left: 180px; /* Позиция справа от логотипа RTU MIREA */
+        z-index: 1000;
+    }
+    
+    .theme-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid rgba(255, 255, 255, 0.7);
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+    
+    .theme-icon:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    body.rainy-theme .comment-submit:hover {
+        background-color: #455a64;
+    }
+
+    body.rainy-theme .close-modal:hover,
+    body.rainy-theme .close-modal:focus {
+        color: #546e7a;
     }
 
     /* Стили для навигационной панели в дождливой теме */
     body.rainy-theme .header {
-        background-color: rgba(40, 40, 40, 0.85);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-        border-bottom: 1px solid rgba(80, 80, 80, 0.3);
+        background-color: rgba(55, 71, 79, 0.85);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        border-bottom: 1px solid rgba(236, 239, 241, 0.3);
         z-index: 100;
         position: relative;
     }
@@ -1161,24 +1143,415 @@
     }
 
     body.rainy-theme .nav-link {
-        color: rgba(220, 220, 220, 0.9);
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        color: rgba(236, 239, 241, 0.9);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
 
     body.rainy-theme .nav-link:hover {
         color: #ffffff;
-        background-color: rgba(80, 80, 80, 0.5);
+        background-color: rgba(84, 110, 122, 0.5);
     }
 
     body.rainy-theme .header span {
-        color: rgba(220, 220, 220, 0.9);
+        color: rgba(236, 239, 241, 0.9);
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
+
+    /* Стили для молнии */
+    .lightning-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        pointer-events: none;
+    }
     
-    /* Стили для переключателя тем в дождливой теме */
-    body.rainy-theme .theme-toggle {
-        background: linear-gradient(135deg, #333333, #666666);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    .lightning {
+        position: absolute;
+        top: 0;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0);
+        animation: lightning-flash 0.3s linear;
+        pointer-events: none;
+    }
+    
+    @keyframes lightning-flash {
+        0% {
+            opacity: 0;
+            background-color: rgba(255, 255, 255, 0);
+        }
+        10% {
+            opacity: 0.2;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        15% {
+            opacity: 0;
+            background-color: rgba(255, 255, 255, 0);
+        }
+        20% {
+            opacity: 0.9;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.8);
+        }
+        25% {
+            opacity: 0.2;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        30% {
+            opacity: 0.5;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        31% {
+            opacity: 0;
+            background-color: rgba(255, 255, 255, 0);
+        }
+        100% {
+            opacity: 0;
+            background-color: rgba(255, 255, 255, 0);
+        }
+    }
+    
+    /* Стиль для звука грома */
+    .thunder-sound {
+        display: none;
+    }
+    
+    /* Стили для стекающих капель */
+    .flowing-drop {
+        position: fixed;
+        width: var(--width, 3px);
+        height: var(--height, 15px);
+        background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 100%);
+        border-radius: 100% 100% 10% 10%;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+        opacity: 0;
+        z-index: 98;
+        pointer-events: none;
+        transform-origin: center top;
+        animation: flowing var(--duration, 8s) ease-in-out forwards;
+        animation-delay: var(--delay, 0s);
+    }
+    
+    /* Анимация стекания капель */
+    @keyframes flowing {
+        0% {
+            opacity: 0;
+            transform: translateY(0) scaleY(1) translateX(0);
+        }
+        5% {
+            opacity: 0.7;
+        }
+        20% {
+            transform: translateY(var(--y1, 50px)) scaleY(1.2) translateX(var(--x1, 5px));
+        }
+        40% {
+            transform: translateY(var(--y2, 100px)) scaleY(1.5) translateX(var(--x2, -8px));
+        }
+        60% {
+            transform: translateY(var(--y3, 150px)) scaleY(1.8) translateX(var(--x3, 5px));
+        }
+        80% {
+            transform: translateY(var(--y4, 200px)) scaleY(2) translateX(var(--x4, -5px));
+            opacity: 0.7;
+        }
+        100% {
+            transform: translateY(var(--y5, 300px)) scaleY(0.8) translateX(var(--x5, 0));
+            opacity: 0;
+        }
+    }
+
+    /* Стили для тонкой линии молнии */
+    .lightning-bolt {
+        position: absolute;
+        top: 0;
+        width: 2px;
+        height: 0;
+        background-color: rgba(255, 255, 255, 0.9);
+        filter: blur(1px);
+        box-shadow: 
+            0 0 5px rgba(255, 255, 255, 0.8),
+            0 0 8px rgba(200, 220, 255, 0.8);
+        opacity: 0;
+        transform-origin: top center;
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    /* Анимация для эффекта вспышки молнии */
+    @keyframes lightning-flash {
+        0% {
+            opacity: 0;
+            background-color: rgba(255, 255, 255, 0);
+        }
+        10% {
+            opacity: 0.2;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        15% {
+            opacity: 0;
+            background-color: rgba(255, 255, 255, 0);
+        }
+        20% {
+            opacity: 0.9;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.8);
+        }
+        25% {
+            opacity: 0.2;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        30% {
+            opacity: 0.5;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        31% {
+            opacity: 0;
+            background-color: rgba(255, 255, 255, 0);
+        }
+        100% {
+            opacity: 0;
+            background-color: rgba(255, 255, 255, 0);
+        }
+    }
+    
+    /* Анимация для линии молнии */
+    @keyframes lightning-bolt-appear {
+        0% {
+            opacity: 0;
+            height: 0;
+            transform: translateY(0) rotate(0deg);
+        }
+        5% {
+            opacity: 1;
+            height: var(--bolt-height);
+            transform: translateY(0) rotate(var(--bolt-rotate, 0deg));
+        }
+        30% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+    
+    /* Анимация для ответвления молнии */
+    @keyframes lightning-branch-appear {
+        0% {
+            opacity: 0;
+            width: 0;
+            transform: translateY(var(--branch-y)) rotate(var(--branch-rotate, 30deg));
+        }
+        20% {
+            opacity: 1;
+            width: var(--branch-width);
+        }
+        80% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+
+    /* Новый простой переключатель тем */
+    .simple-theme-switcher {
+        position: fixed;
+        top: 60px;
+        right: 20px;
+        z-index: 2000;
+        display: flex;
+        gap: 10px;
+    }
+    
+    .theme-button {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .theme-button:hover {
+        transform: scale(1.1);
+    }
+    
+    .cosmic-button {
+        background: linear-gradient(135deg, #1a237e 0%, #4a148c 100%);
+    }
+    
+    .rainy-button {
+        background: linear-gradient(135deg, #546e7a 0%, #37474f 100%);
+    }
+    
+    .theme-button.active {
+        border: 3px solid #ffeb3b;
+    }
+    
+    .theme-button-icon {
+        color: white;
+        font-size: 20px;
+    }
+
+    /* Круглое меню для выбора тем */
+    .theme-circle-menu {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 10000;
+    }
+    
+    .theme-circle-toggle {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #5e35b1, #3949ab);
+        border-radius: 50%;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: white;
+        font-size: 22px;
+        transition: all 0.3s ease;
+    }
+    
+    .theme-circle-toggle:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .theme-circle-menu-items {
+        position: absolute;
+        bottom: 60px;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        padding: 10px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        width: 180px;
+    }
+    
+    .theme-circle-menu-items.active {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .theme-option {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .theme-option:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+    
+    .theme-option-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .theme-option-label {
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .theme-option.cosmic .theme-option-icon {
+        background: linear-gradient(135deg, #000428, #004e92);
+        border-radius: 50%;
+        color: white;
+    }
+    
+    .theme-option.rainy .theme-option-icon {
+        background: linear-gradient(135deg, #37474f, #546e7a);
+        border-radius: 50%;
+        color: white;
+    }
+    
+    /* Стили для выделения активной темы в меню */
+    .theme-option.active {
+        background-color: rgba(0, 0, 0, 0.07);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .theme-option.active::after {
+        content: '✓';
+        position: absolute;
+        right: 12px;
+        color: #4caf50;
+        font-weight: bold;
+    }
+    
+    /* Добавляем стиль для отображения компактного положения */
+    .theme-circle-menu-items .theme-option {
+        position: relative;
+    }
+    
+    /* Анимация пульсации для круглой кнопки */
+    @keyframes pulse {
+        0% { transform: scale(1); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); }
+        50% { transform: scale(1.05); box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3); }
+        100% { transform: scale(1); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); }
+    }
+    
+    .theme-circle-toggle.pulse {
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes floating {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(20px); }
+        100% { transform: translateY(0px); }
+    }
+
+    @keyframes disappear {
+        0% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+
+    /* Круглое меню переключения тем */
+    #theme-circle-menu {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        user-select: none;
+        cursor: move;
+        touch-action: none;
+        transition: transform 0.2s ease;
+    }
+    
+    #theme-circle-menu.dragging {
+        transform: scale(0.95);
+        opacity: 0.8;
     }
     
     /* Цвет кружка меняется в зависимости от темы */
@@ -1187,1254 +1560,12 @@
     }
     
     .rainy-theme .theme-circle-toggle {
-        background: linear-gradient(135deg, #333333, #666666);
+        background: linear-gradient(135deg, #37474f, #546e7a);
     }
     
-    .rainy-button {
-        background: linear-gradient(135deg, #333333, #666666);
-    }
-
-    /* Удаляем стили для капель дождя, так как они больше не нужны */
-    .raindrop, .splash {
-        display: none;
-    }
-    
-    /* Стили для плавающих квадратов в серой теме */
-    .floating-squares {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        z-index: 0; /* Низкий z-index, чтобы не перекрывать важные элементы */
-        display: none;
-    }
-    
-    body.rainy-theme .floating-squares {
-        display: block;
-    }
-    
-    .square {
-        position: absolute;
-        display: block;
-        list-style: none;
-        animation: animate-square 25s linear infinite;
-        bottom: -150px;
-    }
-    
-    /* Квадраты разных оттенков серого и белого */
-    .square:nth-child(1) {
-        left: 25%;
-        width: 80px;
-        height: 80px;
-        animation-delay: 0s;
-        background: rgba(255, 255, 255, 0.9); /* Чисто белый */
-    }
-    
-    .square:nth-child(2) {
-        left: 10%;
-        width: 20px;
-        height: 20px;
-        animation-delay: 2s;
-        animation-duration: 12s;
-        background: rgba(0, 0, 0, 0.9); /* Чисто черный */
-        border-radius: 20%;
-    }
-    
-    .square:nth-child(3) {
-        left: 70%;
-        width: 20px;
-        height: 20px;
-        animation-delay: 4s;
-        background: rgba(120, 120, 120, 0.9); /* Средне-серый */
-    }
-    
-    .square:nth-child(4) {
-        left: 40%;
-        width: 60px;
-        height: 60px;
-        animation-delay: 0s;
-        animation-duration: 18s;
-        background: rgba(50, 50, 50, 0.85); /* Темно-серый */
-        border-radius: 15%;
-    }
-    
-    .square:nth-child(5) {
-        left: 65%;
-        width: 20px;
-        height: 20px;
-        animation-delay: 0s;
-        background: rgba(230, 230, 230, 0.95); /* Очень светло-серый */
-        border-radius: 50%;
-    }
-    
-    .square:nth-child(6) {
-        left: 75%;
-        width: 110px;
-        height: 110px;
-        animation-delay: 3s;
-        background: rgba(30, 30, 30, 0.8); /* Темный */
-    }
-    
-    .square:nth-child(7) {
-        left: 35%;
-        width: 150px;
-        height: 150px;
-        animation-delay: 7s;
-        background: rgba(200, 200, 200, 0.85); /* Светло-серый */
-        border-radius: 10%;
-    }
-    
-    .square:nth-child(8) {
-        left: 50%;
-        width: 25px;
-        height: 25px;
-        animation-delay: 15s;
-        animation-duration: 45s;
-        background: rgba(255, 255, 255, 1); /* Белый непрозрачный */
-    }
-    
-    .square:nth-child(9) {
-        left: 20%;
-        width: 15px;
-        height: 15px;
-        animation-delay: 2s;
-        animation-duration: 35s;
-        background: rgba(0, 0, 0, 1); /* Черный непрозрачный */
-        border-radius: 40%;
-    }
-    
-    .square:nth-child(10) {
-        left: 85%;
-        width: 150px;
-        height: 150px;
-        animation-delay: 0s;
-        animation-duration: 11s;
-        background: rgba(150, 150, 150, 0.9); /* Выраженный серый */
-    }
-    
-    /* Добавляем больше квадратов с разными оттенками серого */
-    .square:nth-child(11) {
-        left: 15%;
-        width: 90px;
-        height: 90px;
-        animation-delay: 3.5s;
-        animation-duration: 22s;
-        background: rgba(70, 70, 70, 0.7); /* Темно-серый полупрозрачный */
-        border-radius: 30%;
-    }
-    
-    .square:nth-child(12) {
-        left: 60%;
-        width: 30px;
-        height: 30px;
-        animation-delay: 5s;
-        animation-duration: 17s;
-        background: rgba(240, 240, 240, 1); /* Почти белый */
-    }
-    
-    .square:nth-child(13) {
-        left: 5%;
-        width: 70px;
-        height: 70px;
-        animation-delay: 1s;
-        animation-duration: 14s;
-        background: rgba(20, 20, 20, 0.8); /* Очень темный */
-        border-radius: 5%;
-    }
-    
-    .square:nth-child(14) {
-        left: 95%;
-        width: 18px;
-        height: 18px;
-        animation-delay: 8s;
-        animation-duration: 19s;
-        background: rgba(180, 180, 180, 1); /* Средне-светлый непрозрачный */
-        border-radius: 25%;
-    }
-    
-    .square:nth-child(15) {
-        left: 45%;
-        width: 120px;
-        height: 120px;
-        animation-delay: 0.5s;
-        animation-duration: 27s;
-        background: rgba(100, 100, 100, 0.75); /* Серый полупрозрачный */
-    }
-    
-    .square:nth-child(16) {
-        left: 30%;
-        width: 40px;
-        height: 40px;
-        animation-delay: 6s;
-        animation-duration: 16s;
-        background: rgba(160, 160, 160, 0.9); /* Средне-серый */
-        border-radius: 15%;
-    }
-    
-    .square:nth-child(17) {
-        left: 80%;
-        width: 55px;
-        height: 55px;
-        animation-delay: 9s;
-        animation-duration: 21s;
-        background: rgba(40, 40, 40, 0.95); /* Насыщенный темно-серый */
-    }
-    
-    .square:nth-child(18) {
-        left: 22%;
-        width: 25px;
-        height: 25px;
-        animation-delay: 4.5s;
-        animation-duration: 23s;
-        background: rgba(220, 220, 220, 0.8); /* Светло-серый полупрозрачный */
-        border-radius: 40%;
-    }
-    
-    .square:nth-child(19) {
-        left: 68%;
-        width: 100px;
-        height: 100px;
-        animation-delay: 7.5s;
-        animation-duration: 28s;
-        background: rgba(60, 60, 60, 0.85); /* Темно-серый */
-        border-radius: 8%;
-    }
-    
-    .square:nth-child(20) {
-        left: 92%;
-        width: 15px;
-        height: 15px;
-        animation-delay: 10s;
-        animation-duration: 15s;
-        background: rgba(250, 250, 250, 1); /* Почти белый непрозрачный */
-        border-radius: 20%;
-    }
-    
-    /* Дополнительные квадраты разных оттенков */
-    .square:nth-child(21) {
-        left: 77%;
-        width: 35px;
-        height: 35px;
-        animation-delay: 1.5s;
-        animation-duration: 19s;
-        background: rgba(10, 10, 10, 0.9); /* Очень темный непрозрачный */
-        border-radius: 12%;
-    }
-    
-    .square:nth-child(22) {
-        left: 38%;
-        width: 48px;
-        height: 48px;
-        animation-delay: 6.5s;
-        animation-duration: 25s;
-        background: rgba(190, 190, 190, 1); /* Светло-серый непрозрачный */
-    }
-    
-    .square:nth-child(23) {
-        left: 12%;
-        width: 65px;
-        height: 65px;
-        animation-delay: 8.5s;
-        animation-duration: 20s;
-        background: rgba(90, 90, 90, 0.95); /* Серый непрозрачный */
-        border-radius: 18%;
-    }
-    
-    .square:nth-child(24) {
-        left: 88%;
-        width: 28px;
-        height: 28px;
-        animation-delay: 3.2s;
-        animation-duration: 22s;
-        background: rgba(210, 210, 210, 0.9); /* Светлый полупрозрачный */
-        border-radius: 35%;
-    }
-    
-    .square:nth-child(25) {
-        left: 52%;
-        width: 95px;
-        height: 95px;
-        animation-delay: 5.8s;
-        animation-duration: 26s;
-        background: rgba(5, 5, 5, 0.95); /* Почти черный */
-    }
-    
-    .square:nth-child(26) {
-        left: 7%;
-        width: 32px;
-        height: 32px;
-        animation-delay: 7.2s;
-        animation-duration: 30s;
-        background: rgba(225, 225, 225, 1); /* Яркий светло-серый */
-        border-radius: 45%;
-    }
-    
-    .square:nth-child(27) {
-        left: 73%;
-        width: 85px;
-        height: 85px;
-        animation-delay: 4.7s;
-        animation-duration: 18s;
-        background: rgba(80, 80, 80, 1); /* Средне-темный непрозрачный */
-        border-radius: 6%;
-    }
-    
-    .square:nth-child(28) {
-        left: 28%;
-        width: 18px;
-        height: 18px;
-        animation-delay: 9.5s;
-        animation-duration: 24s;
-        background: rgba(35, 35, 35, 0.8); /* Темный полупрозрачный */
-    }
-    
-    .square:nth-child(29) {
-        left: 83%;
-        width: 110px;
-        height: 110px;
-        animation-delay: 2.8s;
-        animation-duration: 32s;
-        background: rgba(170, 170, 170, 0.95); /* Средне-светлый непрозрачный */
-        border-radius: 25%;
-    }
-    
-    .square:nth-child(30) {
-        left: 3%;
-        width: 22px;
-        height: 22px;
-        animation-delay: 11.2s;
-        animation-duration: 27s;
-        background: rgba(245, 245, 245, 0.95); /* Почти белый непрозрачный */
-        border-radius: 15%;
-    }
-    
-    /* Добавляем еще 10 квадратов с более экстремальными размерами и оттенками */
-    .square:nth-child(31) {
-        left: 42%;
-        width: 200px;
-        height: 200px;
-        animation-delay: 12s;
-        animation-duration: 35s;
-        background: rgba(15, 15, 15, 0.6); /* Темный полупрозрачный */
-        border-radius: 5%;
-    }
-    
-    .square:nth-child(32) {
-        left: 62%;
-        width: 8px;
-        height: 8px;
-        animation-delay: 4.2s;
-        animation-duration: 16s;
-        background: rgba(255, 255, 255, 1); /* Белый непрозрачный */
-        border-radius: 50%;
-    }
-    
-    .square:nth-child(33) {
-        left: 54%;
-        width: 130px;
-        height: 130px;
-        animation-delay: 9.2s;
-        animation-duration: 26s;
-        background: rgba(110, 110, 110, 0.9); /* Средний серый непрозрачный */
-    }
-    
-    .square:nth-child(34) {
-        left: 8%;
-        width: 75px;
-        height: 75px;
-        animation-delay: 14s;
-        animation-duration: 31s;
-        background: rgba(180, 180, 180, 0.7); /* Светло-серый полупрозрачный */
-        border-radius: 10%;
-    }
-    
-    .square:nth-child(35) {
-        left: 98%;
-        width: 12px;
-        height: 12px;
-        animation-delay: 6.8s;
-        animation-duration: 19s;
-        background: rgba(25, 25, 25, 1); /* Темный непрозрачный */
-    }
-    
-    .square:nth-child(36) {
-        left: 33%;
-        width: 145px;
-        height: 145px;
-        animation-delay: 8.2s;
-        animation-duration: 28s;
-        background: rgba(200, 200, 200, 0.85); /* Светлый полупрозрачный */
-        border-radius: 3%;
-    }
-    
-    .square:nth-child(37) {
-        left: 87%;
-        width: 10px;
-        height: 10px;
-        animation-delay: 15.5s;
-        animation-duration: 20s;
-        background: rgba(140, 140, 140, 1); /* Средний серый непрозрачный */
-        border-radius: 30%;
-    }
-    
-    .square:nth-child(38) {
-        left: 17%;
-        width: 180px;
-        height: 180px;
-        animation-delay: 7.5s;
-        animation-duration: 40s;
-        background: rgba(45, 45, 45, 0.8); /* Темно-серый полупрозрачный */
-    }
-    
-    .square:nth-child(39) {
-        left: 78%;
-        width: 50px;
-        height: 50px;
-        animation-delay: 13.2s;
-        animation-duration: 23s;
-        background: rgba(235, 235, 235, 0.9); /* Светлый непрозрачный */
-        border-radius: 15%;
-    }
-    
-    .square:nth-child(40) {
-        left: 2%;
-        width: 100px;
-        height: 100px;
-        animation-delay: 10.5s;
-        animation-duration: 36s;
-        background: rgba(65, 65, 65, 1); /* Темно-серый непрозрачный */
-        border-radius: 8%;
-    }
-
-    @keyframes animate-square {
-        0% {
-            transform: translateY(0) rotate(0deg);
-            opacity: 0.5;
-        }
-        
-        50% {
-            transform: translateY(-500px) rotate(360deg);
-            opacity: 0.3;
-        }
-        
-        100% {
-            transform: translateY(-1000px) rotate(720deg);
-            opacity: 0;
-        }
-    }
-    
-    /* Альтернативные анимации для разнообразия */
-    .square:nth-child(3n) {
-        animation-name: animate-square-alt1;
-    }
-    
-    .square:nth-child(3n+1) {
-        animation-name: animate-square-alt2;
-    }
-    
-    @keyframes animate-square-alt1 {
-        0% {
-            transform: translateY(0) rotate(0deg);
-            opacity: 0.5;
-        }
-        
-        33% {
-            transform: translateY(-330px) rotate(240deg) translateX(30px);
-            opacity: 0.4;
-        }
-        
-        66% {
-            transform: translateY(-660px) rotate(480deg) translateX(-30px);
-            opacity: 0.2;
-        }
-        
-        100% {
-            transform: translateY(-1000px) rotate(720deg);
-            opacity: 0;
-        }
-    }
-    
-    @keyframes animate-square-alt2 {
-        0% {
-            transform: translateY(0) rotate(0deg);
-            opacity: 0.5;
-        }
-        
-        40% {
-            transform: translateY(-400px) rotate(180deg) translateX(-40px);
-            opacity: 0.3;
-        }
-        
-        80% {
-            transform: translateY(-800px) rotate(540deg) translateX(40px);
-            opacity: 0.1;
-        }
-        
-        100% {
-            transform: translateY(-1000px) rotate(720deg);
-            opacity: 0;
-        }
-    }
-    
-    /* Квадраты разных оттенков серого */
-    .square:nth-child(1) {
-        left: 25%;
-        width: 80px;
-        height: 80px;
-        animation-delay: 0s;
-        background: rgba(255, 255, 255, 0.7);
-    }
-    
-    .square:nth-child(2) {
-        left: 10%;
-        width: 20px;
-        height: 20px;
-        animation-delay: 2s;
-        animation-duration: 12s;
-        background: rgba(20, 20, 20, 0.6);
-        border-radius: 20%;
-    }
-    
-    .square:nth-child(3) {
-        left: 70%;
-        width: 20px;
-        height: 20px;
-        animation-delay: 4s;
-        background: rgba(150, 150, 150, 0.6);
-    }
-    
-    .square:nth-child(4) {
-        left: 40%;
-        width: 60px;
-        height: 60px;
-        animation-delay: 0s;
-        animation-duration: 18s;
-        background: rgba(80, 80, 80, 0.5);
-        border-radius: 15%;
-    }
-    
-    .square:nth-child(5) {
-        left: 65%;
-        width: 20px;
-        height: 20px;
-        animation-delay: 0s;
-        background: rgba(220, 220, 220, 0.7);
-        border-radius: 50%;
-    }
-    
-    .square:nth-child(6) {
-        left: 75%;
-        width: 110px;
-        height: 110px;
-        animation-delay: 3s;
-        background: rgba(40, 40, 40, 0.4);
-    }
-    
-    .square:nth-child(7) {
-        left: 35%;
-        width: 150px;
-        height: 150px;
-        animation-delay: 7s;
-        background: rgba(180, 180, 180, 0.5);
-        border-radius: 10%;
-    }
-    
-    .square:nth-child(8) {
-        left: 50%;
-        width: 25px;
-        height: 25px;
-        animation-delay: 15s;
-        animation-duration: 45s;
-        background: rgba(255, 255, 255, 0.8);
-    }
-    
-    .square:nth-child(9) {
-        left: 20%;
-        width: 15px;
-        height: 15px;
-        animation-delay: 2s;
-        animation-duration: 35s;
-        background: rgba(10, 10, 10, 0.7);
-        border-radius: 40%;
-    }
-    
-    .square:nth-child(10) {
-        left: 85%;
-        width: 150px;
-        height: 150px;
-        animation-delay: 0s;
-        animation-duration: 11s;
-        background: rgba(130, 130, 130, 0.6);
-    }
-    
-    /* Добавляем больше квадратов с разными оттенками серого */
-    .square:nth-child(11) {
-        left: 15%;
-        width: 90px;
-        height: 90px;
-        animation-delay: 3.5s;
-        animation-duration: 22s;
-        background: rgba(60, 60, 60, 0.5);
-        border-radius: 30%;
-    }
-    
-    .square:nth-child(12) {
-        left: 60%;
-        width: 30px;
-        height: 30px;
-        animation-delay: 5s;
-        animation-duration: 17s;
-        background: rgba(240, 240, 240, 0.8);
-    }
-    
-    .square:nth-child(13) {
-        left: 5%;
-        width: 70px;
-        height: 70px;
-        animation-delay: 1s;
-        animation-duration: 14s;
-        background: rgba(30, 30, 30, 0.6);
-        border-radius: 5%;
-    }
-    
-    .square:nth-child(14) {
-        left: 95%;
-        width: 18px;
-        height: 18px;
-        animation-delay: 8s;
-        animation-duration: 19s;
-        background: rgba(200, 200, 200, 0.7);
-        border-radius: 25%;
-    }
-    
-    .square:nth-child(15) {
-        left: 45%;
-        width: 120px;
-        height: 120px;
-        animation-delay: 0.5s;
-        animation-duration: 27s;
-        background: rgba(100, 100, 100, 0.6);
-    }
-    
-    .square:nth-child(16) {
-        left: 30%;
-        width: 40px;
-        height: 40px;
-        animation-delay: 6s;
-        animation-duration: 16s;
-        background: rgba(160, 160, 160, 0.5);
-        border-radius: 15%;
-    }
-    
-    .square:nth-child(17) {
-        left: 80%;
-        width: 55px;
-        height: 55px;
-        animation-delay: 9s;
-        animation-duration: 21s;
-        background: rgba(50, 50, 50, 0.7);
-    }
-    
-    .square:nth-child(18) {
-        left: 22%;
-        width: 25px;
-        height: 25px;
-        animation-delay: 4.5s;
-        animation-duration: 23s;
-        background: rgba(220, 220, 220, 0.6);
-        border-radius: 40%;
-    }
-    
-    .square:nth-child(19) {
-        left: 68%;
-        width: 100px;
-        height: 100px;
-        animation-delay: 7.5s;
-        animation-duration: 28s;
-        background: rgba(70, 70, 70, 0.5);
-        border-radius: 8%;
-    }
-    
-    .square:nth-child(20) {
-        left: 92%;
-        width: 15px;
-        height: 15px;
-        animation-delay: 10s;
-        animation-duration: 15s;
-        background: rgba(250, 250, 250, 0.9);
-        border-radius: 20%;
-    }
-    
-    /* Добавляем еще 10 квадратов */
-    .square:nth-child(21) {
-        left: 77%;
-        width: 35px;
-        height: 35px;
-        animation-delay: 1.5s;
-        animation-duration: 19s;
-        background: rgba(25, 25, 25, 0.65);
-        border-radius: 12%;
-    }
-    
-    .square:nth-child(22) {
-        left: 38%;
-        width: 48px;
-        height: 48px;
-        animation-delay: 6.5s;
-        animation-duration: 25s;
-        background: rgba(190, 190, 190, 0.75);
-    }
-    
-    .square:nth-child(23) {
-        left: 12%;
-        width: 65px;
-        height: 65px;
-        animation-delay: 8.5s;
-        animation-duration: 20s;
-        background: rgba(128, 128, 128, 0.55);
-        border-radius: 18%;
-    }
-    
-    .square:nth-child(24) {
-        left: 88%;
-        width: 28px;
-        height: 28px;
-        animation-delay: 3.2s;
-        animation-duration: 22s;
-        background: rgba(210, 210, 210, 0.65);
-        border-radius: 35%;
-    }
-    
-    .square:nth-child(25) {
-        left: 52%;
-        width: 95px;
-        height: 95px;
-        animation-delay: 5.8s;
-        animation-duration: 26s;
-        background: rgba(15, 15, 15, 0.7);
-    }
-    
-    .square:nth-child(26) {
-        left: 7%;
-        width: 32px;
-        height: 32px;
-        animation-delay: 7.2s;
-        animation-duration: 30s;
-        background: rgba(230, 230, 230, 0.8);
-        border-radius: 45%;
-    }
-    
-    .square:nth-child(27) {
-        left: 73%;
-        width: 85px;
-        height: 85px;
-        animation-delay: 4.7s;
-        animation-duration: 18s;
-        background: rgba(90, 90, 90, 0.6);
-        border-radius: 6%;
-    }
-    
-    .square:nth-child(28) {
-        left: 28%;
-        width: 18px;
-        height: 18px;
-        animation-delay: 9.5s;
-        animation-duration: 24s;
-        background: rgba(45, 45, 45, 0.5);
-    }
-    
-    .square:nth-child(29) {
-        left: 83%;
-        width: 110px;
-        height: 110px;
-        animation-delay: 2.8s;
-        animation-duration: 32s;
-        background: rgba(170, 170, 170, 0.55);
-        border-radius: 25%;
-    }
-    
-    .square:nth-child(30) {
-        left: 3%;
-        width: 22px;
-        height: 22px;
-        animation-delay: 11.2s;
-        animation-duration: 27s;
-        background: rgba(245, 245, 245, 0.85);
-        border-radius: 15%;
-    }
-    
-    /* Добавляем еще 10 квадратов */
-    .square:nth-child(31) {
-        left: 77%;
-        width: 35px;
-        height: 35px;
-        animation-delay: 1.5s;
-        animation-duration: 19s;
-        background: rgba(25, 25, 25, 0.65);
-        border-radius: 12%;
-    }
-    
-    .square:nth-child(32) {
-        left: 38%;
-        width: 48px;
-        height: 48px;
-        animation-delay: 6.5s;
-        animation-duration: 25s;
-        background: rgba(190, 190, 190, 0.75);
-    }
-    
-    .square:nth-child(33) {
-        left: 12%;
-        width: 65px;
-        height: 65px;
-        animation-delay: 8.5s;
-        animation-duration: 20s;
-        background: rgba(128, 128, 128, 0.55);
-        border-radius: 18%;
-    }
-    
-    .square:nth-child(34) {
-        left: 88%;
-        width: 28px;
-        height: 28px;
-        animation-delay: 3.2s;
-        animation-duration: 22s;
-        background: rgba(210, 210, 210, 0.65);
-        border-radius: 35%;
-    }
-    
-    .square:nth-child(35) {
-        left: 52%;
-        width: 95px;
-        height: 95px;
-        animation-delay: 5.8s;
-        animation-duration: 26s;
-        background: rgba(15, 15, 15, 0.7);
-    }
-    
-    .square:nth-child(36) {
-        left: 7%;
-        width: 32px;
-        height: 32px;
-        animation-delay: 7.2s;
-        animation-duration: 30s;
-        background: rgba(230, 230, 230, 0.8);
-        border-radius: 45%;
-    }
-    
-    .square:nth-child(37) {
-        left: 73%;
-        width: 85px;
-        height: 85px;
-        animation-delay: 4.7s;
-        animation-duration: 18s;
-        background: rgba(90, 90, 90, 0.6);
-        border-radius: 6%;
-    }
-    
-    .square:nth-child(38) {
-        left: 28%;
-        width: 18px;
-        height: 18px;
-        animation-delay: 9.5s;
-        animation-duration: 24s;
-        background: rgba(45, 45, 45, 0.5);
-    }
-    
-    .square:nth-child(39) {
-        left: 83%;
-        width: 110px;
-        height: 110px;
-        animation-delay: 2.8s;
-        animation-duration: 32s;
-        background: rgba(170, 170, 170, 0.55);
-        border-radius: 25%;
-    }
-    
-    .square:nth-child(40) {
-        left: 3%;
-        width: 22px;
-        height: 22px;
-        animation-delay: 11.2s;
-        animation-duration: 27s;
-        background: rgba(245, 245, 245, 0.85);
-        border-radius: 15%;
-    }
-
-    @keyframes animate-square {
-        0% {
-            transform: translateY(0) rotate(0deg);
-            opacity: 0.5;
-        }
-        
-        50% {
-            transform: translateY(-500px) rotate(360deg);
-            opacity: 0.3;
-        }
-        
-        100% {
-            transform: translateY(-1000px) rotate(720deg);
-            opacity: 0;
-        }
-    }
-    
-    /* Альтернативные анимации для разнообразия */
-    .square:nth-child(3n) {
-        animation-name: animate-square-alt1;
-    }
-    
-    .square:nth-child(3n+1) {
-        animation-name: animate-square-alt2;
-    }
-    
-    @keyframes animate-square-alt1 {
-        0% {
-            transform: translateY(0) rotate(0deg);
-            opacity: 0.5;
-        }
-        
-        33% {
-            transform: translateY(-330px) rotate(240deg) translateX(30px);
-            opacity: 0.4;
-        }
-        
-        66% {
-            transform: translateY(-660px) rotate(480deg) translateX(-30px);
-            opacity: 0.2;
-        }
-        
-        100% {
-            transform: translateY(-1000px) rotate(720deg);
-            opacity: 0;
-        }
-    }
-    
-    @keyframes animate-square-alt2 {
-        0% {
-            transform: translateY(0) rotate(0deg);
-            opacity: 0.5;
-        }
-        
-        40% {
-            transform: translateY(-400px) rotate(180deg) translateX(-40px);
-            opacity: 0.3;
-        }
-        
-        80% {
-            transform: translateY(-800px) rotate(540deg) translateX(40px);
-            opacity: 0.1;
-        }
-        
-        100% {
-            transform: translateY(-1000px) rotate(720deg);
-            opacity: 0;
-        }
-    }
-    
-    /* Квадраты разных оттенков серого */
-    .square:nth-child(1) {
-        left: 25%;
-        width: 80px;
-        height: 80px;
-        animation-delay: 0s;
-        background: rgba(255, 255, 255, 0.7);
-    }
-    
-    .square:nth-child(2) {
-        left: 10%;
-        width: 20px;
-        height: 20px;
-        animation-delay: 2s;
-        animation-duration: 12s;
-        background: rgba(20, 20, 20, 0.6);
-        border-radius: 20%;
-    }
-    
-    .square:nth-child(3) {
-        left: 70%;
-        width: 20px;
-        height: 20px;
-        animation-delay: 4s;
-        background: rgba(150, 150, 150, 0.6);
-    }
-    
-    .square:nth-child(4) {
-        left: 40%;
-        width: 60px;
-        height: 60px;
-        animation-delay: 0s;
-        animation-duration: 18s;
-        background: rgba(80, 80, 80, 0.5);
-        border-radius: 15%;
-    }
-    
-    .square:nth-child(5) {
-        left: 65%;
-        width: 20px;
-        height: 20px;
-        animation-delay: 0s;
-        background: rgba(220, 220, 220, 0.7);
-        border-radius: 50%;
-    }
-    
-    .square:nth-child(6) {
-        left: 75%;
-        width: 110px;
-        height: 110px;
-        animation-delay: 3s;
-        background: rgba(40, 40, 40, 0.4);
-    }
-    
-    .square:nth-child(7) {
-        left: 35%;
-        width: 150px;
-        height: 150px;
-        animation-delay: 7s;
-        background: rgba(180, 180, 180, 0.5);
-        border-radius: 10%;
-    }
-    
-    .square:nth-child(8) {
-        left: 50%;
-        width: 25px;
-        height: 25px;
-        animation-delay: 15s;
-        animation-duration: 45s;
-        background: rgba(255, 255, 255, 0.8);
-    }
-    
-    .square:nth-child(9) {
-        left: 20%;
-        width: 15px;
-        height: 15px;
-        animation-delay: 2s;
-        animation-duration: 35s;
-        background: rgba(10, 10, 10, 0.7);
-        border-radius: 40%;
-    }
-    
-    .square:nth-child(10) {
-        left: 85%;
-        width: 150px;
-        height: 150px;
-        animation-delay: 0s;
-        animation-duration: 11s;
-        background: rgba(130, 130, 130, 0.6);
-    }
-    
-    /* Добавляем больше квадратов с разными оттенками серого */
-    .square:nth-child(11) {
-        left: 15%;
-        width: 90px;
-        height: 90px;
-        animation-delay: 3.5s;
-        animation-duration: 22s;
-        background: rgba(60, 60, 60, 0.5);
-        border-radius: 30%;
-    }
-    
-    .square:nth-child(12) {
-        left: 60%;
-        width: 30px;
-        height: 30px;
-        animation-delay: 5s;
-        animation-duration: 17s;
-        background: rgba(240, 240, 240, 0.8);
-    }
-    
-    .square:nth-child(13) {
-        left: 5%;
-        width: 70px;
-        height: 70px;
-        animation-delay: 1s;
-        animation-duration: 14s;
-        background: rgba(30, 30, 30, 0.6);
-        border-radius: 5%;
-    }
-    
-    .square:nth-child(14) {
-        left: 95%;
-        width: 18px;
-        height: 18px;
-        animation-delay: 8s;
-        animation-duration: 19s;
-        background: rgba(200, 200, 200, 0.7);
-        border-radius: 25%;
-    }
-    
-    .square:nth-child(15) {
-        left: 45%;
-        width: 120px;
-        height: 120px;
-        animation-delay: 0.5s;
-        animation-duration: 27s;
-        background: rgba(100, 100, 100, 0.6);
-    }
-    
-    .square:nth-child(16) {
-        left: 30%;
-        width: 40px;
-        height: 40px;
-        animation-delay: 6s;
-        animation-duration: 16s;
-        background: rgba(160, 160, 160, 0.5);
-        border-radius: 15%;
-    }
-    
-    .square:nth-child(17) {
-        left: 80%;
-        width: 55px;
-        height: 55px;
-        animation-delay: 9s;
-        animation-duration: 21s;
-        background: rgba(50, 50, 50, 0.7);
-    }
-    
-    .square:nth-child(18) {
-        left: 22%;
-        width: 25px;
-        height: 25px;
-        animation-delay: 4.5s;
-        animation-duration: 23s;
-        background: rgba(220, 220, 220, 0.6);
-        border-radius: 40%;
-    }
-    
-    .square:nth-child(19) {
-        left: 68%;
-        width: 100px;
-        height: 100px;
-        animation-delay: 7.5s;
-        animation-duration: 28s;
-        background: rgba(70, 70, 70, 0.5);
-        border-radius: 8%;
-    }
-    
-    .square:nth-child(20) {
-        left: 92%;
-        width: 15px;
-        height: 15px;
-        animation-delay: 10s;
-        animation-duration: 15s;
-        background: rgba(250, 250, 250, 0.9);
-        border-radius: 20%;
-    }
-    
-    /* Добавляем еще 10 квадратов */
-    .square:nth-child(21) {
-        left: 77%;
-        width: 35px;
-        height: 35px;
-        animation-delay: 1.5s;
-        animation-duration: 19s;
-        background: rgba(25, 25, 25, 0.65);
-        border-radius: 12%;
-    }
-    
-    .square:nth-child(22) {
-        left: 38%;
-        width: 48px;
-        height: 48px;
-        animation-delay: 6.5s;
-        animation-duration: 25s;
-        background: rgba(190, 190, 190, 0.75);
-    }
-    
-    .square:nth-child(23) {
-        left: 12%;
-        width: 65px;
-        height: 65px;
-        animation-delay: 8.5s;
-        animation-duration: 20s;
-        background: rgba(128, 128, 128, 0.55);
-        border-radius: 18%;
-    }
-    
-    .square:nth-child(24) {
-        left: 88%;
-        width: 28px;
-        height: 28px;
-        animation-delay: 3.2s;
-        animation-duration: 22s;
-        background: rgba(210, 210, 210, 0.65);
-        border-radius: 35%;
-    }
-    
-    .square:nth-child(25) {
-        left: 52%;
-        width: 95px;
-        height: 95px;
-        animation-delay: 5.8s;
-        animation-duration: 26s;
-        background: rgba(15, 15, 15, 0.7);
-    }
-    
-    .square:nth-child(26) {
-        left: 7%;
-        width: 32px;
-        height: 32px;
-        animation-delay: 7.2s;
-        animation-duration: 30s;
-        background: rgba(230, 230, 230, 0.8);
-        border-radius: 45%;
-    }
-    
-    .square:nth-child(27) {
-        left: 73%;
-        width: 85px;
-        height: 85px;
-        animation-delay: 4.7s;
-        animation-duration: 18s;
-        background: rgba(90, 90, 90, 0.6);
-        border-radius: 6%;
-    }
-    
-    .square:nth-child(28) {
-        left: 28%;
-        width: 18px;
-        height: 18px;
-        animation-delay: 9.5s;
-        animation-duration: 24s;
-        background: rgba(45, 45, 45, 0.5);
-    }
-    
-    .square:nth-child(29) {
-        left: 83%;
-        width: 110px;
-        height: 110px;
-        animation-delay: 2.8s;
-        animation-duration: 32s;
-        background: rgba(170, 170, 170, 0.55);
-        border-radius: 25%;
-    }
-    
-    .square:nth-child(30) {
-        left: 3%;
-        width: 22px;
-        height: 22px;
-        animation-delay: 11.2s;
-        animation-duration: 27s;
-        background: rgba(245, 245, 245, 0.85);
-        border-radius: 15%;
-    }
-    
-    /* Убеждаемся, что квадраты видны только в серой теме */
-    body:not(.rainy-theme):not(.theme-rainy) .floating-squares {
-        display: none !important;
-    }
-    
-    body.rainy-theme .floating-squares,
-    body.theme-rainy .floating-squares {
-        display: block !important;
-        z-index: 2;
-    }
-    
-    /* Убеждаемся, что дождливый фон не перекрывает квадраты */
-    body.rainy-theme .rainy-background,
-    body.theme-rainy .rainy-background {
-        z-index: 1;
+    /* Дефолтный стиль при загрузке страницы (до применения темы) */
+    .theme-circle-toggle {
+        background: linear-gradient(135deg, #3b1b78, #1a237e);
     }
 </style>
 {% endblock %}
@@ -2445,53 +1576,8 @@
     <!-- Здесь будут динамически созданные звезды и метеоры -->
 </div>
 
-<!-- Добавляем контейнер с плавающими квадратами для серой темы -->
-<div class="floating-squares" id="floating-squares">
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-</div>
-
 <!-- Дождливый фон (изначально скрытый) -->
-<div class="rainy-background" id="rainy-background" style="display: none;">
+<div class="rainy-background" id="rainy-background">
     <div class="mist"></div>
     <!-- Здесь будут динамически созданы капли дождя -->
 </div>
@@ -2972,7 +2058,7 @@
                         
                         // Создаем дождливый фон, если его еще нет
                         if (!rainyBackground.querySelector('.raindrop')) {
-                            window.createRainyBackgroundGlobal();
+                            window.createRainyBackground();
                         }
                     }
                 }
@@ -3013,7 +2099,7 @@
                     
                     // Создаем дождливый фон, если его еще нет
                     if (!rainyBackground.querySelector('.raindrop')) {
-                        window.createRainyBackgroundGlobal();
+                        window.createRainyBackground();
                     }
                 }
             }
@@ -3132,8 +2218,8 @@
         
         // Глобальная функция для создания дождливого фона,
         // чтобы гарантировать доступность во всех частях кода
-        window.createRainyBackground = function() {
-            console.log('Вызвана глобальная функция createRainyBackground');
+        window.createRainyBackgroundGlobal = function() {
+            console.log('Вызвана глобальная функция createRainyBackgroundGlobal');
             
             const rainyBg = document.getElementById('rainy-background');
             if (!rainyBg) {
@@ -3145,99 +2231,71 @@
             rainyBg.innerHTML = '<div class="mist"></div>';
             
             // Установка градиентного фона
-            rainyBg.style.background = 'linear-gradient(to bottom, #333333 0%, #666666 40%, #888888 100%)';
+            rainyBg.style.background = 'linear-gradient(to bottom, #1c262b 0%, #37474f 40%, #455a64 100%)';
             
-            // Добавляем базовый слой помех
-            const glitchEffect = document.createElement('div');
-            glitchEffect.className = 'glitch-effect';
-            rainyBg.appendChild(glitchEffect);
-            
-            // Создаем случайные линии помех
-            for (let i = 0; i < 12; i++) {
-                setTimeout(() => {
-                    createGlitchLine(rainyBg);
-                }, i * 500);
+            // Остальной код инициализации...
+            const mist = rainyBg.querySelector('.mist');
+            if (mist) {
+                mist.style.background = 'linear-gradient(to bottom, rgba(192, 210, 222, 0.15) 0%, rgba(176, 198, 209, 0.25) 100%)';
+                mist.style.opacity = '0.4';
             }
             
-            // Создаем случайные блоки помех
-            for (let i = 0; i < 8; i++) {
+            // Создаем начальные капли дождя
+            for (let i = 0; i < 50; i++) {
                 setTimeout(() => {
-                    createGlitchBlock(rainyBg);
-                }, i * 700);
+                    createRaindrop(rainyBg);
+                }, i * 100);
             }
             
-            // Постоянное добавление новых элементов помех
-            const glitchInterval = setInterval(() => {
+            // Постоянное добавление новых капель
+            const rainInterval = setInterval(() => {
                 if (document.body.classList.contains('rainy-theme')) {
-                    if (Math.random() > 0.5) {
-                        createGlitchLine(rainyBg);
-                    } else {
-                        createGlitchBlock(rainyBg);
-                    }
+                    createRaindrop(rainyBg);
                 } else {
-                    clearInterval(glitchInterval);
+                    clearInterval(rainInterval);
                 }
-            }, 1000);
+            }, 100);
         };
         
-        function createGlitchLine(container) {
-            const line = document.createElement('div');
-            line.className = 'glitch-line';
-            
-            // Случайное положение
-            line.style.top = `${Math.random() * 100}%`;
-            
-            // Случайная скорость анимации
-            const duration = 1 + Math.random() * 3;
-            line.style.animationDuration = `${duration}s`;
-            
-            // Случайная задержка начала анимации
-            line.style.animationDelay = `${Math.random() * 2}s`;
-            
-            // Добавляем линию в контейнер
-            container.appendChild(line);
-            
-            // Удаляем линию после анимации
-            setTimeout(() => {
-                if (line.parentNode) {
-                    line.parentNode.removeChild(line);
-                }
-            }, (duration + parseFloat(line.style.animationDelay)) * 1000);
-        }
-        
-        function createGlitchBlock(container) {
-            const block = document.createElement('div');
-            block.className = 'glitch-block';
-            
-            // Случайное положение
-            block.style.top = `${Math.random() * 100}%`;
-            block.style.left = `${Math.random() * 100}%`;
-            
-            // Случайный размер
-            block.style.width = `${50 + Math.random() * 150}px`;
-            block.style.height = `${5 + Math.random() * 30}px`;
-            
-            // Случайная скорость анимации
-            const duration = 1 + Math.random() * 3;
-            block.style.animationDuration = `${duration}s`;
-            
-            // Случайная задержка начала анимации
-            block.style.animationDelay = `${Math.random() * 2}s`;
-            
-            // Добавляем блок в контейнер
-            container.appendChild(block);
-            
-            // Удаляем блок после анимации
-            setTimeout(() => {
-                if (block.parentNode) {
-                    block.parentNode.removeChild(block);
-                }
-            }, (duration + parseFloat(block.style.animationDelay)) * 1000);
-        }
-        
         function createRaindrop(container) {
-            // Оставляем эту функцию для совместимости, но заменяем ее функционал
-            createGlitchLine(container);
+            const drop = document.createElement('div');
+            drop.className = 'raindrop';
+            
+            // Случайное положение
+            drop.style.left = `${Math.random() * 100}%`;
+            
+            // Случайная скорость падения
+            const duration = 0.5 + Math.random() * 1.5; // от 0.5 до 2 секунды
+            drop.style.setProperty('--duration', `${duration}s`);
+            
+            // Случайная задержка начала анимации
+            drop.style.setProperty('--delay', `${Math.random() * 2}s`);
+            
+            // Добавляем каплю в контейнер
+            container.appendChild(drop);
+            
+            // Создаем всплеск при падении капли
+            setTimeout(() => {
+                const splash = document.createElement('div');
+                splash.className = 'splash';
+                splash.style.left = drop.style.left;
+                splash.style.bottom = '0';
+                container.appendChild(splash);
+                
+                // Удаляем всплеск после анимации
+                setTimeout(() => {
+                    if (splash.parentNode) {
+                        splash.parentNode.removeChild(splash);
+                    }
+                }, 600);
+            }, (duration + parseFloat(drop.style.getPropertyValue('--delay'))) * 1000);
+            
+            // Удаляем каплю после падения
+            setTimeout(() => {
+                if (drop.parentNode) {
+                    drop.parentNode.removeChild(drop);
+                }
+            }, (duration + parseFloat(drop.style.getPropertyValue('--delay')) + 1) * 1000);
         }
         
         console.log('== DOMContentLoaded: ЗАВЕРШЕНО ==');
@@ -3274,7 +2332,7 @@
                             }
                             
                             // Устанавливаем градиентный фон
-                            rainyBg.style.background = 'linear-gradient(to bottom, #333333 0%, #666666 40%, #888888 100%)';
+                            rainyBg.style.background = 'linear-gradient(to bottom, #1c262b 0%, #37474f 40%, #455a64 100%)';
                             
                             // Создаем капли дождя
                             for (let i = 0; i < 50; i++) {
@@ -3408,7 +2466,7 @@
                         if (rainyBg) {
                             rainyBg.style.display = 'block';
                             
-                            // Создаем дождливый фон, если его еще нет
+                            // Если капель дождя еще нет, создаем их
                             if (!rainyBg.querySelector('.raindrop')) {
                                 console.log('Создаем дождливый фон через круглое меню');
                                 
@@ -3423,13 +2481,13 @@
                                     rainyBg.innerHTML = '<div class="mist"></div>';
                                     
                                     // Устанавливаем фон
-                                    rainyBg.style.background = 'linear-gradient(to bottom, #333333 0%, #666666 40%, #888888 100%)';
+                                    rainyBg.style.background = 'linear-gradient(to bottom, #1c262b 0%, #37474f 40%, #455a64 100%)';
                                     
                                     // Создаем туман
                                     const mist = rainyBg.querySelector('.mist');
                                     if (mist) {
-                                        mist.style.background = 'linear-gradient(to bottom, rgba(150, 150, 150, 0.1) 0%, rgba(200, 200, 200, 0.2) 100%)';
-                                        mist.style.opacity = '0.3';
+                                        mist.style.background = 'linear-gradient(to bottom, rgba(192, 210, 222, 0.15) 0%, rgba(176, 198, 209, 0.25) 100%)';
+                                        mist.style.opacity = '0.4';
                                     }
                                     
                                     // Создаем капли
@@ -4299,20 +3357,43 @@
             
             // Применяем тему к body
             if (theme === 'rainy') {
-                console.log('Применяем дождливую тему через глобальную функцию setRainyTheme');
-                // Используем нашу новую функцию для установки дождливой темы
-                window.setRainyTheme();
+                console.log('Применяем дождливую тему...');
+                // Добавляем класс дождливой темы
+                document.body.classList.add('rainy-theme');
+                document.body.classList.remove('cosmic-theme');
                 
-                // Запускаем эффект молний, если он нужен
+                // Показываем/скрываем соответствующие фоны
+                if (rainyBackground) {
+                rainyBackground.style.display = 'block';
+                    console.log('Дождливый фон активирован');
+                } else {
+                    console.error('rainyBackground не определен!');
+                }
+                
+                if (enhancedStars) {
+                enhancedStars.style.display = 'none';
+                    console.log('Звездный фон скрыт');
+                } else {
+                    console.error('enhancedStars не определен!');
+                }
+                
+                // Создаем дождливый фон если его еще нет
+                console.log('Проверяем наличие капель дождя...');
                 try {
+                    if (rainyBackground && !rainyBackground.querySelector('.raindrop')) {
+                        console.log('Капли не найдены, создаём дождливый фон');
+                    createRainyBackground();
+                }
+                    
+                    // Запускаем эффект молний
                     if (typeof startLightningEffects === 'function') {
                         console.log('Запускаем эффект молний');
                         startLightningEffects();
-                    } else {
+            } else {
                         console.error('Функция startLightningEffects не определена');
                     }
                 } catch (error) {
-                    console.error('Ошибка при запуске эффекта молний:', error);
+                    console.error('Ошибка при создании дождливого фона:', error);
                 }
             } else {
                 console.log('Применяем космическую тему...');
@@ -4340,7 +3421,6 @@
             const newsItems = document.querySelectorAll('.news-item');
             const timers = document.querySelectorAll('.timer-container');
             const newsControls = document.querySelectorAll('.news-controls');
-            const floatingSquares = document.getElementById('floating-squares');
             
             // Убедимся что все таймеры видимы
             timers.forEach(timer => {
@@ -4359,67 +3439,373 @@
                 newsItems[currentNewsIndex].style.display = 'block';
             }
             
-            // Управляем видимостью плавающих квадратов
-            if (floatingSquares) {
-                if (document.body.classList.contains('rainy-theme') || document.body.classList.contains('theme-rainy')) {
-                    floatingSquares.style.display = 'block';
-                    // Убеждаемся, что плавающие квадраты имеют высокий z-index
-                    floatingSquares.style.zIndex = '2';
-                    console.log('Плавающие квадраты активированы в серой теме');
-                } else {
-                    floatingSquares.style.display = 'none';
-                    console.log('Плавающие квадраты скрыты для не-серой темы');
-                }
-            } else {
-                console.error('Не удалось найти контейнер с плавающими квадратами!');
-            }
-            
             // Обновим прозрачность QR-секции в зависимости от темы
             const qrSection = document.querySelector('.qr-section');
             if (qrSection) {
                 if (document.body.classList.contains('rainy-theme')) {
-                    qrSection.style.backgroundColor = 'transparent';
-                    qrSection.style.backdropFilter = 'none';
-                    qrSection.style.boxShadow = 'none';
+                    qrSection.style.backgroundColor = 'rgba(245, 250, 255, 0.1)';
+                    qrSection.style.backdropFilter = 'blur(5px)';
                 } else {
                     // Восстановление стилей для космической темы
                     qrSection.style.backgroundColor = '';
                     qrSection.style.backdropFilter = '';
-                    qrSection.style.boxShadow = '';
                 }
             }
         }
         
-        // Функция для создания дождливого фона - теперь использует глитч-эффект
+        // Функция для создания дождливого фона
         function createRainyBackground() {
-            console.log('Локальная функция createRainyBackground вызывает глобальную функцию createRainyBackgroundGlobal');
+            const container = rainyBackground;
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
             
-            // Удаляем капли дождя, которые могли остаться
+            // Меняем фон на более красивый градиент
+            container.style.background = 'linear-gradient(to bottom, #1c262b 0%, #37474f 40%, #455a64 100%)';
+            
+            // Усиливаем эффект дымки для более красивого вида
+            const mist = container.querySelector('.mist');
+            if (mist) {
+                mist.style.background = 'linear-gradient(to bottom, rgba(192, 210, 222, 0.15) 0%, rgba(176, 198, 209, 0.25) 100%)';
+                mist.style.opacity = '0.4';
+            }
+            
+            // Создаем контейнер для капель на экране
+            const body = document.body;
+            
+            // Удаляем любые существующие капли, которые могли остаться от предыдущих переключений тем
+            function removeAllDrops() {
+                // Удаляем все flowing-drop
+                const allFlowingDrops = document.querySelectorAll('.flowing-drop');
+                allFlowingDrops.forEach(drop => {
+                    if (drop.parentNode) {
+                        drop.parentNode.removeChild(drop);
+                    }
+                });
+            }
+            
+            // При переключении тем нужно удалить все капли
             removeAllDrops();
             
-            // Используем нашу новую функцию для создания глитч-эффекта
-            if (typeof window.createRainyBackgroundGlobal === 'function') {
-                window.createRainyBackgroundGlobal();
-                } else {
-                console.error('Глобальная функция createRainyBackgroundGlobal не определена');
-                
-                // Запасной вариант, если глобальная функция не найдена
-                const container = rainyBackground;
-                if (container) {
-                    // Меняем фон на темно-серый градиент
-                    container.style.background = 'linear-gradient(to bottom, #333333 0%, #666666 40%, #888888 100%)';
-                    
-                    // Добавляем туман
-                    const mist = container.querySelector('.mist') || document.createElement('div');
-                    mist.className = 'mist';
-                    mist.style.background = 'linear-gradient(to bottom, rgba(50, 50, 50, 0.1) 0%, rgba(90, 90, 90, 0.2) 100%)';
-                    mist.style.opacity = '0.2';
-                    
-                    if (!mist.parentNode) {
-                        container.appendChild(mist);
-                    }
+            // Функция для создания стекающих капель
+            function createFlowingDrops() {
+                // Если не активна дождливая тема, не создаем капли
+                if (!document.body.classList.contains('rainy-theme')) {
+                    return;
                 }
+                
+                // Максимальное количество стекающих капель - увеличено
+                const MAX_FLOWING_DROPS = 30;
+                
+                // Удаляем старые капли если их слишком много
+                const currentDrops = document.querySelectorAll('.flowing-drop');
+                if (currentDrops.length > MAX_FLOWING_DROPS) {
+                    return;
+                }
+                
+                // Создаем новую стекающую каплю
+                const drop = document.createElement('div');
+                drop.className = 'flowing-drop';
+                
+                // Определяем начальную позицию (в верхней части экрана)
+                const startPosX = 5 + Math.random() * 90; // 5-95% ширины экрана
+                drop.style.left = `${startPosX}%`;
+                drop.style.top = `${Math.random() * 20}%`; // Начинаем в верхних 20% экрана
+                
+                // Задаем случайные размеры
+                const width = 2 + Math.random() * 4; // 2-6px ширина
+                const height = 10 + Math.random() * 20; // 10-30px высота
+                drop.style.setProperty('--width', `${width}px`);
+                drop.style.setProperty('--height', `${height}px`);
+                
+                // Задаем произвольный путь стекания
+                // Генерируем случайные смещения для каждой точки анимации
+                const windowHeight = window.innerHeight;
+                const y1 = 50 + Math.random() * 50;
+                const y2 = y1 + 50 + Math.random() * 50;
+                const y3 = y2 + 50 + Math.random() * 50;
+                const y4 = y3 + 50 + Math.random() * 50;
+                const y5 = Math.min(y4 + 100 + Math.random() * 100, windowHeight);
+                
+                const x1 = -10 + Math.random() * 20;
+                const x2 = -10 + Math.random() * 20;
+                const x3 = -10 + Math.random() * 20;
+                const x4 = -10 + Math.random() * 20;
+                const x5 = -10 + Math.random() * 20;
+                
+                drop.style.setProperty('--y1', `${y1}px`);
+                drop.style.setProperty('--y2', `${y2}px`);
+                drop.style.setProperty('--y3', `${y3}px`);
+                drop.style.setProperty('--y4', `${y4}px`);
+                drop.style.setProperty('--y5', `${y5}px`);
+                
+                drop.style.setProperty('--x1', `${x1}px`);
+                drop.style.setProperty('--x2', `${x2}px`);
+                drop.style.setProperty('--x3', `${x3}px`);
+                drop.style.setProperty('--x4', `${x4}px`);
+                drop.style.setProperty('--x5', `${x5}px`);
+                
+                // Случайная длительность и задержка анимации
+                const duration = 4 + Math.random() * 8; // 4-12 секунд
+                drop.style.setProperty('--duration', `${duration}s`);
+                drop.style.setProperty('--delay', `${Math.random() * 2}s`);
+                
+                // Добавляем каплю в контейнер дождливого фона, а не в body
+                container.appendChild(drop);
+                
+                // Удаляем каплю после анимации
+                setTimeout(() => {
+                    if (drop.parentNode) {
+                        drop.parentNode.removeChild(drop);
+                    }
+                }, (duration + 2) * 1000); // Добавляем 2 секунды для задержки
             }
+            
+            // Создаем начальные стекающие капли - увеличено количество
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    createFlowingDrops();
+                }, i * 300); // создаем с интервалом 300мс для большей частоты
+            }
+            
+            // Периодически добавляем новые стекающие капли
+            const flowingDropInterval = setInterval(() => {
+                if (document.body.classList.contains('rainy-theme')) {
+                    createFlowingDrops();
+                    createFlowingDrops(); // Добавляем две капли за раз для большей плотности
+                } else {
+                    // Если тема не дождливая, удаляем все стекающие капли
+                    removeAllDrops();
+                    clearInterval(flowingDropInterval);
+                }
+            }, 800); // каждые 800мс
+            
+            // Функция для создания эффекта молнии
+            function createLightningEffect() {
+                const lightningContainer = document.getElementById('lightning-container');
+                const thunderSound = document.getElementById('thunder-sound');
+                
+                // Создаем элемент молнии (фоновая вспышка)
+                const lightning = document.createElement('div');
+                lightning.className = 'lightning';
+                lightningContainer.appendChild(lightning);
+                
+                // Создаем тонкую линию молнии (зигзагообразную)
+                const bolt = document.createElement('div');
+                bolt.className = 'lightning-bolt';
+                
+                // Случайное положение по горизонтали
+                const startLeftPos = 10 + Math.random() * 80; // от 10% до 90% ширины экрана
+                bolt.style.left = `${startLeftPos}%`;
+                
+                // Случайная высота и угол наклона
+                const boltHeight = 100 + Math.random() * 500; // от 100px до 600px
+                const rotateAngle = -5 + Math.random() * 10; // от -5 до 5 градусов
+                
+                bolt.style.setProperty('--bolt-height', `${boltHeight}px`);
+                bolt.style.setProperty('--bolt-rotate', `${rotateAngle}deg`);
+                
+                // Анимация болта молнии
+                bolt.style.animation = 'lightning-bolt-appear 0.5s linear forwards';
+                
+                lightningContainer.appendChild(bolt);
+                
+                // Создаем несколько ответвлений от главной линии молнии
+                const branchCount = 1 + Math.floor(Math.random() * 3); // 1-3 ответвления
+                
+                for (let i = 0; i < branchCount; i++) {
+                    // Создаем ответвление
+                    const branch = document.createElement('div');
+                    branch.className = 'lightning-bolt';
+                    
+                    // Определяем положение ответвления относительно основного болта
+                    const branchPos = 20 + Math.random() * 60; // относительная позиция по высоте болта (20-80%)
+                    const branchY = boltHeight * (branchPos / 100);
+                    const branchRotate = 20 + Math.random() * 40; // угол ответвления (20-60 градусов)
+                    const branchWidth = 50 + Math.random() * 150; // длина ответвления
+                    
+                    // Устанавливаем параметры ответвления
+                    branch.style.left = `${startLeftPos}%`;
+                    branch.style.top = `${branchY}px`;
+                    branch.style.width = '2px';
+                    branch.style.height = '2px';
+                    branch.style.setProperty('--branch-y', `${branchY}px`);
+                    branch.style.setProperty('--branch-rotate', `${Math.random() > 0.5 ? branchRotate : -branchRotate}deg`);
+                    branch.style.setProperty('--branch-width', `${branchWidth}px`);
+                    
+                    // Добавляем анимацию для ответвления
+                    branch.style.animation = `lightning-branch-appear ${0.3 + Math.random() * 0.2}s linear forwards`;
+                    branch.style.animationDelay = `${0.1 + Math.random() * 0.2}s`;
+                    
+                    lightningContainer.appendChild(branch);
+                    
+                    // Удаляем ответвление после анимации
+                    setTimeout(() => {
+                        if (branch.parentNode) {
+                            branch.parentNode.removeChild(branch);
+                        }
+                    }, 600);
+                }
+                
+                // Запускаем анимацию вспышки
+                setTimeout(() => {
+                    lightning.style.animation = 'none';
+                    lightning.offsetHeight; // Перезапуск анимации
+                    lightning.style.animation = 'lightning-flash 0.3s linear';
+                    
+                    // Воспроизводим звук грома, если элемент существует и с небольшой задержкой
+                    if (thunderSound) {
+                        setTimeout(() => {
+                            thunderSound.currentTime = 0;
+                            thunderSound.play().catch(e => console.log('Не удалось воспроизвести звук грома:', e));
+                        }, 300);
+                    }
+                }, 100);
+                
+                // Удаляем молнию после анимации
+                setTimeout(() => {
+                    if (lightning.parentNode) {
+                        lightning.parentNode.removeChild(lightning);
+                    }
+                    if (bolt.parentNode) {
+                        bolt.parentNode.removeChild(bolt);
+                    }
+                }, 600);
+            }
+            
+            // Периодически создаем молнии
+            function scheduleLightning() {
+                if (!document.body.classList.contains('rainy-theme')) {
+                    return;
+                }
+                
+                // Создаем молнию
+                createLightningEffect();
+                
+                // Планируем следующую молнию со случайной задержкой
+                const nextLightningDelay = 5000 + Math.random() * 25000; // От 5 до 30 секунд
+                setTimeout(scheduleLightning, nextLightningDelay);
+            }
+            
+            // Запускаем планировщик молний
+            setTimeout(scheduleLightning, 5000);
+            
+            // Создаем капли дождя с замыканием для управления ими
+            const createRaindrops = (() => {
+                const MAX_DROPS = 200;
+                const drops = [];
+                
+                return function() {
+                    // Если слишком много капель, удаляем старые
+                    while (drops.length > MAX_DROPS) {
+                        const oldDrop = drops.shift();
+                        if (oldDrop && oldDrop.parentNode) {
+                            oldDrop.parentNode.removeChild(oldDrop);
+                        }
+                    }
+                    
+                    // Создаем новые капли
+                    for (let i = 0; i < 10; i++) {
+                        const drop = document.createElement('div');
+                        drop.className = 'raindrop';
+                        
+                        // Случайное положение
+                        drop.style.left = `${Math.random() * 100}%`;
+                        
+                        // Случайная скорость падения
+                        const duration = 0.7 + Math.random() * 0.7;
+                        drop.style.setProperty('--duration', `${duration}s`);
+                        drop.style.setProperty('--delay', `${Math.random() * 0.5}s`);
+                        
+                        // Случайная длина и ширина капли для разнообразия
+                        drop.style.height = `${10 + Math.random() * 15}px`;
+                        drop.style.width = `${1 + Math.random() * 1.5}px`;
+                        
+                        // Случайная прозрачность для создания глубины
+                        drop.style.opacity = `${0.3 + Math.random() * 0.7}`;
+                        
+                        container.appendChild(drop);
+                        drops.push(drop);
+                        
+                        // Создаем брызги когда капля достигает "земли"
+                        setTimeout(() => {
+                            if (document.body.classList.contains('rainy-theme')) {
+                                const splash = document.createElement('div');
+                                splash.className = 'splash';
+                                splash.style.left = drop.style.left;
+                                splash.style.top = `${windowHeight - 5}px`;
+                                container.appendChild(splash);
+                                
+                                // Удаляем брызги после анимации
+                                setTimeout(() => {
+                                    if (splash.parentNode) {
+                                        splash.parentNode.removeChild(splash);
+                                    }
+                                }, 600);
+                            }
+                        }, duration * 1000);
+                    }
+                };
+            })();
+            
+            // Создаем первоначальные капли
+            createRaindrops();
+
+            // Добавляем легкий эффект тумана внизу экрана для красоты
+            const bottomMist = document.createElement('div');
+            bottomMist.className = 'bottom-mist';
+            bottomMist.style.position = 'absolute';
+            bottomMist.style.bottom = '0';
+            bottomMist.style.left = '0';
+            bottomMist.style.width = '100%';
+            bottomMist.style.height = '150px';
+            bottomMist.style.background = 'linear-gradient(to top, rgba(192, 210, 222, 0.2) 0%, rgba(176, 198, 209, 0) 100%)';
+            bottomMist.style.pointerEvents = 'none';
+            container.appendChild(bottomMist);
+            
+            // Запускаем периодические молнии для дождливой темы
+            let lightningInterval;
+            
+            function startLightningEffects() {
+                // Проверяем, активен ли дождливый режим
+                if (!document.body.classList.contains('rainy-theme')) {
+                    return;
+                }
+                
+                // Первая молния с небольшой задержкой
+                setTimeout(() => {
+                    createLightningEffect();
+                }, 2000);
+                
+                // Создаем молнии с случайными интервалами
+                lightningInterval = setInterval(() => {
+                    // Проверяем, активен ли еще дождливый режим
+                    if (!document.body.classList.contains('rainy-theme')) {
+                        clearInterval(lightningInterval);
+                        return;
+                    }
+                    
+                    // Вероятность молнии (примерно 75%)
+                    if (Math.random() > 0.25) {
+                        createLightningEffect();
+                    }
+                }, 8000 + Math.random() * 15000); // Интервал от 8 до 23 секунд
+            }
+            
+            // Запускаем молнии если активна дождливая тема
+            if (document.body.classList.contains('rainy-theme')) {
+                startLightningEffects();
+            }
+            
+            // Постоянно добавляем новые капли
+            const rainInterval = setInterval(() => {
+                // Проверяем, активна ли дождливая тема
+                if (document.body.classList.contains('rainy-theme')) {
+                    createRaindrops();
+                } else {
+                    // Если тема не активна, можно приостановить создание капель
+                    clearInterval(rainInterval);
+                }
+            }, 100);
         }
         
         // Добавим прямой обработчик при загрузке страницы для дополнительной надежности
@@ -4486,7 +3872,6 @@
                 
                 if (rainyBackground) rainyBackground.style.display = 'none';
                 if (enhancedStars) enhancedStars.style.display = 'block';
-                if (floatingSquares) floatingSquares.style.display = 'none';
                 
                 // Сохраняем выбор
                 localStorage.setItem('theme', 'cosmic');
@@ -4508,7 +3893,56 @@
         if (simpleRainyButton) {
             simpleRainyButton.addEventListener('click', function() {
                 console.log('Нажата простая кнопка: Дождливая тема');
-                window.setRainyTheme();
+                
+                // Прямое применение темы без использования общей функции
+                document.body.classList.add('rainy-theme');
+                document.body.classList.remove('cosmic-theme');
+                
+                const rainyBg = document.getElementById('rainy-background');
+                const enhancedStrs = document.getElementById('enhanced-stars');
+                
+                if (rainyBg) {
+                    rainyBg.style.display = 'block';
+                    
+                    // Создаем дождливый фон, если его еще нет
+                    if (!rainyBg.querySelector('.raindrop')) {
+                        console.log('Создаем дождливый фон напрямую через глобальную функцию');
+                        try {
+                            // Используем глобальную функцию
+                            if (typeof window.createRainyBackgroundGlobal === 'function') {
+                                window.createRainyBackgroundGlobal();
+                            } else {
+                                console.error('Глобальная функция createRainyBackgroundGlobal не определена');
+                                // Пробуем локальную функцию как запасной вариант
+                                if (typeof createRainyBackground === 'function') {
+                                    createRainyBackground();
+                                } else {
+                                    console.error('Функция createRainyBackground тоже не определена');
+                                }
+                            }
+                        } catch (error) {
+                            console.error('Ошибка при создании дождливого фона:', error);
+                        }
+                    }
+                } else {
+                    console.error('Не удалось найти элемент rainy-background');
+                }
+                
+                if (enhancedStrs) {
+                    enhancedStrs.style.display = 'none';
+                } else {
+                    console.error('Не удалось найти элемент enhanced-stars');
+                }
+                
+                // Сохраняем выбор
+                localStorage.setItem('theme', 'rainy');
+                
+                // Обновляем активные кнопки
+                const simpleCosmicBtn = document.getElementById('simple-cosmic-button');
+                if (simpleCosmicBtn) simpleCosmicBtn.classList.remove('active');
+                simpleRainyButton.classList.add('active');
+                
+                console.log('Применена дождливая тема');
             });
         }
         
@@ -4552,13 +3986,13 @@
             rainyBackground.innerHTML = '<div class="mist"></div>';
             
             // Устанавливаем фон
-            rainyBackground.style.background = 'linear-gradient(to bottom, #333333 0%, #666666 40%, #888888 100%)';
+            rainyBackground.style.background = 'linear-gradient(to bottom, #1c262b 0%, #37474f 40%, #455a64 100%)';
             
             // Настраиваем туман
             const mist = rainyBackground.querySelector('.mist');
             if (mist) {
-                mist.style.background = 'linear-gradient(to bottom, rgba(150, 150, 150, 0.1) 0%, rgba(200, 200, 200, 0.2) 100%)';
-                mist.style.opacity = '0.3';
+                mist.style.background = 'linear-gradient(to bottom, rgba(192, 210, 222, 0.15) 0%, rgba(176, 198, 209, 0.25) 100%)';
+                mist.style.opacity = '0.4';
             }
             
             // Создаем начальные капли
@@ -4682,8 +4116,8 @@
                 document.body.classList.remove('rainy-theme');
                 document.body.classList.add('cosmic-theme');
             } else if (theme === 'rainy') {
-                window.setRainyTheme();
-                return; // Выходим, так как функция setRainyTheme делает все нужные действия
+                document.body.classList.remove('cosmic-theme');
+                document.body.classList.add('rainy-theme');
             }
             
             // Обновляем видимость фонов
@@ -4855,56 +4289,5 @@
     }
 
     // Функция для обновления QR-кода новости
-
-    // Глобальная функция для установки дождливой темы с глитч-эффектом
-    window.setRainyTheme = function() {
-        console.log('Установка дождливой (серой) темы с глитч-эффектом');
-        
-        // Обновляем классы на body
-        document.body.classList.add('rainy-theme');
-        document.body.classList.remove('cosmic-theme');
-        
-        // Настраиваем отображение фонов
-        const rainyBg = document.getElementById('rainy-background');
-        const enhancedStrs = document.getElementById('enhanced-stars');
-        const floatingSquares = document.getElementById('floating-squares');
-        
-        if (enhancedStrs) enhancedStrs.style.display = 'none';
-        
-        // Настраиваем плавающие квадраты для серой темы
-        if (floatingSquares) {
-            floatingSquares.style.display = 'block';
-            floatingSquares.style.zIndex = '0'; // Снижаем z-index, чтобы не перекрывать футер
-            console.log('Плавающие квадраты активированы в серой теме');
-        } else {
-            console.error('Элемент floating-squares не найден!');
-        }
-        
-        if (rainyBg) {
-            // Очищаем содержимое, чтобы избежать накопления элементов
-            rainyBg.innerHTML = '<div class="mist"></div>';
-            rainyBg.style.display = 'block';
-            rainyBg.style.zIndex = '1'; // Низкий z-index, чтобы быть позади квадратов
-            
-            // Создаем глитч-эффект
-            try {
-                window.createRainyBackgroundGlobal();
-            } catch (error) {
-                console.error('Ошибка при создании глитч-эффекта:', error);
-            }
-        }
-        
-        // Сохраняем в localStorage
-        localStorage.setItem('theme', 'rainy');
-        
-        // Активируем соответствующие кнопки меню
-        const simpleCosmicBtn = document.getElementById('simple-cosmic-button');
-        const simpleRainyBtn = document.getElementById('simple-rainy-button');
-        
-        if (simpleCosmicBtn) simpleCosmicBtn.classList.remove('active');
-        if (simpleRainyBtn) simpleRainyBtn.classList.add('active');
-        
-        console.log('Дождливая тема с глитч-эффектом установлена');
-    };
 </script>
 {% endblock %}

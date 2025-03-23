@@ -8,59 +8,162 @@
     /* Стили для страницы курсов валют */
     html, body {
         background-color: transparent !important;
-        min-height: 100vh;
+        height: 100vh;
         margin: 0;
         padding: 0;
-        overflow-x: hidden;
-        scrollbar-width: thin;
+        overflow: hidden;
+        scrollbar-width: none;
+    }
+    
+    /* Скрываем скроллбар */
+    body::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* Стили инфо-заголовка специально для страницы курсов валют */
+    .currency-info-header {
+        background: rgba(35, 28, 92, 0.95);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 1rem;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    body.rainy-theme .currency-info-header {
+        background: rgba(30, 30, 30, 0.9);
+        color: #aaaaaa;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(60, 60, 60, 0.35);
+        backdrop-filter: blur(7px);
+    }
+    
+    body.rainy-theme .currency-info-header .icon {
+        color: #888888;
     }
     
     .currency-dashboard {
-        width: 90%;
-        max-width: 1400px;
-        margin: 10px auto;
-        padding: 15px;
+        width: 94%;
+        max-width: 1600px;
+        height: calc(100vh - 80px);
+        margin: 5px auto;
+        padding: 10px;
         background-color: rgba(255, 255, 255, 0.9);
-        border-radius: 20px;
+        border-radius: 15px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         position: relative;
         z-index: 5;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Стили для дождливой темы */
+    body.rainy-theme .currency-dashboard {
+        background-color: rgba(40, 40, 40, 0.9);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(70, 70, 70, 0.3);
+        backdrop-filter: blur(5px);
+    }
+    
+    body.rainy-theme .currency-title {
+        color: #cccccc;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+    
+    body.rainy-theme .currency-button {
+        background-color: rgba(30, 30, 30, 0.4);
+        color: #aaaaaa;
+        border-color: rgba(60, 60, 60, 0.4);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+    }
+    
+    body.rainy-theme .currency-button:hover {
+        background-color: rgba(50, 50, 50, 0.6);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+        color: #e0e0e0;
+        text-shadow: 0 0 8px rgba(150, 150, 150, 0.5);
+    }
+    
+    body.rainy-theme .currency-button.active {
+        background-color: rgba(50, 50, 50, 0.8);
+        color: #e0e0e0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(150, 150, 150, 0.3);
+        text-shadow: 0 0 8px rgba(150, 150, 150, 0.6);
+    }
+    
+    body.rainy-theme .period-button {
+        background-color: rgba(30, 30, 30, 0.4);
+        color: #aaaaaa;
+        border-color: rgba(60, 60, 60, 0.4);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+    
+    body.rainy-theme .period-button:hover {
+        background-color: rgba(50, 50, 50, 0.6);
+        color: #e0e0e0;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+    }
+    
+    body.rainy-theme .period-button.active {
+        background-color: rgba(50, 50, 50, 0.8);
+        color: #e0e0e0;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5), inset 0 0 8px rgba(150, 150, 150, 0.3);
+    }
+    
+    body.rainy-theme .info-card {
+        background-color: rgba(30, 30, 30, 0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(60, 60, 60, 0.2);
+        backdrop-filter: blur(2px);
+    }
+    
+    body.rainy-theme .info-title {
+        color: #aaaaaa;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+    
+    body.rainy-theme .info-value,
+    body.rainy-theme .info-change {
+        color: #e0e0e0;
+        text-shadow: 0 0 8px rgba(150, 150, 150, 0.4);
     }
     
     .currency-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
     
     .currency-title {
-        font-size: 2rem;
+        font-size: 1.6rem;
         font-weight: bold;
         color: #231c5c;
+        margin: 0;
     }
     
     .currency-selector {
         display: flex;
-        gap: 10px;
+        gap: 8px;
         flex-wrap: wrap;
     }
     
     .currency-button {
-        padding: 8px 15px;
+        padding: 6px 12px;
         background-color: #f0f0f0;
         border: 2px solid #231c5c;
         border-radius: 50px;
         color: #231c5c;
         font-weight: bold;
-        font-size: 1rem;
+        font-size: 0.9rem;
         cursor: pointer;
         transition: all 0.3s ease;
     }
     
     .currency-button:hover {
         background-color: #d8d8ff;
-        transform: translateY(-3px);
+        transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(35, 28, 92, 0.2);
     }
     
@@ -72,17 +175,18 @@
     .period-selector {
         display: flex;
         justify-content: center;
-        gap: 10px;
-        margin-bottom: 15px;
+        gap: 8px;
+        margin-bottom: 10px;
     }
     
     .period-button {
-        padding: 6px 12px;
+        padding: 5px 10px;
         background-color: #f0f0f0;
         border: 1px solid #ccc;
         border-radius: 30px;
         color: #231c5c;
         font-weight: bold;
+        font-size: 0.9rem;
         cursor: pointer;
         transition: all 0.3s ease;
     }
@@ -99,61 +203,69 @@
     
     .chart-container {
         width: 100%;
-        height: 45vh;
-        margin: 15px 0;
+        height: 38vh;
+        margin: 10px 0;
         position: relative;
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.8);
+        flex-grow: 1;
+    }
+    
+    body.rainy-theme .chart-container {
+        background-color: rgba(35, 35, 35, 0.8);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(60, 60, 60, 0.3);
     }
     
     .currency-info {
         display: flex;
         justify-content: space-between;
-        margin-top: 15px;
-        gap: 10px;
+        margin-top: 10px;
+        gap: 8px;
         flex-wrap: wrap;
     }
     
     .info-card {
         flex: 1;
-        min-width: 200px;
+        min-width: 180px;
         background-color: #f8f8ff;
-        padding: 10px;
+        padding: 8px;
         border-radius: 10px;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         transition: all 0.3s ease;
     }
     
     .info-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
     
     .info-title {
-        font-size: 1rem;
+        font-size: 0.9rem;
         font-weight: bold;
         color: #231c5c;
-        margin-bottom: 5px;
+        margin-bottom: 4px;
     }
     
     .info-value {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
         font-weight: bold;
         color: #231c5c;
     }
     
     .info-change {
-        font-size: 1rem;
-        margin-top: 3px;
+        font-size: 0.9rem;
+        margin-top: 2px;
     }
     
     .info-change.positive {
-        color: #4caf50;
+        color: #888888;
     }
     
     .info-change.negative {
-        color: #f44336;
+        color: #555555;
     }
     
     .loading-overlay {
@@ -171,8 +283,8 @@
     }
     
     .loading-spinner {
-        width: 40px;
-        height: 40px;
+        width: 35px;
+        height: 35px;
         border: 4px solid #f3f3f3;
         border-top: 4px solid #231c5c;
         border-radius: 50%;
@@ -187,12 +299,12 @@
     /* Адаптивность для мобильных устройств */
     @media (max-width: 768px) {
         .currency-title {
-            font-size: 1.8rem;
+            font-size: 1.4rem;
         }
         
         .currency-header {
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             align-items: flex-start;
         }
         
@@ -202,32 +314,213 @@
         }
         
         .currency-button {
-            padding: 5px 10px;
-            font-size: 0.9rem;
+            padding: 4px 8px;
+            font-size: 0.85rem;
         }
         
         .chart-container {
-            height: 40vh;
+            height: 35vh;
         }
         
         .info-card {
-            min-width: calc(50% - 20px);
+            min-width: calc(50% - 15px);
         }
     }
     
     @media (max-width: 576px) {
         .currency-dashboard {
-            padding: 10px;
+            padding: 8px;
             width: 95%;
+            height: calc(100vh - 70px);
         }
         
         .currency-title {
-            font-size: 1.6rem;
+            font-size: 1.3rem;
         }
         
         .info-card {
-            min-width: 100%;
+            min-width: calc(50% - 10px);
+            padding: 6px;
         }
+        
+        .info-title {
+            font-size: 0.85rem;
+        }
+        
+        .info-value {
+            font-size: 1.3rem;
+        }
+    }
+    
+    /* Удаляем стили для молнии (эффект вспышки) в контейнере currency-dashboard */
+    @keyframes lightningFlash {
+        0%, 100% {
+            box-shadow: 0 10px 25px rgba(3, 5, 12, 0.3);
+        }
+    }
+    
+    body.rainy-theme .currency-dashboard {
+        animation: none;
+    }
+    
+    /* Стили для загрузчика в дождливой теме */
+    body.rainy-theme .loading-overlay {
+        background-color: rgba(30, 30, 30, 0.5);
+    }
+    
+    body.rainy-theme .loading-spinner {
+        border: 4px solid rgba(30, 30, 30, 0.3);
+        border-top: 4px solid #888888;
+    }
+    
+    body.rainy-theme .info-card:hover {
+        transform: translateY(-3px);
+        background-color: rgba(30, 30, 30, 0.25);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    }
+    
+    .currency-title {
+        color: #231c5c;
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 1.6rem;
+    }
+    
+    .currency-chart-container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 15px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    body.rainy-theme .currency-chart-container {
+        background-color: rgba(35, 35, 35, 0.8);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(60, 60, 60, 0.3);
+    }
+    
+    body.rainy-theme .currency-chart-container h3 {
+        color: #bbbbbb;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+    
+    body.rainy-theme .currency-chart-container canvas {
+        filter: invert(0.85) hue-rotate(180deg);
+    }
+    
+    .chart-actions {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+        gap: 8px;
+    }
+    
+    .time-button {
+        padding: 4px 12px;
+        background-color: rgba(35, 28, 92, 0.1);
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .time-button:hover, .time-button.active {
+        background-color: rgba(35, 28, 92, 0.8);
+        color: white;
+    }
+    
+    body.rainy-theme .time-button {
+        background-color: rgba(60, 60, 60, 0.5);
+        color: #aaaaaa;
+        border: 1px solid rgba(80, 80, 80, 0.3);
+    }
+    
+    body.rainy-theme .time-button:hover, 
+    body.rainy-theme .time-button.active {
+        background-color: rgba(80, 80, 80, 0.9);
+        color: #ffffff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+    
+    .currency-tables {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+    }
+    
+    .currency-table {
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        padding: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    body.rainy-theme .currency-table {
+        background-color: rgba(35, 35, 35, 0.8);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(60, 60, 60, 0.3);
+    }
+    
+    body.rainy-theme .currency-table h3 {
+        color: #bbbbbb;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+    
+    body.rainy-theme .currency-table table th,
+    body.rainy-theme .currency-table table td {
+        color: #aaaaaa;
+        border-color: rgba(80, 80, 80, 0.3);
+    }
+    
+    body.rainy-theme .currency-table table tr:nth-child(odd) {
+        background-color: rgba(50, 50, 50, 0.4);
+    }
+    
+    body.rainy-theme .currency-table table tr:hover {
+        background-color: rgba(60, 60, 60, 0.6);
+    }
+    
+    @media (max-width: 768px) {
+        .currency-tables {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    /* Скрываем звездное небо для серой темы */
+    body.rainy-theme .enhanced-stars-container {
+        display: none !important;
+    }
+    
+    /* Дополнительные стили дождливой темы для блоков с курсами валют */
+    body.rainy-theme .chart-container {
+        background-color: rgba(30, 30, 30, 0.7);
+        border: 1px solid rgba(60, 60, 60, 0.3);
+    }
+    
+    body.rainy-theme .currency-table {
+        background-color: rgba(35, 35, 35, 0.8);
+        color: #cccccc;
+    }
+    
+    body.rainy-theme .currency-table th {
+        background-color: rgba(45, 45, 45, 0.9);
+        color: #aaaaaa;
+        border-color: rgba(70, 70, 70, 0.5);
+    }
+    
+    body.rainy-theme .currency-table td {
+        border-color: rgba(60, 60, 60, 0.3);
+        color: #cccccc;
+    }
+    
+    body.rainy-theme .currency-table tr:nth-child(even) {
+        background-color: rgba(40, 40, 40, 0.5);
+    }
+    
+    body.rainy-theme .currency-table tr:hover {
+        background-color: rgba(50, 50, 50, 0.7);
     }
 </style>
 {% endblock %}
@@ -288,14 +581,26 @@
 {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Переменные для хранения текущего состояния
-        let currentCurrency = 'USD';
-        let currentPeriod = 'day';
-        let chart = null;
-        const loadingOverlay = document.getElementById('loadingOverlay');
+    document.addEventListener('DOMContentLoaded', () => {
+        // Проверяем, не используется ли серая тема
+        const isRainyTheme = document.body.classList.contains('rainy-theme');
         
-        // Получаем элементы для обновления информации
+        // Если серая тема, скрываем звездный фон
+        if (isRainyTheme) {
+            const starsContainer = document.querySelector('.enhanced-stars-container');
+            if (starsContainer) {
+                starsContainer.style.display = 'none';
+            }
+        }
+        
+        // Код для работы с курсами валют
+        // Инициализация переменных
+        let chart = null;
+        let currentCurrency = 'USD';
+        let currentPeriod = 'month';
+        
+        // Получаем ссылки на нужные элементы
+        const loadingOverlay = document.getElementById('loadingOverlay');
         const currentRateElement = document.getElementById('currentRate');
         const changeValueElement = document.getElementById('changeValue');
         const changePercentElement = document.getElementById('changePercent');
@@ -466,11 +771,11 @@
             let gradientColor = '#231c5c';
             switch(currentCurrency) {
                 case 'USD': gradientColor = '#231c5c'; break;
-                case 'EUR': gradientColor = '#4caf50'; break;
-                case 'GBP': gradientColor = '#9c27b0'; break;
-                case 'CNY': gradientColor = '#f44336'; break;
-                case 'BTC': gradientColor = '#ff9800'; break;
-                case 'ETH': gradientColor = '#2196f3'; break;
+                case 'EUR': gradientColor = '#777777'; break;
+                case 'GBP': gradientColor = '#555555'; break;
+                case 'CNY': gradientColor = '#999999'; break;
+                case 'BTC': gradientColor = '#666666'; break;
+                case 'ETH': gradientColor = '#444444'; break;
             }
             
             // Создаем градиент для заливки под линией

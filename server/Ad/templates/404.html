@@ -310,6 +310,91 @@ body::-webkit-scrollbar-thumb:hover {
     font-size: 1rem;
     cursor: pointer;
 }
+
+/* Стили для дождливой темы */
+body.rainy-theme .error-container {
+    background-color: rgba(50, 50, 50, 0.85);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(80, 80, 80, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+body.rainy-theme .error-container h1,
+body.rainy-theme .error-container h2 {
+    color: #cccccc;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+body.rainy-theme .error-container p {
+    color: #aaaaaa;
+}
+
+body.rainy-theme .error-code {
+    color: #888888;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+body.rainy-theme .space-object {
+    filter: brightness(0.8) contrast(1.1);
+}
+
+body.rainy-theme .home-button {
+    background-color: rgba(60, 60, 60, 0.8);
+    color: #cccccc;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(80, 80, 80, 0.5);
+}
+
+body.rainy-theme .home-button:hover {
+    background-color: rgba(70, 70, 70, 0.9);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+}
+
+/* Скрываем звездное небо для серой темы */
+body.rainy-theme .enhanced-stars-container {
+    display: none !important;
+}
+
+/* Дополнительные стили для игры в серой теме */
+body.rainy-theme .game-container {
+    background-color: rgba(40, 40, 40, 0.8);
+    border: 1px solid rgba(60, 60, 60, 0.4);
+}
+
+body.rainy-theme .score-display {
+    background: rgba(60, 60, 60, 0.8);
+    color: #cccccc;
+}
+
+body.rainy-theme .game-instructions {
+    color: #aaaaaa;
+}
+
+body.rainy-theme .error-back-button {
+    background-color: rgba(60, 60, 60, 0.8);
+    color: #cccccc;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+body.rainy-theme .error-back-button:hover {
+    background-color: rgba(70, 70, 70, 0.9);
+    color: #ffffff;
+}
+
+body.rainy-theme .restart-btn {
+    background-color: rgba(60, 60, 60, 0.8);
+    color: #cccccc;
+}
+
+body.rainy-theme .restart-btn:hover {
+    background-color: rgba(70, 70, 70, 0.9);
+    color: #ffffff;
+}
+
+body.rainy-theme .game-over {
+    background-color: rgba(40, 40, 40, 0.9);
+}
 </style>
 {% endblock %}
 
@@ -340,9 +425,20 @@ body::-webkit-scrollbar-thumb:hover {
 {% block script %}
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Создаем улучшенный звездный фон
+        // Проверяем, не используется ли серая тема
+        const isRainyTheme = document.body.classList.contains('rainy-theme');
+        
+        // Создаем улучшенный звездный фон только если не серая тема
+        if (!isRainyTheme) {
+            createEnhancedStarryBackground();
+        }
+        
+        // Функция создания звездного фона
         function createEnhancedStarryBackground() {
             const container = document.getElementById('enhanced-stars');
+            // Если элемент не найден или тема дождливая, ничего не делаем
+            if (!container || isRainyTheme) return;
+            
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
             
@@ -420,9 +516,6 @@ body::-webkit-scrollbar-thumb:hover {
                 createMeteor();
             }, 8000 + Math.random() * 5000); // Случайный интервал между метеорами
         }
-        
-        // Вызываем функцию создания звездного фона
-        createEnhancedStarryBackground();
         
         // Обеспечиваем прозрачный фон для всех родительских элементов
         function setTransparentBg() {
