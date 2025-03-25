@@ -7,17 +7,91 @@
 <style>
     /* Стили для страницы курсов валют */
     html, body {
-        background-color: transparent !important;
         height: 100vh;
         margin: 0;
         padding: 0;
-        overflow: hidden;
         scrollbar-width: none;
+        background: transparent !important; /* Делаем фон прозрачным для видимости звезд */
     }
     
     /* Скрываем скроллбар */
     body::-webkit-scrollbar {
         display: none;
+    }
+    
+    /* Звездное небо */
+    #stars-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+    }
+    
+    /* Убираем влияние базового шаблона */
+    body .star-container {
+        display: none !important;
+    }
+    
+    /* Стили звезд */
+    .star {
+        position: absolute;
+        background: #FFF;
+        border-radius: 50%;
+        box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.7);
+        animation: twinkle 4s infinite;
+        opacity: 0.8;
+    }
+    
+    .shooting-star {
+        position: absolute;
+        width: 3px;
+        height: 80px;
+        background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+        animation: shootingStar 5s linear infinite;
+        transform: rotate(45deg);
+        opacity: 0;
+    }
+    
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 1; }
+    }
+    
+    @keyframes shootingStar {
+        0% {
+            transform: translate(calc(100vw * var(--x, 0)), calc(100vh * var(--y, 0))) rotate(45deg);
+            opacity: 0;
+            height: 5px;
+        }
+        1% {
+            opacity: 1;
+        }
+        5% {
+            opacity: 1;
+            transform: translate(calc(100vw * var(--x, 0) - 100px), calc(100vh * var(--y, 0) + 100px)) rotate(45deg);
+            height: 30px;
+        }
+        10% {
+            opacity: 0;
+            height: 80px;
+            transform: translate(calc(100vw * var(--x, 0) - 200px), calc(100vh * var(--y, 0) + 200px)) rotate(45deg);
+        }
+        100% {
+            opacity: 0;
+            transform: translate(calc(100vw * var(--x, 0) - 200px), calc(100vh * var(--y, 0) + 200px)) rotate(45deg);
+        }
+    }
+    
+    /* Настройка z-index для гарантии правильного отображения */
+    .currency-dashboard {
+        position: relative;
+        z-index: 1; /* над звездами */
     }
     
     /* Стили инфо-заголовка специально для страницы курсов валют */
@@ -56,6 +130,7 @@
         z-index: 5;
         display: flex;
         flex-direction: column;
+        margin-bottom: 30px;
     }
     
     /* Стили для дождливой темы */
@@ -526,6 +601,12 @@
 {% endblock %}
 
 {% block content %}
+<!-- Фоновый градиент -->
+<div id="custom-background" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, #010105 0%, #150f38 100%); z-index: -1;"></div>
+
+<!-- Контейнер для звездного неба -->
+<div id="stars-container"></div>
+
 <div class="currency-dashboard">
     <div class="currency-header">
         <h1 class="currency-title">Курсы валют</h1>
@@ -541,9 +622,9 @@
     </div>
     
     <div class="period-selector">
-        <button class="period-button active" data-period="day">День</button>
+        <button class="period-button" data-period="day">День</button>
         <button class="period-button" data-period="week">Неделя</button>
-        <button class="period-button" data-period="month">Месяц</button>
+        <button class="period-button active" data-period="month">Месяц</button>
         <button class="period-button" data-period="year">Год</button>
     </div>
     
@@ -582,22 +663,169 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Проверяем, не используется ли серая тема
-        const isRainyTheme = document.body.classList.contains('rainy-theme');
+        console.log('Инициализация страницы курсов валют');
         
-        // Если серая тема, скрываем звездный фон
-        if (isRainyTheme) {
-            const starsContainer = document.querySelector('.enhanced-stars-container');
-            if (starsContainer) {
-                starsContainer.style.display = 'none';
+        // Устанавливаем правильный фон в зависимости от темы
+        const isRainyTheme = document.body.classList.contains('rainy-theme');
+        const customBg = document.getElementById('custom-background');
+        
+        if (customBg) {
+            if (isRainyTheme) {
+                customBg.style.background = 'linear-gradient(to bottom, #0a0a0a 0%, #232323 50%, #353535 100%)';
+            } else {
+                customBg.style.background = 'linear-gradient(to bottom, #010105 0%, #150f38 100%)';
             }
+        } else {
+            console.error('Не найден элемент фона!');
         }
+        
+        // Проверка видимости звездного фона
+        const checkStarsVisibility = () => {
+            const starsContainer = document.getElementById('stars-container');
+            
+            console.log('Проверка звезд:', {
+                'контейнер звезд найден': !!starsContainer,
+                'звезд создано': starsContainer ? starsContainer.children.length : 0,
+                'дождливая тема': isRainyTheme,
+                'z-index контейнера': starsContainer ? getComputedStyle(starsContainer).zIndex : 'нет',
+                'body background': getComputedStyle(document.body).background
+            });
+        };
+        
+        // Устанавливаем таймер, чтобы проверить видимость через секунду после полной загрузки
+        setTimeout(checkStarsVisibility, 1000);
+        
+        // Инициализация звездного неба
+        const starsContainer = document.getElementById('stars-container');
+        
+        // Создаем звезды только для не-дождливой темы
+        if (!isRainyTheme && starsContainer) {
+            // Очищаем контейнер
+            starsContainer.innerHTML = '';
+            
+            console.log('Создаю звезды в контейнере:', starsContainer);
+            
+            // Создаем обычные звезды
+            for (let i = 0; i < 100; i++) {
+                createStar(starsContainer);
+            }
+            
+            // Создаем падающие звезды
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    createShootingStar(starsContainer);
+                }, i * 1000); // Запускаем каждую секунду
+            }
+            
+            // Запускаем периодическое создание падающих звезд
+            setInterval(() => {
+                if (!document.body.classList.contains('rainy-theme')) {
+                    createShootingStar(starsContainer);
+                }
+            }, 5000); // Каждые 5 секунд
+        } else {
+            console.log('Звезды не созданы:', {
+                'дождливая тема': isRainyTheme,
+                'контейнер найден': !!starsContainer
+            });
+        }
+        
+        // Функция создания звезды
+        function createStar(container) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            
+            // Случайный размер
+            const size = Math.random() * 2 + 1;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            
+            // Случайная позиция
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            
+            // Случайная задержка для мерцания
+            star.style.animationDelay = `${Math.random() * 4}s`;
+            
+            container.appendChild(star);
+        }
+        
+        // Функция создания падающей звезды
+        function createShootingStar(container) {
+            if (document.body.classList.contains('rainy-theme')) {
+                return; // Не создаем звезды в дождливой теме
+            }
+            
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            
+            // Устанавливаем случайную начальную позицию
+            const xPos = Math.random();
+            const yPos = Math.random() * 0.5; // Только в верхней половине экрана
+            
+            star.style.setProperty('--x', xPos);
+            star.style.setProperty('--y', yPos);
+            
+            container.appendChild(star);
+            
+            // Удаляем звезду после анимации
+            setTimeout(() => {
+                if (star.parentNode === container) {
+                    container.removeChild(star);
+                }
+            }, 5000);
+        }
+        
+        // Обработчик события изменения темы
+        document.addEventListener('themeChanged', (e) => {
+            console.log('Смена темы на:', e.detail.theme);
+            const isRainyThemeNow = e.detail.theme === 'rainy';
+            const customBg = document.getElementById('custom-background');
+            
+            // Меняем фон в зависимости от темы
+            if (customBg) {
+                if (isRainyThemeNow) {
+                    customBg.style.background = 'linear-gradient(to bottom, #0a0a0a 0%, #232323 50%, #353535 100%)';
+                } else {
+                    customBg.style.background = 'linear-gradient(to bottom, #010105 0%, #150f38 100%)';
+                }
+            }
+            
+            if (isRainyThemeNow) {
+                // Если включена дождливая тема, очищаем звезды
+                if (starsContainer) {
+                    starsContainer.innerHTML = '';
+                }
+            } else {
+                // Иначе создаем звезды заново
+                if (starsContainer) {
+                    starsContainer.innerHTML = '';
+                    for (let i = 0; i < 100; i++) {
+                        createStar(starsContainer);
+                    }
+                    for (let i = 0; i < 5; i++) {
+                        setTimeout(() => {
+                            createShootingStar(starsContainer);
+                        }, i * 700);
+                    }
+                }
+            }
+            
+            // Проверяем состояние после смены темы
+            setTimeout(checkStarsVisibility, 300);
+            
+            // Перерисовываем график с текущими данными
+            if (chartData && chartData.length > 0) {
+                updateChart(chartData);
+            }
+        });
         
         // Код для работы с курсами валют
         // Инициализация переменных
         let chart = null;
         let currentCurrency = 'USD';
         let currentPeriod = 'month';
+        let chartData = []; // Сохраняем последние загруженные данные
         
         // Получаем ссылки на нужные элементы
         const loadingOverlay = document.getElementById('loadingOverlay');
@@ -649,6 +877,12 @@
         
         // Функция для форматирования даты
         function formatDate(date) {
+            if (typeof date === 'string' && date.includes(" ")) {
+                // Если дата содержит время (формат "YYYY-MM-DD HH:MM")
+                const [datePart, timePart] = date.split(" ");
+                return timePart; // Возвращаем только часы и минуты для режима "день"
+            }
+            // Для других форматов возвращаем дату обычным способом
             const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
             return new Date(date).toLocaleDateString('ru-RU', options);
         }
@@ -700,6 +934,9 @@
             })
             .then(data => {
                 if (data.status === 'success') {
+                    // Сохраняем данные для возможного использования позже
+                    chartData = data.data;
+                    
                     // Обновляем график с полученными данными
                     updateChart(data.data);
                     
@@ -709,6 +946,7 @@
                 else {
                     console.error('Ошибка при получении данных:', data.message);
                     // В случае ошибки используем пустые данные
+                    chartData = [];
                     updateChart([]);
                     updateInfo([], currentRate);
                 }
@@ -716,6 +954,7 @@
             .catch(error => {
                 console.error('Ошибка при запросе данных:', error);
                 // В случае ошибки используем пустые данные
+                chartData = [];
                 updateChart([]);
                 updateInfo([], currentRate);
             })
@@ -729,6 +968,9 @@
         function updateChart(data) {
             const ctx = document.getElementById('currencyChart').getContext('2d');
             
+            // Проверяем текущую тему снова, на случай если она изменилась
+            const currentIsRainyTheme = document.body.classList.contains('rainy-theme');
+            
             // Если данных нет, показываем пустой график
             if (!data || data.length === 0) {
                 if (chart) {
@@ -741,8 +983,8 @@
                         datasets: [{
                             label: `Курс ${currentCurrency}`,
                             data: [],
-                            borderColor: '#231c5c',
-                            backgroundColor: 'rgba(35, 28, 92, 0.1)'
+                            borderColor: currentIsRainyTheme ? '#888888' : '#231c5c',
+                            backgroundColor: currentIsRainyTheme ? 'rgba(136, 136, 136, 0.1)' : 'rgba(35, 28, 92, 0.1)'
                         }]
                     },
                     options: {
@@ -755,8 +997,14 @@
             
             // Форматируем данные для Chart.js
             const labels = data.map(item => {
+                // Проверяем, содержит ли дата время
+                if (typeof item.date === 'string' && item.date.includes(" ")) {
+                    // Если содержит время, извлекаем только часы и минуты
+                    const [datePart, timePart] = item.date.split(" ");
+                    return timePart;
+                }
+                // Если нет, форматируем стандартным способом
                 if (currentPeriod === 'day') {
-                    // Если в данных есть время, используем его, иначе используем только дату
                     const date = new Date(item.date);
                     if (date.getHours() !== 0 || date.getMinutes() !== 0) {
                         return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
@@ -767,15 +1015,23 @@
             
             const values = data.map(item => item.value);
             
-            // Определяем цвет графика
-            let gradientColor = '#231c5c';
-            switch(currentCurrency) {
-                case 'USD': gradientColor = '#231c5c'; break;
-                case 'EUR': gradientColor = '#777777'; break;
-                case 'GBP': gradientColor = '#555555'; break;
-                case 'CNY': gradientColor = '#999999'; break;
-                case 'BTC': gradientColor = '#666666'; break;
-                case 'ETH': gradientColor = '#444444'; break;
+            // Определяем цвет графика в зависимости от темы и валюты
+            let gradientColor;
+            
+            if (currentIsRainyTheme) {
+                // Серая тема - все графики в серых тонах
+                switch(currentCurrency) {
+                    case 'USD': gradientColor = '#888888'; break;
+                    case 'EUR': gradientColor = '#777777'; break;
+                    case 'GBP': gradientColor = '#666666'; break;
+                    case 'CNY': gradientColor = '#999999'; break;
+                    case 'BTC': gradientColor = '#555555'; break;
+                    case 'ETH': gradientColor = '#444444'; break;
+                    default: gradientColor = '#888888';
+                }
+            } else {
+                // Синяя тема - все графики в одном оттенке синего
+                gradientColor = '#1a237e'; // Единый оттенок синего для всех валют
             }
             
             // Создаем градиент для заливки под линией
@@ -820,10 +1076,10 @@
                             display: false
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                            titleColor: '#333',
-                            bodyColor: '#333',
-                            borderColor: '#ddd',
+                            backgroundColor: currentIsRainyTheme ? 'rgba(40, 40, 40, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                            titleColor: currentIsRainyTheme ? '#cccccc' : '#333',
+                            bodyColor: currentIsRainyTheme ? '#cccccc' : '#333',
+                            borderColor: currentIsRainyTheme ? '#555' : '#ddd',
                             borderWidth: 1,
                             padding: 10,
                             cornerRadius: 8,
@@ -831,6 +1087,14 @@
                             callbacks: {
                                 title: function(tooltipItems) {
                                     const item = tooltipItems[0];
+                                    if (currentPeriod === 'day') {
+                                        const today = new Date();
+                                        const yesterday = new Date();
+                                        yesterday.setDate(today.getDate() - 1);
+                                        const todayStr = today.toLocaleDateString('ru-RU');
+                                        const yesterdayStr = yesterday.toLocaleDateString('ru-RU');
+                                        return `${item.label < today.getHours() ? todayStr : yesterdayStr}, ${item.label}`;
+                                    }
                                     return `Дата: ${item.label}`;
                                 },
                                 label: function(context) {
@@ -850,19 +1114,34 @@
                                 display: false
                             },
                             ticks: {
-                                color: '#666',
+                                color: currentIsRainyTheme ? '#aaaaaa' : '#666',
                                 font: {
                                     size: 12
+                                },
+                                callback: function(value, index, values) {
+                                    // Для дневного режима показываем только каждый 3-й час 
+                                    // чтобы избежать перегруженности оси X
+                                    if (currentPeriod === 'day') {
+                                        const hourLabel = this.getLabelForValue(value);
+                                        if (hourLabel.includes(':')) {
+                                            const hour = parseInt(hourLabel.split(':')[0]);
+                                            if (hour % 3 === 0) {
+                                                return hourLabel;
+                                            }
+                                            return '';
+                                        }
+                                    }
+                                    return this.getLabelForValue(value);
                                 }
                             }
                         },
                         y: {
                             beginAtZero: false,
                             grid: {
-                                color: '#eee'
+                                color: currentIsRainyTheme ? '#444' : '#eee'
                             },
                             ticks: {
-                                color: '#666',
+                                color: currentIsRainyTheme ? '#aaaaaa' : '#666',
                                 font: {
                                     size: 12
                                 },
@@ -881,8 +1160,8 @@
             // Если данных нет, показываем прочерки
             if (!data || data.length === 0) {
                 currentRateElement.textContent = currentCurrency === 'BTC' || currentCurrency === 'ETH' ? 
-                    `${currentRate.toLocaleString('ru-RU')} $` : 
-                    `${currentRate.toLocaleString('ru-RU')} ₽`;
+                    `${currentRate.toLocaleString('ru-RU')} $`
+                    : `${currentRate.toLocaleString('ru-RU')} ₽`;
                 changeValueElement.textContent = '--';
                 changePercentElement.textContent = '--';
                 maxValueElement.textContent = '--';
@@ -892,73 +1171,127 @@
                 return;
             }
             
-            // Получаем текущий и начальный курс из данных
-            const initialValue = data[0].value;
-            let finalValue = data[data.length - 1].value;
-            
-            // Для последнего значения используем текущий курс, если он доступен
-            if (currentRate > 0) {
-                finalValue = currentRate;
-            }
-            
-            // Расчет изменения
-            const change = finalValue - initialValue;
-            const changePercent = (change / initialValue) * 100;
-            
             // Находим максимальное и минимальное значения
-            let maxValue = Number.MIN_SAFE_INTEGER;
-            let minValue = Number.MAX_SAFE_INTEGER;
-            let maxDate, minDate;
+            let maxVal = data[0].value;
+            let minVal = data[0].value;
+            let maxValDate = data[0].date;
+            let minValDate = data[0].date;
             
             data.forEach(item => {
-                if (item.value > maxValue) {
-                    maxValue = item.value;
-                    maxDate = new Date(item.date);
+                if (item.value > maxVal) {
+                    maxVal = item.value;
+                    maxValDate = item.date;
                 }
-                if (item.value < minValue) {
-                    minValue = item.value;
-                    minDate = new Date(item.date);
+                if (item.value < minVal) {
+                    minVal = item.value;
+                    minValDate = item.date;
                 }
             });
             
-            // Обновляем элементы интерфейса
-            if (currentCurrency === 'BTC' || currentCurrency === 'ETH') {
-                currentRateElement.textContent = `${finalValue.toLocaleString('ru-RU')} $`;
-                maxValueElement.textContent = `${maxValue.toLocaleString('ru-RU')} $`;
-                minValueElement.textContent = `${minValue.toLocaleString('ru-RU')} $`;
-                changeValueElement.textContent = change >= 0 ? 
-                    `+${change.toLocaleString('ru-RU')} $` : 
-                    `${change.toLocaleString('ru-RU')} $`;
+            // Форматируем даты для максимального и минимального значений
+            if (typeof maxValDate === 'string' && maxValDate.includes(" ")) {
+                const [datePart, timePart] = maxValDate.split(" ");
+                maxDateElement.textContent = currentPeriod === 'day' ? 
+                    `${timePart}` : 
+                    `${formatDate(datePart)}`;
+            } else if (currentPeriod === 'day') {
+                const date = new Date(maxValDate);
+                if (date.getHours() !== 0 || date.getMinutes() !== 0) {
+                    maxDateElement.textContent = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                } else {
+                    maxDateElement.textContent = formatDate(maxValDate);
+                }
             } else {
-                currentRateElement.textContent = `${finalValue.toLocaleString('ru-RU')} ₽`;
-                maxValueElement.textContent = `${maxValue.toLocaleString('ru-RU')} ₽`;
-                minValueElement.textContent = `${minValue.toLocaleString('ru-RU')} ₽`;
-                changeValueElement.textContent = change >= 0 ? 
-                    `+${change.toLocaleString('ru-RU')} ₽` : 
-                    `${change.toLocaleString('ru-RU')} ₽`;
+                maxDateElement.textContent = formatDate(maxValDate);
             }
             
-            // Обновляем процентное изменение
-            changePercentElement.textContent = changePercent >= 0 ? 
-                `+${changePercent.toFixed(2)}%` : 
-                `${changePercent.toFixed(2)}%`;
-            
-            // Добавляем класс для цвета (зеленый для положительного, красный для отрицательного)
-            changePercentElement.className = 'info-change ' + (changePercent >= 0 ? 'positive' : 'negative');
-            changeValueElement.className = 'info-value ' + (changePercent >= 0 ? 'positive' : 'negative');
-            
-            // Форматируем даты для максимального и минимального значений
-            if (currentPeriod === 'day' && maxDate.getHours() !== 0) {
-                maxDateElement.textContent = maxDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                minDateElement.textContent = minDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            if (typeof minValDate === 'string' && minValDate.includes(" ")) {
+                const [datePart, timePart] = minValDate.split(" ");
+                minDateElement.textContent = currentPeriod === 'day' ? 
+                    `${timePart}` : 
+                    `${formatDate(datePart)}`;
+            } else if (currentPeriod === 'day') {
+                const date = new Date(minValDate);
+                if (date.getHours() !== 0 || date.getMinutes() !== 0) {
+                    minDateElement.textContent = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                } else {
+                    minDateElement.textContent = formatDate(minValDate);
+                }
             } else {
-                maxDateElement.textContent = formatDate(maxDate);
-                minDateElement.textContent = formatDate(minDate);
+                minDateElement.textContent = formatDate(minValDate);
+            }
+            
+            // Остальные данные
+            const lastValue = data[data.length - 1].value;
+            const firstValue = data[0].value;
+            const change = lastValue - firstValue;
+            const changePercent = ((change / firstValue) * 100).toFixed(2);
+            
+            currentRateElement.textContent = currentCurrency === 'BTC' || currentCurrency === 'ETH' ? 
+                `${lastValue.toLocaleString('ru-RU')} $`
+                : `${lastValue.toLocaleString('ru-RU')} ₽`;
+                
+            changeValueElement.textContent = currentCurrency === 'BTC' || currentCurrency === 'ETH' ?
+                (change >= 0 ? `+${change.toLocaleString('ru-RU')} $` : `${change.toLocaleString('ru-RU')} $`) :
+                (change >= 0 ? `+${change.toLocaleString('ru-RU')} ₽` : `${change.toLocaleString('ru-RU')} ₽`);
+                
+            changePercentElement.textContent = `${change >= 0 ? '+' : ''}${changePercent}%`;
+            changePercentElement.className = `info-change ${change >= 0 ? 'positive' : 'negative'}`;
+            
+            maxValueElement.textContent = currentCurrency === 'BTC' || currentCurrency === 'ETH' ?
+                `${maxVal.toLocaleString('ru-RU')} $` :
+                `${maxVal.toLocaleString('ru-RU')} ₽`;
+                
+            minValueElement.textContent = currentCurrency === 'BTC' || currentCurrency === 'ETH' ?
+                `${minVal.toLocaleString('ru-RU')} $` :
+                `${minVal.toLocaleString('ru-RU')} ₽`;
+        }
+        
+        // Запускаем начальную загрузку данных
+        loadChartData();
+        
+        // Добавляем автоматическое обновление данных каждый час для дневного режима
+        let autoRefreshInterval;
+        
+        function startAutoRefresh() {
+            // Отключаем существующий интервал, если есть
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+            
+            // Устанавливаем новый интервал в зависимости от режима
+            if (currentPeriod === 'day') {
+                // Для дневного режима обновляем каждые 5 минут
+                autoRefreshInterval = setInterval(function() {
+                    console.log('Автоматическое обновление данных...');
+                    // Очищаем кеш для текущей валюты
+                    if (currentCurrency) {
+                        // Запрашиваем новые данные
+                        loadChartData();
+                    }
+                }, 5 * 60 * 1000); // 5 минут
+            } else {
+                // Для других режимов обновляем каждый час
+                autoRefreshInterval = setInterval(function() {
+                    console.log('Автоматическое обновление данных...');
+                    // Очищаем кеш для текущей валюты
+                    if (currentCurrency) {
+                        // Запрашиваем новые данные
+                        loadChartData();
+                    }
+                }, 60 * 60 * 1000); // 1 час
             }
         }
         
-        // Загружаем начальные данные
-        loadChartData();
+        // Запускаем автоматическое обновление
+        startAutoRefresh();
+        
+        // Обновляем интервал при смене периода
+        document.querySelectorAll('.period-button').forEach(button => {
+            button.addEventListener('click', function() {
+                startAutoRefresh();
+            });
+        });
     });
 </script>
-{% endblock %} 
+{% endblock %}

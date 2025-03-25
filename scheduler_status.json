@@ -1,0 +1,30 @@
+{
+  "status": "Активен",
+  "jobs": [
+    {
+      "id": "fetch_news_init",
+      "name": "fetch_news",
+      "next_run_time": "2025-03-25T07:05:51.715994+00:00",
+      "trigger": "date[2025-03-25 07:05:51 UTC]",
+      "misfire_grace_time": 1
+    },
+    {
+      "id": "update_currency_job",
+      "name": "update_currency_job",
+      "next_run_time": "2025-03-25T13:05:46.714996+05:00",
+      "trigger": "interval[1:00:00]",
+      "misfire_grace_time": 1
+    },
+    {
+      "id": "fetch_news",
+      "name": "fetch_news",
+      "next_run_time": "2025-03-25T18:05:46.714996+05:00",
+      "trigger": "interval[6:00:00]",
+      "misfire_grace_time": 1
+    }
+  ],
+  "job_count": 3,
+  "has_time_restriction_commented": false,
+  "source_code_fragment": "    @classmethod\n    def update_currency_job(cls):\n        try:\n            # Очищаем кеш данных курсов валют при обновлении\n            # Импортируем здесь, чтобы избежать цикличного импорта\n            from .views import _currency_data_cache\n            _currency_data_cache.clear()\n            \n            now = timezone.now()\n            \n            # Ограничиваем обновление только в ровное время часа\n            # ВРЕМЕННО ОТКЛЮЧАЕМ ОГРАНИЧЕНИЕ ДЛЯ ОТЛАДКИ\n            # if now.minute != 0:\n",
+  "timestamp": "2025-03-25T12:05:46.727962"
+}
