@@ -1639,8 +1639,7 @@
                 if (data.status === 'success' && data.data.length > 0) {
                     // Получаем последнее значение USD
                     const usdLatestRate = data.data[data.data.length - 1].value;
-                    
-                    // Обновляем все элементы USD в футере
+
                     document.querySelectorAll('.item[data-currency="USD"]').forEach(item => {
                         item.textContent = `$ ${usdLatestRate.toLocaleString('ru-RU')}₽`;
                     });
