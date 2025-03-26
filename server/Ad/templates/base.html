@@ -397,29 +397,33 @@
         }
 
         .nav-link {
-            color: inherit;
+            color: #231c5c;
             text-decoration: none;
-            font-size: 1.2rem;
-            padding: 5px 15px;
+            padding: 8px 15px;
             border-radius: 8px;
             transition: all 0.3s ease;
-            font-weight: 500;
+            background: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
         }
 
         .nav-link:hover {
-            background-color: rgba(35, 28, 92, 0.1);
+            background: #231c5c;
+            color: white;
+            transform: translateY(-2px);
         }
-        
-        /* Стили для навигации в дождливой теме */
+
+        /* Стили для дождливой темы в навигационных ссылках */
         body.rainy-theme .nav-link {
-            color: #d8d8d8;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-        }
-        
-        body.rainy-theme .nav-link:hover {
-            background-color: rgba(60, 60, 60, 0.4);
+            background: rgba(60, 60, 60, 0.3);
+            color: #cccccc;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(80, 80, 80, 0.25);
+        }
+
+        body.rainy-theme .nav-link:hover {
+            background: rgba(70, 70, 70, 0.5);
             color: #ffffff;
+            box-shadow: 0 0 15px rgba(70, 70, 70, 0.6);
         }
 
         .content {
@@ -800,6 +804,7 @@
             <div class="nav-menu">
                 <a href="{% url 'main' %}" class="nav-link">Главная</a>
                 <a href="{% url 'currency_charts' %}" class="nav-link">Курсы валют</a>
+                <a href="{% url 'weather' %}" class="nav-link">Погода</a>
                 {% if user.is_authenticated %}
                     <a href="{% url 'profile' %}" class="nav-link">Личный кабинет</a>
                     <a href="{% url 'logout' %}" class="nav-link">Выход</a>
@@ -1085,7 +1090,6 @@
             ],
             'ETH': [
                 '🔧 Ethereum был создан Виталиком Бутериным в 2015 году',
-                '�� Платформа поддерживает создание смарт-контрактов и децентрализованных приложений',
                 '🌐 На Ethereum работает более 80% всех DeFi проектов',
                 '🔄 В 2022 году Ethereum перешел на proof-of-stake, снизив энергопотребление на 99.95%',
                 '📊 Ежедневно в сети Ethereum проводится более миллиона транзакций',

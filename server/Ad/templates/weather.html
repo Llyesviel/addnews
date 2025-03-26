@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Погода{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Погода в Москве</h3>
+                </div>
+                {% if error %}
+                <div class="card-body">
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                </div>
+                {% else %}
+                <div class="card-body">
+                    <div class="current-weather text-center">
+                        <img src="https://openweathermap.org/img/wn/{{ current_weather.icon }}@2x.png" 
+                             alt="{{ current_weather.description }}" 
+                             class="weather-icon">
+                        <h2>{{ current_weather.temperature }}°C</h2>
+                        <p class="text-muted">Ощущается как {{ current_weather.feels_like }}°C</p>
+                        <p class="weather-description">{{ current_weather.description|capfirst }}</p>
+                        <div class="weather-details mt-3">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p><i class="fas fa-tint"></i> Влажность: {{ current_weather.humidity }}%</p>
+                                </div>
+                                <div class="col-6">
+                                    <p><i class="fas fa-wind"></i> Ветер: {{ current_weather.wind_speed }} м/с</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if forecast %}
+            <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">Прогноз на неделю</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for day in forecast %}
+                        <div class="col-md-4 mb-3">
+                            <div class="forecast-day text-center">
+                                <h5>{{ day.date|date:"d.m" }}</h5>
+                                <img src="https://openweathermap.org/img/wn/{{ day.icon }}.png" 
+                                     alt="{{ day.description }}">
+                                <p class="mb-0">{{ day.temperature }}°C</p>
+                                <small class="text-muted">{{ day.description }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.weather-icon {
+    width: 100px;
+    height: 100px;
+}
+.weather-description {
+    font-size: 1.2em;
+    color: #666;
+}
+.forecast-day {
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+.forecast-day img {
+    width: 50px;
+    height: 50px;
+}
+</style>
+{% endblock %}

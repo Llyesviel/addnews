@@ -26,6 +26,7 @@ main_patterns = [
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.profile_view, name='profile'),
     path('currency/', views.currency_charts, name='currency_charts'),
+    path('weather/', views.weather_view, name='weather'),
     path('test-404/', views.test_404, name='test_404'),
 ]
 

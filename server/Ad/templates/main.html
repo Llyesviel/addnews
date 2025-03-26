@@ -4043,6 +4043,8 @@
                     const currentCount = parseInt(countElement.textContent) || 0;
                     countElement.textContent = currentCount + 1;
                     
+                    // Закрываем модальное окно
+                    commentsModal.style.display = 'none';
                 } else {
                     commentError.textContent = data.message;
                     commentError.style.display = 'block';

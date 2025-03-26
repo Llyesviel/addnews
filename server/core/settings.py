@@ -14,8 +14,12 @@ import os
 from pathlib import Path
 from django.contrib.staticfiles.handlers import StaticFilesHandler
 from django.core.wsgi import get_wsgi_application
+from dotenv import load_dotenv
 
 import environ
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -242,3 +246,8 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 
 # Debug toolbar settings
 INTERNAL_IPS = ['127.0.0.1']
+
+# Weather settings
+OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY', '')
+DEFAULT_CITY = os.getenv('DEFAULT_CITY', 'Moscow')
+WEATHER_CACHE_TIMEOUT = int(os.getenv('WEATHER_CACHE_TIMEOUT', 3600))

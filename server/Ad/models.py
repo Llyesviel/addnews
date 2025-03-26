@@ -2,6 +2,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Модель новостей
 class News(models.Model):
@@ -88,6 +90,12 @@ class NewsRating(models.Model):
 # Модель профиля пользователя для расширения стандартной модели пользователя
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Пользователь")
+    comments = models.ManyToManyField(
+        'NewsComment',
+        related_name='user_profiles',
+        verbose_name="Комментарии пользователя",
+        blank=True
+    )
     
     class Meta:
         verbose_name = "Профиль пользователя"
@@ -95,6 +103,14 @@ class UserProfile(models.Model):
         
     def __str__(self):
         return self.user.username
+
+    def add_comment_activity(self, comment):
+        """Добавляет комментарий в активность пользователя"""
+        self.comments.add(comment)
+        
+    def get_recent_activity(self, limit=10):
+        """Возвращает последние действия пользователя"""
+        return self.comments.select_related('news').order_by('-created_at')[:limit]
 
 # Модель для комментариев к новостям
 class NewsComment(models.Model):
@@ -110,3 +126,36 @@ class NewsComment(models.Model):
         
     def __str__(self):
         return f"{self.user.username} - {self.news.title[:30]}"
+
+class WeatherCache(models.Model):
+    city = models.CharField(max_length=100)
+    temperature = models.FloatField()
+    feels_like = models.FloatField()
+    humidity = models.IntegerField()
+    pressure = models.IntegerField()
+    wind_speed = models.FloatField()
+    description = models.CharField(max_length=200)
+    icon = models.CharField(max_length=20)
+    date = models.DateField()
+    last_updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('city', 'date')
+        
+    def __str__(self):
+        return f"{self.city} - {self.date} ({self.temperature}°C)"
+
+# Сигнал для автоматического создания профиля пользователя
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    """Создает профиль пользователя при создании нового пользователя"""
+    if created:
+        UserProfile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    """Сохраняет профиль пользователя при сохранении пользователя"""
+    try:
+        instance.userprofile.save()
+    except UserProfile.DoesNotExist:
+        UserProfile.objects.create(user=instance)

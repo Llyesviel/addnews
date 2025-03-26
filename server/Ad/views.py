@@ -15,6 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import calendar
 import requests
+from .weather_utils import weather_service
 
 
 def redirect_to_main(request):
@@ -99,7 +100,13 @@ def logout_view(request):
 
 @login_required
 def profile_view(request):
-    return render(request, 'profile.html', {'user': request.user})
+    # Получаем последние комментарии пользователя
+    recent_activity = request.user.userprofile.get_recent_activity()
+    
+    return render(request, 'profile.html', {
+        'user': request.user,
+        'recent_activity': recent_activity
+    })
 
 
 @login_required
@@ -337,6 +344,10 @@ def add_comment(request):
         news = get_object_or_404(News, id=news_id)
         comment = NewsComment(user=request.user, news=news, text=comment_text)
         comment.save()
+        
+        # Добавляем комментарий в активность пользователя
+        profile = request.user.userprofile
+        profile.add_comment_activity(comment)
         
         return JsonResponse({
             'status': 'success',
@@ -608,3 +619,18 @@ def generate_test_crypto_data(currency_code, period):
         })
     
     return result
+
+
+def weather_view(request):
+    try:
+        current_weather = weather_service.get_current_weather()
+        forecast = weather_service.get_forecast()
+        return render(request, 'weather.html', {
+            'current_weather': current_weather,
+            'forecast': forecast,
+            'error': None
+        })
+    except ValueError as e:
+        return render(request, 'weather.html', {
+            'error': str(e)
+        })
