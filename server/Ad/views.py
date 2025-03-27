@@ -623,14 +623,38 @@ def generate_test_crypto_data(currency_code, period):
 
 def weather_view(request):
     try:
+        # Получаем текущую погоду
         current_weather = weather_service.get_current_weather()
+        
+        if not current_weather:
+            raise ValueError("Не удалось получить данные о погоде")
+        
+        # Получаем прогноз на 6 дней
         forecast = weather_service.get_forecast()
-        return render(request, 'weather.html', {
+        
+        # Генерируем почасовой прогноз
+        from datetime import datetime, timedelta
+        current_hour = datetime.now().hour
+        hourly_forecast = []
+        for i in range(8):  # Следующие 8 часов
+            hour = (current_hour + i) % 24
+            hourly_forecast.append({
+                'time': f'{hour:02d}:00',
+                'icon': current_weather.icon,
+                'temp': current_weather.temperature + (i - 4),  # Примерная температура
+                'description': current_weather.description
+            })
+
+        context = {
             'current_weather': current_weather,
             'forecast': forecast,
-            'error': None
-        })
-    except ValueError as e:
-        return render(request, 'weather.html', {
-            'error': str(e)
-        })
+            'hourly_forecast': hourly_forecast,
+            'current_time': datetime.now(),
+            'yesterday_temp': current_weather.temperature - 2  # Пример данных
+        }
+        
+        return render(request, 'weather.html', context)
+        
+    except Exception as e:
+        logging.error(f"Ошибка при получении погоды: {str(e)}")
+        return render(request, 'weather.html', {'error': str(e)})

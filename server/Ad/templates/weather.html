@@ -4,86 +4,286 @@
 {% block title %}Погода{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">Погода в Москве</h3>
+<div class="weather-container">
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% else %}
+        <div class="weather-card">
+            <div class="weather-header">
+                <h2>Погода в Москве</h2>
+                <div class="weather-time">
+                    Сейчас {{ current_time|date:"H:i" }}
+                    {% if yesterday_temp %}
+                        · Вчера в это время {{ yesterday_temp|floatformat:"0" }}°
+                    {% endif %}
                 </div>
-                {% if error %}
-                <div class="card-body">
-                    <div class="alert alert-danger" role="alert">
-                        {{ error }}
-                    </div>
-                </div>
-                {% else %}
-                <div class="card-body">
-                    <div class="current-weather text-center">
-                        <img src="https://openweathermap.org/img/wn/{{ current_weather.icon }}@2x.png" 
-                             alt="{{ current_weather.description }}" 
-                             class="weather-icon">
-                        <h2>{{ current_weather.temperature }}°C</h2>
-                        <p class="text-muted">Ощущается как {{ current_weather.feels_like }}°C</p>
-                        <p class="weather-description">{{ current_weather.description|capfirst }}</p>
-                        <div class="weather-details mt-3">
-                            <div class="row">
-                                <div class="col-6">
-                                    <p><i class="fas fa-tint"></i> Влажность: {{ current_weather.humidity }}%</p>
-                                </div>
-                                <div class="col-6">
-                                    <p><i class="fas fa-wind"></i> Ветер: {{ current_weather.wind_speed }} м/с</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
             </div>
 
-            {% if forecast %}
-            <div class="card mt-4">
-                <div class="card-header bg-info text-white">
-                    <h4 class="mb-0">Прогноз на неделю</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        {% for day in forecast %}
-                        <div class="col-md-4 mb-3">
-                            <div class="forecast-day text-center">
-                                <h5>{{ day.date|date:"d.m" }}</h5>
-                                <img src="https://openweathermap.org/img/wn/{{ day.icon }}.png" 
-                                     alt="{{ day.description }}">
-                                <p class="mb-0">{{ day.temperature }}°C</p>
-                                <small class="text-muted">{{ day.description }}</small>
-                            </div>
-                        </div>
-                        {% endfor %}
+            <div class="current-weather">
+                <div class="weather-column"></div>
+                <div class="weather-column main-weather">
+                    <div class="temp-main">
+                        <span class="temperature">{{ current_weather.temperature|floatformat:"0" }}°</span>
+                        <img src="https://openweathermap.org/img/wn/{{ current_weather.icon }}@2x.png" 
+                             alt="{{ current_weather.description }}">
+                    </div>
+                    <div class="weather-info">
+                        <div class="description">{{ current_weather.description|capfirst }}</div>
+                        <div class="feels-like">Ощущается как {{ current_weather.feels_like|floatformat:"0" }}°</div>
                     </div>
                 </div>
+                <div class="weather-column"></div>
             </div>
-            {% endif %}
+            <div class="hourly-forecast">
+                {% for hour in hourly_forecast %}
+                <div class="hour-item">
+                    <div class="time">{{ hour.time }}</div>
+                    <img src="https://openweathermap.org/img/wn/{{ hour.icon }}.png" alt="{{ hour.description }}">
+                    <div class="temp">{{ hour.temp|floatformat:"0" }}°</div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="daily-forecast">
+                {% for day in forecast %}
+                <div class="day-item">
+                    <div class="day-header">
+                        <div class="day-name">
+                            {{ day.date|date:"D"|capfirst }}
+                            <div class="date">{{ day.date|date:"d E" }}</div>
+                        </div>
+                    </div>
+                    <div class="day-weather">
+                        <img src="https://openweathermap.org/img/wn/{{ day.icon }}.png" alt="{{ day.description }}">
+                        <div class="day-temp">
+                            <span class="high">{{ day.temperature|floatformat:"0" }}°</span>
+                        </div>
+                        <div class="day-desc">{{ day.description }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 </div>
 
 <style>
-.weather-icon {
-    width: 100px;
-    height: 100px;
+.weather-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: url('{% static "images/weather-bg.jpg" %}') no-repeat center center;
+    background-size: cover;
+    min-height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.weather-description {
-    font-size: 1.2em;
+
+.weather-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+}
+
+.weather-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+}
+
+.weather-header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.weather-time {
+    color: #666;
+    font-size: 14px;
+}
+
+.location-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    color: #4a90e2;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.current-weather {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    background: url('{% static "images/"|add:current_weather.background_image|default:"Пасмурно.png" %}') no-repeat center center;
+    background-size: cover;
+    padding: 20px;
+    border-radius: 15px;
+    position: relative;
+}
+
+.current-weather::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(220, 220, 220, 0.226);
+    border-radius: 15px;
+}
+
+.weather-column {
+    flex: 1;
+    opacity: 0;
+    position: relative;
+}
+
+.main-weather {
+    flex: 2;
+    text-align: center;
+    opacity: 1;
+    position: relative;
+    z-index: 1;
+}
+
+.temp-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.temperature {
+    font-size: 72px;
+    font-weight: bold;
+    color: #000;
+}
+
+.weather-info {
+    margin: 20px 0;
+}
+
+.description {
+    font-size: 24px;
+    color: #000;
+    margin-bottom: 5px;
+}
+
+.feels-like {
+    color: #000;
+    font-size: 16px;
+}
+
+.weather-details {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.empty-space {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+}
+
+.detail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     color: #666;
 }
-.forecast-day {
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #f8f9fa;
+
+.hourly-forecast {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    padding-left: 30px;
 }
-.forecast-day img {
-    width: 50px;
-    height: 50px;
+
+.hour-item {
+    text-align: center;
+    min-width: 60px;
+    flex-shrink: 0;
+}
+
+.hour-item .time {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.hour-item .temp {
+    color: #333;
+    font-weight: 500;
+}
+
+.daily-forecast {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.day-item {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.949);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.day-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.date {
+    font-size: 12px;
+    color: #666;
+    margin-top: 2px;
+}
+
+.day-weather {
+    margin-top: 10px;
+}
+
+.day-temp {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+}
+
+.day-desc {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.hourly-forecast::-webkit-scrollbar {
+    display: none;
+}
+
+.hourly-forecast {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 </style>
 {% endblock %}

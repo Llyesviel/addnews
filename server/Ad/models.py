@@ -128,15 +128,16 @@ class NewsComment(models.Model):
         return f"{self.user.username} - {self.news.title[:30]}"
 
 class WeatherCache(models.Model):
-    city = models.CharField(max_length=100)
+    city = models.CharField(max_length=50)
+    date = models.DateField()
     temperature = models.FloatField()
     feels_like = models.FloatField()
     humidity = models.IntegerField()
     pressure = models.IntegerField()
     wind_speed = models.FloatField()
-    description = models.CharField(max_length=200)
-    icon = models.CharField(max_length=20)
-    date = models.DateField()
+    description = models.CharField(max_length=100)
+    icon = models.CharField(max_length=10)
+    background_image = models.CharField(max_length=100, default='Пасмурно.png')
     last_updated = models.DateTimeField(auto_now=True)
 
     class Meta:

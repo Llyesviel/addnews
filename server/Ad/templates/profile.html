@@ -16,14 +16,16 @@ html, body {
     padding: 0;
     overflow-x: hidden;
     scrollbar-width: thin;
+    width: 100%;
+    position: relative;
 }
 
 .enhanced-stars-container {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
@@ -82,11 +84,12 @@ html, body {
     background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0));
     transform: rotate(-35deg);
     opacity: 0;
-    top: calc(var(--top, 0.3) * 100%);
-    left: calc(var(--left, 0.5) * 100%);
+    top: calc(var(--top, 0.3) * 100vh);
+    left: calc(var(--left, 0.5) * 100vw);
     animation: meteor 8s linear infinite;
     animation-delay: var(--delay, 0s);
     z-index: 1;
+    pointer-events: none;
 }
 
 /* Туманности */
@@ -169,13 +172,18 @@ body::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Принудительно делаем все контейнеры с прозрачным фоном */
+/* Принудительно делаем все контейнеры с прозрачным фоном и без горизонтальной прокрутки */
 .container, 
 .content-container,
 .wrapper,
 .page-wrapper,
 .main-wrapper {
     background-color: transparent !important;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 /* Стили для страницы профиля */
@@ -183,11 +191,13 @@ body::-webkit-scrollbar-thumb:hover {
     background-color: white;
     padding: 30px;
     border-radius: 20px;
-    width: 100%;
+    width: calc(100% - 40px); /* Учитываем отступы */
     max-width: 700px;
-    margin: 50px auto;
+    margin: 20px auto;
     position: relative;
     z-index: 2;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    overflow-x: hidden;
 }
 
 .profile-info {
@@ -507,6 +517,64 @@ body.rainy-theme .list-group-item.highlight {
         background-color: rgba(50, 50, 50, 0.9);
     }
 }
+
+/* Стили для секции комментариев */
+.comments-section {
+    margin-top: 20px;
+}
+
+.comments-header {
+    cursor: pointer;
+    padding: 10px;
+    background: #4a90e2;
+    color: white;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.comments-header:hover {
+    background: #357abd;
+}
+
+.comments-header i {
+    transition: transform 0.3s ease;
+}
+
+.comments-header.active i {
+    transform: rotate(180deg);
+}
+
+.comments-content {
+    display: none;
+    transition: all 0.3s ease;
+}
+
+.comments-content.show {
+    display: block;
+}
+
+/* Стили для серой темы */
+body.rainy-theme .comments-header {
+    background: rgba(60, 60, 60, 0.8);
+    border: 1px solid rgba(80, 80, 80, 0.5);
+}
+
+body.rainy-theme .comments-header:hover {
+    background: rgba(70, 70, 70, 0.9);
+}
+
+body.rainy-theme .list-group {
+    background: rgba(40, 40, 40, 0.3);
+}
+
+body.rainy-theme .list-group-item {
+    background: rgba(50, 50, 50, 0.9);
+    border: 1px solid rgba(80, 80, 80, 0.2);
+}
 </style>
 {% endblock %}
 
@@ -582,17 +650,25 @@ body.rainy-theme .list-group-item.highlight {
     <div class="profile-section">
         <h3>Активность</h3>
         {% if recent_activity %}
-            <div class="list-group">
-                {% for comment in recent_activity %}
-                    <div class="list-group-item" data-comment-date="{{ comment.created_at|date:'Y-m-d' }}">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-1">{{ comment.news.title }}</h5>
-                            <small class="text-muted">{{ comment.created_at|date:"d.m.Y H:i" }}</small>
-                        </div>
-                        <p class="mb-1">{{ comment.text }}</p>
-                        <small class="text-muted">Комментарий к новости</small>
+            <div class="comments-section">
+                <div class="comments-header" onclick="toggleComments()">
+                    <span>Комментарии</span>
+                    <i>▼</i>
+                </div>
+                <div class="comments-content" id="commentsContent">
+                    <div class="list-group">
+                        {% for comment in recent_activity %}
+                            <div class="list-group-item" data-comment-date="{{ comment.created_at|date:'Y-m-d' }}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-1">{{ comment.news.title }}</h5>
+                                    <small class="text-muted">{{ comment.created_at|date:"d.m.Y H:i" }}</small>
+                                </div>
+                                <p class="mb-1">{{ comment.text }}</p>
+                                <small class="text-muted">Комментарий к новости</small>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                </div>
             </div>
         {% else %}
             <p class="text-muted">У вас пока нет активности.</p>
@@ -603,6 +679,15 @@ body.rainy-theme .list-group-item.highlight {
 
 {% block script %}
 <script>
+    function toggleComments() {
+        const content = document.getElementById('commentsContent');
+        const header = document.querySelector('.comments-header');
+        const icon = header.querySelector('i');
+        
+        content.classList.toggle('show');
+        header.classList.toggle('active');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         // Проверяем, не используется ли серая тема
         const isRainyTheme = document.body.classList.contains('rainy-theme');
