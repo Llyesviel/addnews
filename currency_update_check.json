@@ -1,0 +1,608 @@
+{
+  "timestamp": "2025-03-25T12:11:54.844624",
+  "current_rates": [
+    {
+      "currency": "USD",
+      "rate": "83.8766",
+      "updated_at": "2025-03-25T07:10:57.897340+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.5427",
+      "updated_at": "2025-03-25T07:10:57.897340+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5517",
+      "updated_at": "2025-03-25T07:10:57.897340+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86795.0000",
+      "updated_at": "2025-03-25T07:10:57.897340+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2061.9800",
+      "updated_at": "2025-03-25T07:10:57.897340+00:00",
+      "source": "CoinGecko"
+    }
+  ],
+  "recent_updates": [
+    {
+      "currency": "USD",
+      "rate": "83.8766",
+      "timestamp": "2025-03-25T07:10:57.897340+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.5427",
+      "timestamp": "2025-03-25T07:10:57.897340+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5517",
+      "timestamp": "2025-03-25T07:10:57.897340+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86795.0000",
+      "timestamp": "2025-03-25T07:10:57.897340+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2061.9800",
+      "timestamp": "2025-03-25T07:10:57.897340+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8766",
+      "timestamp": "2025-03-25T07:10:08.143050+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.5427",
+      "timestamp": "2025-03-25T07:10:08.143050+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5517",
+      "timestamp": "2025-03-25T07:10:08.143050+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86801.0000",
+      "timestamp": "2025-03-25T07:10:08.143050+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2060.9000",
+      "timestamp": "2025-03-25T07:10:08.143050+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8766",
+      "timestamp": "2025-03-25T07:09:50.159311+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.5427",
+      "timestamp": "2025-03-25T07:09:50.159311+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5517",
+      "timestamp": "2025-03-25T07:09:50.159311+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86801.0000",
+      "timestamp": "2025-03-25T07:09:50.159311+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2060.9000",
+      "timestamp": "2025-03-25T07:09:50.159311+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8766",
+      "timestamp": "2025-03-25T07:09:47.911093+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.5427",
+      "timestamp": "2025-03-25T07:09:47.911093+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5517",
+      "timestamp": "2025-03-25T07:09:47.911093+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86791.0000",
+      "timestamp": "2025-03-25T07:09:47.911093+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2060.7200",
+      "timestamp": "2025-03-25T07:09:47.911093+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8766",
+      "timestamp": "2025-03-25T07:09:30.620519+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.5427",
+      "timestamp": "2025-03-25T07:09:30.620519+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5517",
+      "timestamp": "2025-03-25T07:09:30.620519+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86791.0000",
+      "timestamp": "2025-03-25T07:09:30.620519+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2060.7200",
+      "timestamp": "2025-03-25T07:09:30.620519+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8766",
+      "timestamp": "2025-03-25T07:08:53.850856+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.5427",
+      "timestamp": "2025-03-25T07:08:53.850856+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5517",
+      "timestamp": "2025-03-25T07:08:53.850856+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86781.0000",
+      "timestamp": "2025-03-25T07:08:53.850856+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2060.5000",
+      "timestamp": "2025-03-25T07:08:53.850856+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8766",
+      "timestamp": "2025-03-25T07:07:33.960059+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.5427",
+      "timestamp": "2025-03-25T07:07:33.960059+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5517",
+      "timestamp": "2025-03-25T07:07:33.960059+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86739.0000",
+      "timestamp": "2025-03-25T07:07:33.960059+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2059.9700",
+      "timestamp": "2025-03-25T07:07:33.960059+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8766",
+      "timestamp": "2025-03-25T07:07:32.055714+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.5427",
+      "timestamp": "2025-03-25T07:07:32.055714+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5517",
+      "timestamp": "2025-03-25T07:07:32.055714+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86739.0000",
+      "timestamp": "2025-03-25T07:07:32.055714+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2059.9700",
+      "timestamp": "2025-03-25T07:07:32.055714+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8766",
+      "timestamp": "2025-03-25T07:07:19.602659+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.5427",
+      "timestamp": "2025-03-25T07:07:19.602659+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5517",
+      "timestamp": "2025-03-25T07:07:19.602659+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86739.0000",
+      "timestamp": "2025-03-25T07:07:19.602659+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2059.9700",
+      "timestamp": "2025-03-25T07:07:19.602659+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8766",
+      "timestamp": "2025-03-25T07:05:46.723973+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.5427",
+      "timestamp": "2025-03-25T07:05:46.723973+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5517",
+      "timestamp": "2025-03-25T07:05:46.723973+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86721.0000",
+      "timestamp": "2025-03-25T07:05:46.723973+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2058.2200",
+      "timestamp": "2025-03-25T07:05:46.723973+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8766",
+      "timestamp": "2025-03-25T07:05:04.648254+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.5427",
+      "timestamp": "2025-03-25T07:05:04.648254+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5517",
+      "timestamp": "2025-03-25T07:05:04.648254+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86721.0000",
+      "timestamp": "2025-03-25T07:05:04.648254+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2058.2200",
+      "timestamp": "2025-03-25T07:05:04.648254+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8766",
+      "timestamp": "2025-03-25T07:04:37.764142+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.5427",
+      "timestamp": "2025-03-25T07:04:37.764142+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5517",
+      "timestamp": "2025-03-25T07:04:37.764142+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86655.0000",
+      "timestamp": "2025-03-25T07:04:37.764142+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2056.1300",
+      "timestamp": "2025-03-25T07:04:37.764142+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8738",
+      "timestamp": "2025-03-25T06:47:59.173523+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.6037",
+      "timestamp": "2025-03-25T06:47:59.173523+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5519",
+      "timestamp": "2025-03-25T06:47:59.173523+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86629.0000",
+      "timestamp": "2025-03-25T06:47:59.173523+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2053.7600",
+      "timestamp": "2025-03-25T06:47:59.173523+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8738",
+      "timestamp": "2025-03-25T06:47:26.918719+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.6037",
+      "timestamp": "2025-03-25T06:47:26.918719+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5519",
+      "timestamp": "2025-03-25T06:47:26.918719+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86629.0000",
+      "timestamp": "2025-03-25T06:47:26.918719+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2053.7600",
+      "timestamp": "2025-03-25T06:47:26.918719+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8738",
+      "timestamp": "2025-03-25T06:46:58.935881+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.6037",
+      "timestamp": "2025-03-25T06:46:58.935881+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5519",
+      "timestamp": "2025-03-25T06:46:58.935881+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86655.0000",
+      "timestamp": "2025-03-25T06:46:58.935881+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2054.1700",
+      "timestamp": "2025-03-25T06:46:58.935881+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8738",
+      "timestamp": "2025-03-25T06:43:10.487127+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.6037",
+      "timestamp": "2025-03-25T06:43:10.487127+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5519",
+      "timestamp": "2025-03-25T06:43:10.487127+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86849.0000",
+      "timestamp": "2025-03-25T06:43:10.487127+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2058.0900",
+      "timestamp": "2025-03-25T06:43:10.487127+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8738",
+      "timestamp": "2025-03-25T06:42:37.670081+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.6037",
+      "timestamp": "2025-03-25T06:42:37.670081+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5519",
+      "timestamp": "2025-03-25T06:42:37.670081+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86849.0000",
+      "timestamp": "2025-03-25T06:42:37.670081+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2058.0900",
+      "timestamp": "2025-03-25T06:42:37.670081+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8738",
+      "timestamp": "2025-03-25T06:42:19.188191+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.6037",
+      "timestamp": "2025-03-25T06:42:19.188191+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5519",
+      "timestamp": "2025-03-25T06:42:19.188191+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86856.0000",
+      "timestamp": "2025-03-25T06:42:19.188191+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2058.4400",
+      "timestamp": "2025-03-25T06:42:19.188191+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "USD",
+      "rate": "83.8738",
+      "timestamp": "2025-03-25T06:41:54.059050+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "EUR",
+      "rate": "90.6037",
+      "timestamp": "2025-03-25T06:41:54.059050+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "CNY",
+      "rate": "11.5519",
+      "timestamp": "2025-03-25T06:41:54.059050+00:00",
+      "source": "OpenExchangeRates"
+    },
+    {
+      "currency": "BTC",
+      "rate": "86868.0000",
+      "timestamp": "2025-03-25T06:41:54.059050+00:00",
+      "source": "CoinGecko"
+    },
+    {
+      "currency": "ETH",
+      "rate": "2058.8300",
+      "timestamp": "2025-03-25T06:41:54.059050+00:00",
+      "source": "CoinGecko"
+    }
+  ],
+  "updates_at_hour_start": true
+}

@@ -36,16 +36,38 @@ class News(models.Model):
 # Модель курсов валют
 class CurrencyRate(models.Model):
     currency_name = models.CharField(max_length=10, verbose_name="Название валюты")
-    rate = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Курс")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
+    rate = models.DecimalField(max_digits=12, decimal_places=4, verbose_name="Курс")
+    updated_at = models.DateTimeField(verbose_name="Дата обновления", default=timezone.now)
     symbol = models.CharField(max_length=5, verbose_name="Символ валюты", default="₽")
+    source = models.CharField(max_length=50, verbose_name="Источник данных", blank=True, null=True)
 
     class Meta:
         verbose_name = "Курс валюты"
         verbose_name_plural = "Курсы валют"
 
     def __str__(self):
-        return f"{self.currency_name}{self.symbol}: {self.rate}₽"
+        source_info = f" ({self.source})" if self.source else ""
+        return f"{self.currency_name}{self.symbol}: {self.rate}₽{source_info}"
+
+# Модель для хранения истории курсов валют
+class CurrencyRateHistory(models.Model):
+    currency_name = models.CharField(max_length=10, verbose_name="Название валюты")
+    rate = models.DecimalField(max_digits=12, decimal_places=4, verbose_name="Курс")
+    timestamp = models.DateTimeField(verbose_name="Время фиксации", default=timezone.now)
+    source = models.CharField(max_length=50, verbose_name="Источник данных", blank=True, null=True)
+
+    class Meta:
+        verbose_name = "История курса валюты"
+        verbose_name_plural = "История курсов валют"
+        ordering = ['-timestamp']
+        indexes = [
+            models.Index(fields=['currency_name', 'timestamp']),
+        ]
+        db_table = 'ad_currencyratehistory'
+
+    def __str__(self):
+        source_info = f" ({self.source})" if self.source else ""
+        return f"{self.currency_name}: {self.rate}₽ - {self.timestamp.strftime('%d.%m.%Y %H:%M')}{source_info}"
 
 # Модель фоновых изображений
 class BackgroundImage(models.Model):

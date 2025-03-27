@@ -15,9 +15,9 @@ html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    scrollbar-width: thin;
-    width: 100%;
-    position: relative;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .enhanced-stars-container {
@@ -186,18 +186,28 @@ body::-webkit-scrollbar-thumb:hover {
     margin: 0;
 }
 
+/* Скрываем скроллбары */
+::-webkit-scrollbar {
+    display: none;
+}
+
+* {
+    scrollbar-width: none;
+}
+
 /* Стили для страницы профиля */
 .profile-container {
     background-color: white;
     padding: 30px;
     border-radius: 20px;
-    width: calc(100% - 40px); /* Учитываем отступы */
+    width: 90%;
     max-width: 700px;
-    margin: 20px auto;
+    margin: 10px auto 50px auto;
     position: relative;
     z-index: 2;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    overflow-x: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    max-height: calc(100vh - 230px);
 }
 
 .profile-info {
@@ -215,14 +225,15 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .profile-data {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 10px;
+    display: flex;
+    align-items: center;
     margin-bottom: 10px;
 }
 
 .profile-label {
     font-weight: bold;
+    width: 170px;
+    flex-shrink: 0;
 }
 
 .change-password-form {
@@ -317,6 +328,16 @@ body.rainy-theme .profile-container p,
 body.rainy-theme .profile-container label,
 body.rainy-theme .profile-container div.details-info {
     color: #aaaaaa;
+}
+
+body.rainy-theme .profile-label {
+    color: #aaaaaa;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+body.rainy-theme .profile-data > div:nth-child(2) {
+    color: #aaaaaa;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 body.rainy-theme .form-group input,
@@ -574,6 +595,23 @@ body.rainy-theme .list-group {
 body.rainy-theme .list-group-item {
     background: rgba(50, 50, 50, 0.9);
     border: 1px solid rgba(80, 80, 80, 0.2);
+}
+
+body.rainy-theme .profile-section h3 {
+    border-bottom: 1px solid rgba(80, 80, 80, 0.4);
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+.content {
+    overflow: hidden !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
 }
 </style>
 {% endblock %}
