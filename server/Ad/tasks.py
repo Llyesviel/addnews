@@ -242,7 +242,7 @@ class SchedulerSingleton:
         Получает курсы валют через API OpenExchangeRates
         """
         try:
-            app_id = "e3161d6ea05549ec8877326eeb64ad2e"  # API ключ
+            app_id = "35e0390444424d648c3bcf5c71469192"  # API ключ
             cls.logger.info(f"Запрос к OpenExchangeRates API с ключом: {app_id}")
             
             url = f"https://openexchangerates.org/api/latest.json?app_id={app_id}&base=USD"
