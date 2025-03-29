@@ -95,4 +95,10 @@ celerybeat.pid
 
 # Migrations (опционально, зависит от стратегии команды)
 # */migrations/*.py
-# !*/migrations/__init__.py 
+# !*/migrations/__init__.py
+
+# Скрипты с ключами API
+server/set_env.ps1
+set_env.ps1
+server/set_env.sh
+set_env.sh 

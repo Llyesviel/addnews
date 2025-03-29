@@ -31,6 +31,7 @@ class SchedulerSingleton:
     @classmethod
     def _initialize_scheduler(cls):
         cls._scheduler = BackgroundScheduler()
+        cls._initial_run = True
         cls._scheduler.add_job(cls.update_currency_job, 'interval', hours=1, id='update_currency_job', replace_existing=True)
         cls._scheduler.add_job(cls.fetch_news, 'interval', hours=6, id='fetch_news', replace_existing=True)
         cls._scheduler.add_job(cls.update_currency_job, 'date', run_date=timezone.now(), id='update_currency_job_init', replace_existing=True)
@@ -102,10 +103,14 @@ class SchedulerSingleton:
             
             now = timezone.now()
             
-            # Ограничиваем обновление только в ровное время часа - ПОЛНОСТЬЮ ОТКЛЮЧАЕМ
-            # if now.minute != 0:
-            #     cls.logger.info(f"Пропуск обновления курсов валют. Обновление только в начале часа (текущие минуты: {now.minute})")
-            #     return
+            # Разрешаем обновление только в начале часа или при запуске сервера
+            if now.minute != 0 and not getattr(cls, '_initial_run', False):
+                cls.logger.info(f"Пропуск обновления курсов валют. Обновление только в начале часа (текущие минуты: {now.minute})")
+                return
+            
+            # Сбрасываем флаг первого запуска
+            if getattr(cls, '_initial_run', False):
+                cls._initial_run = False
             
             cls.logger.info(f"Начало обновления курсов валют в {now}")
             
@@ -314,6 +319,16 @@ class SchedulerSingleton:
     @classmethod
     def fetch_news(cls):
         try:
+            # Проверяем условие запуска - только при первом запуске сервера или по расписанию
+            now = timezone.now()
+            if not getattr(cls, '_initial_run', False) and now.hour % 6 != 0:
+                cls.logger.info(f"Пропуск обновления новостей. Обновление только каждые 6 часов или при запуске сервера")
+                return
+                
+            # Сбрасываем флаг первого запуска
+            if getattr(cls, '_initial_run', False):
+                cls._initial_run = False
+                
             feed_urls = cls.FEED_URLS()
             for feed_name, feed_url in feed_urls.items():
                 feed = feedparser.parse(feed_url)

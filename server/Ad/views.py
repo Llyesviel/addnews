@@ -16,9 +16,10 @@ from django.http import JsonResponse
 import calendar
 import requests
 from .weather_utils import weather_service
-from datetime import datetime
-from django.utils import timezone
+from datetime import datetime, timedelta, timezone
+from django.utils import timezone as django_timezone
 from pycbrf import ExchangeRates
+from zoneinfo import ZoneInfo  # Используем zoneinfo вместо timezone
 
 
 def redirect_to_main(request):
@@ -753,7 +754,7 @@ def get_currency_history_from_db(currency_code):
     from datetime import datetime, timedelta
     
     # Получаем данные за последние 24 часа 
-    end_time = timezone.now()
+    end_time = django_timezone.now()
     start_time = end_time - timedelta(days=1)
     
     # Получаем записи из БД, отсортированные по времени
@@ -788,7 +789,7 @@ def get_crypto_history_from_db(currency_code):
     from datetime import datetime, timedelta
     
     # Получаем данные за последние 24 часа 
-    end_time = timezone.now()
+    end_time = django_timezone.now()
     start_time = end_time - timedelta(days=1)
     
     # Получаем записи из БД, отсортированные по времени
@@ -1098,6 +1099,19 @@ def generate_test_crypto_data(currency_code, period):
 
 def weather_view(request):
     try:
+        # Обработка переключения городов
+        city_action = request.GET.get('city_action')
+        
+        if city_action == 'next':
+            weather_service.next_city()
+        elif city_action == 'prev':
+            weather_service.prev_city()
+        elif city_action:  # Если указан конкретный город
+            weather_service.set_city(city_action)
+            
+        # Текущий выбранный город
+        current_city = weather_service.get_current_city()
+        
         # Получаем текущую погоду
         current_weather = weather_service.get_current_weather()
         
@@ -1107,29 +1121,35 @@ def weather_view(request):
         # Получаем прогноз на 6 дней
         forecast = weather_service.get_forecast()
         
-        # Генерируем почасовой прогноз
-        from datetime import datetime, timedelta
-        current_hour = datetime.now().hour
-        hourly_forecast = []
-        for i in range(8):  # Следующие 8 часов
-            hour = (current_hour + i) % 24
-            hourly_forecast.append({
-                'time': f'{hour:02d}:00',
-                'icon': current_weather.icon,
-                'temp': current_weather.temperature + (i - 4),  # Примерная температура
-                'description': current_weather.description
-            })
+        # Получаем почасовой прогноз из API
+        hourly_forecast = weather_service.get_hourly_forecast()
 
+        # Получаем часовой пояс текущего города
+        tz_offset = weather_service.get_city_timezone_offset()
+        
+        # Создаем объект времени с правильным часовым поясом
+        utc_now = datetime.utcnow()
+        city_time = utc_now + timedelta(hours=tz_offset)
+        
         context = {
             'current_weather': current_weather,
             'forecast': forecast,
             'hourly_forecast': hourly_forecast,
-            'current_time': datetime.now(),
-            'yesterday_temp': current_weather.temperature - 2  # Пример данных
+            'current_time': city_time,
+            'current_city': current_city,
+            'current_timezone': tz_offset,
+            'city_list': weather_service.get_city_list()
         }
         
         return render(request, 'weather.html', context)
         
     except Exception as e:
-        logging.error(f"Ошибка при получении погоды: {str(e)}")
-        return render(request, 'weather.html', {'error': str(e)})
+        logging.error(f"Ошибка при получении погоды из API: {str(e)}")
+        
+        # Возвращаем страницу с сообщением об ошибке
+        context = {
+            'error': True,
+            'error_message': str(e)
+        }
+        
+        return render(request, 'weather.html', context)
