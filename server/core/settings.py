@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'Ad.apps.AdConfig',
     'django_apscheduler',
     'rest_framework',
+    'compressor',
 ]
 
 # Debug toolbar в режиме разработки
@@ -205,17 +206,17 @@ LOGGING = {
         'Ad': {  # Логгер для всего приложения Ad
             'handlers': ['console'],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
         'Ad.tasks': {
             'handlers': ['console'],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
         'Ad.views': {  # Логгер специально для views.py
             'handlers': ['console'],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
     },
 }
@@ -248,6 +249,22 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 INTERNAL_IPS = ['127.0.0.1']
 
 # Weather settings
-OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY', '')
-DEFAULT_CITY = os.getenv('DEFAULT_CITY', 'Moscow')
-WEATHER_CACHE_TIMEOUT = int(os.getenv('WEATHER_CACHE_TIMEOUT', 3600))
+OPENWEATHER_API_KEY = '5d5ce032c3e8e1e7fa1b3e7e1626821d'
+DEFAULT_CITY = os.environ.get('DEFAULT_CITY') or os.getenv('DEFAULT_CITY', 'Moscow')
+WEATHER_CACHE_TIMEOUT = int(os.environ.get('WEATHER_CACHE_TIMEOUT') or os.getenv('WEATHER_CACHE_TIMEOUT', 3600))
+
+# Настройки Django Compressor
+COMPRESS_ENABLED = True
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+)
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter',
+]
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+]

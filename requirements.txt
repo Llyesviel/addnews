@@ -23,4 +23,11 @@ requests==2.32.3
 opencv-python==4.7.0.72
 APScheduler==3.9.1
 django_jazzmin==3.0.1
-dj-database-url==2.3.0 
+dj-database-url==2.3.0
+python-dotenv==1.1.0
+whitenoise==6.9.0
+django-appconf==1.1.0
+django-compressor==4.5.1
+rcssmin==1.1.2
+rjsmin==1.2.2
+

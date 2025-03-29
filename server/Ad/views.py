@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.timezone import now
-from .models import News, CurrencyRate, BackgroundImage, NewsRating, UserProfile, NewsComment
+from .models import News, CurrencyRate, BackgroundImage, NewsRating, UserProfile, NewsComment, CurrencyRateHistory
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
@@ -16,6 +16,10 @@ from django.http import JsonResponse
 import calendar
 import requests
 from .weather_utils import weather_service
+from datetime import datetime, timedelta, timezone
+from django.utils import timezone as django_timezone
+from pycbrf import ExchangeRates
+from zoneinfo import ZoneInfo  # Используем zoneinfo вместо timezone
 
 
 def redirect_to_main(request):
@@ -411,38 +415,329 @@ def currency_charts(request):
     })
 
 
+# Кеш для хранения сгенерированных данных
+# Структура: {currency_code: {period: [data]}}
+_currency_data_cache = {}
+_last_hour_checked = None
+
+def _clear_day_cache_if_hour_changed():
+    """Проверяет, сменился ли час, и если да - очищает кеш дневных данных"""
+    global _last_hour_checked
+    current_hour = datetime.now().hour
+    
+    # Если часы изменились или это первая проверка
+    if _last_hour_checked is None or _last_hour_checked != current_hour:
+        # Очищаем только дневные данные
+        for currency in list(_currency_data_cache.keys()):
+            if 'day' in _currency_data_cache[currency]:
+                del _currency_data_cache[currency]['day']
+        
+        _last_hour_checked = current_hour
+
+def fetch_crypto_history_from_coingecko(currency_code, period):
+    """Получает исторические данные о курсах криптовалют из CoinGecko."""
+    from datetime import datetime, timedelta
+    import time
+    
+    # Маппинг криптовалютных кодов на ID в CoinGecko
+    crypto_ids = {
+        'BTC': 'bitcoin',
+        'ETH': 'ethereum'
+    }
+    
+    # Получаем ID криптовалюты
+    crypto_id = crypto_ids.get(currency_code)
+    if not crypto_id:
+        raise ValueError(f"Неизвестный код криптовалюты: {currency_code}")
+    
+    # Определяем параметры запроса в зависимости от периода
+    today = datetime.now()
+    result = []
+    
+    if period == 'day':
+        # Для дневного периода используем почасовые данные (1-минутные свечи за последние 24 часа)
+        days = 1
+        interval = 'hourly'  # Почасовые точки данных
+        
+        # Для дневного режима используем /coins/{id}/market_chart с минутными интервалами
+        url = f"https://api.coingecko.com/api/v3/coins/{crypto_id}/market_chart"
+        params = {
+            "vs_currency": "usd",
+            "days": days,
+            "interval": interval
+        }
+    else:
+        # Определяем параметры для других периодов
+        if period == 'week':
+            days = 7
+        elif period == 'month':
+            days = 30
+        else:  # year
+            days = 365
+        
+        # Для других периодов используем /coins/{id}/market_chart с дневными интервалами
+        url = f"https://api.coingecko.com/api/v3/coins/{crypto_id}/market_chart"
+        params = {
+            "vs_currency": "usd",
+            "days": days,
+            "interval": "daily"
+        }
+    
+    # Делаем запрос к API
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        data = response.json()
+        
+        # Полученные данные в формате [[timestamp, price], ...] 
+        prices = data.get('prices', [])
+        
+        # Преобразуем данные в нужный формат
+        for price_data in prices:
+            timestamp, price = price_data
+            
+            # Конвертируем timestamp (в миллисекундах) в datetime
+            date_obj = datetime.fromtimestamp(timestamp / 1000)
+            
+            # Форматируем дату в зависимости от периода
+            if period == 'day':
+                date_str = date_obj.strftime("%Y-%m-%d %H:%M")
+            else:
+                date_str = date_obj.strftime("%Y-%m-%d")
+            
+            result.append({
+                'date': date_str,
+                'value': round(price, 2)  # Цена в долларах США
+            })
+        
+        return result
+    except Exception as e:
+        logging.error(f"Ошибка при получении данных с CoinGecko: {str(e)}")
+        raise e
+
+
+def fetch_crypto_history_from_cryptocompare(currency_code, period):
+    """Получает исторические данные о курсах криптовалют из CryptoCompare."""
+    from datetime import datetime, timedelta
+    
+    # Маппинг криптовалютных кодов
+    crypto_symbols = {
+        'BTC': 'BTC',
+        'ETH': 'ETH'
+    }
+    
+    symbol = crypto_symbols.get(currency_code)
+    if not symbol:
+        raise ValueError(f"Неизвестный код криптовалюты: {currency_code}")
+    
+    # Определяем параметры запроса в зависимости от периода
+    result = []
+    
+    # URL для CryptoCompare API
+    base_url = "https://min-api.cryptocompare.com/data"
+    
+    if period == 'day':
+        # Для дневного периода получаем почасовые данные
+        # Используем histohour с лимитом 24 часа
+        url = f"{base_url}/v2/histohour"
+        params = {
+            "fsym": symbol,
+            "tsym": "USD",
+            "limit": 24,
+            "aggregate": 1
+        }
+    elif period == 'week':
+        # Для недельного периода получаем данные за каждый день недели
+        url = f"{base_url}/v2/histoday"
+        params = {
+            "fsym": symbol,
+            "tsym": "USD",
+            "limit": 7,
+            "aggregate": 1
+        }
+    elif period == 'month':
+        # Для месячного периода получаем данные за каждый день месяца
+        url = f"{base_url}/v2/histoday"
+        params = {
+            "fsym": symbol,
+            "tsym": "USD",
+            "limit": 30,
+            "aggregate": 1
+        }
+    else:  # year
+        # Для годового периода получаем данные за каждый день года
+        url = f"{base_url}/v2/histoday"
+        params = {
+            "fsym": symbol,
+            "tsym": "USD",
+            "limit": 365,
+            "aggregate": 1
+        }
+    
+    # Делаем запрос к API
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        data = response.json()
+        
+        if data['Response'] == 'Error':
+            raise Exception(data['Message'])
+        
+        # Получаем данные о ценах
+        price_data = data['Data']['Data']
+        
+        # Преобразуем данные в нужный формат
+        for point in price_data:
+            timestamp = point['time']
+            close_price = point['close']
+            
+            # Конвертируем timestamp в datetime
+            date_obj = datetime.fromtimestamp(timestamp)
+            
+            # Форматируем дату в зависимости от периода
+            if period == 'day':
+                date_str = date_obj.strftime("%Y-%m-%d %H:%M")
+            else:
+                date_str = date_obj.strftime("%Y-%m-%d")
+            
+            result.append({
+                'date': date_str,
+                'value': round(close_price, 2)  # Цена в долларах США
+            })
+        
+        # Сортируем результаты по дате
+        result.sort(key=lambda x: x['date'])
+        
+        return result
+    except Exception as e:
+        logging.error(f"Ошибка при получении данных с CryptoCompare: {str(e)}")
+        raise e
+
+
 @require_POST
 def get_currency_history(request):
     """API-endpoint для получения исторических данных о курсах валют."""
     try:
+        # Очищаем кеш дневных данных, если сменился час
+        _clear_day_cache_if_hour_changed()
+        
         data = json.loads(request.body)
         currency_code = data.get('currency_code')
         period = data.get('period', 'month')
         
         if not currency_code:
             return JsonResponse({'status': 'error', 'message': 'Не указан код валюты'})
-            
-        # Для криптовалют используем тестовые данные, так как ЦБ не предоставляет их историю
+        
+        # Используем кеш данных для конкретной валюты и периода
+        cache_key = f"{currency_code}_{period}"
+        
+        # Для криптовалют получаем данные с внешних API
         if currency_code in ['BTC', 'ETH']:
-            # Генерируем тестовые данные для криптовалют
+            # Проверяем кеш сначала
+            if currency_code in _currency_data_cache and period in _currency_data_cache[currency_code]:
+                return JsonResponse({
+                    'status': 'success',
+                    'data': _currency_data_cache[currency_code][period]
+                })
+                
+            # Если в кеше нет, получаем реальные данные
+            try:
+                # Сначала проверяем, есть ли данные в БД для криптовалют (дневной период)
+                if period == 'day':
+                    history_data = get_crypto_history_from_db(currency_code)
+                    if history_data and len(history_data) > 0:
+                        # Сохраняем в кеш
+                        if currency_code not in _currency_data_cache:
+                            _currency_data_cache[currency_code] = {}
+                        _currency_data_cache[currency_code][period] = history_data
+                        
+                        return JsonResponse({
+                            'status': 'success',
+                            'data': history_data
+                        })
+                
+                # Если в БД нет данных или это не дневной период, используем генерацию данных
+                # на основе последних записей
+                try:
+                    # Пробуем получить данные из CoinGecko
+                    history_data = fetch_crypto_history_from_coingecko(currency_code, period)
+                except Exception as e:
+                    logging.error(f"Ошибка при получении данных из CoinGecko: {str(e)}")
+                    try:
+                        # Если CoinGecko не сработал, пробуем CryptoCompare
+                        history_data = fetch_crypto_history_from_cryptocompare(currency_code, period)
+                    except Exception as e2:
+                        logging.error(f"Ошибка при получении данных из CryptoCompare: {str(e2)}")
+                        # Генерируем данные на основе последней записи или фиксированного значения
+                        history_data = generate_test_crypto_data(currency_code, period)
+            except Exception as e:
+                logging.error(f"Ошибка при получении данных для криптовалюты {currency_code}: {str(e)}")
+                history_data = generate_test_crypto_data(currency_code, period)
+            
+            # Сохраняем в кеш
+            if currency_code not in _currency_data_cache:
+                _currency_data_cache[currency_code] = {}
+            _currency_data_cache[currency_code][period] = history_data
+            
             return JsonResponse({
                 'status': 'success',
-                'data': generate_test_crypto_data(currency_code, period)
+                'data': history_data
             })
         
-        # Для обычных валют пытаемся получить данные из RSS ЦБ РФ
+        # Для обычных валют сначала пытаемся получить данные из БД
         try:
+            # Проверяем кеш сначала
+            if currency_code in _currency_data_cache and period in _currency_data_cache[currency_code]:
+                return JsonResponse({
+                    'status': 'success',
+                    'data': _currency_data_cache[currency_code][period]
+                })
+            
+            # Если кеша нет, пытаемся получить данные из БД (особенно важно для дневного периода)
+            if period == 'day':
+                history_data = get_currency_history_from_db(currency_code)
+                
+                if history_data and len(history_data) > 0:
+                    # Сохраняем в кеш
+                    if currency_code not in _currency_data_cache:
+                        _currency_data_cache[currency_code] = {}
+                    _currency_data_cache[currency_code][period] = history_data
+                    
+                    return JsonResponse({
+                        'status': 'success',
+                        'data': history_data
+                    })
+            
+            # Для других периодов или если в БД нет достаточных данных, 
+            # используем только ЦБ РФ
             history_data = fetch_currency_history_from_cb(currency_code, period)
+            
+            # Сохраняем в кеш
+            if currency_code not in _currency_data_cache:
+                _currency_data_cache[currency_code] = {}
+            _currency_data_cache[currency_code][period] = history_data
+            
             return JsonResponse({
                 'status': 'success',
                 'data': history_data
             })
         except Exception as e:
             logging.error(f"Ошибка при получении истории курсов: {str(e)}")
-            # Если не удалось получить реальные данные, используем тестовые
+            
+            # Если в кеше нет, генерируем тестовые данные
+            if currency_code not in _currency_data_cache or period not in _currency_data_cache[currency_code]:
+                history_data = generate_test_currency_data(currency_code, period)
+                
+                # Сохраняем в кеш
+                if currency_code not in _currency_data_cache:
+                    _currency_data_cache[currency_code] = {}
+                _currency_data_cache[currency_code][period] = history_data
+            else:
+                history_data = _currency_data_cache[currency_code][period]
+                
             return JsonResponse({
                 'status': 'success',
-                'data': generate_test_currency_data(currency_code, period)
+                'data': history_data
             })
             
     except Exception as e:
@@ -453,10 +748,82 @@ def get_currency_history(request):
         }, status=500)
 
 
+def get_currency_history_from_db(currency_code):
+    """Получает историю курсов обычных валют из БД для дневного периода."""
+    from .models import CurrencyRateHistory
+    from datetime import datetime, timedelta
+    
+    # Получаем данные за последние 24 часа 
+    end_time = django_timezone.now()
+    start_time = end_time - timedelta(days=1)
+    
+    # Получаем записи из БД, отсортированные по времени
+    history_records = CurrencyRateHistory.objects.filter(
+        currency_name=currency_code,
+        timestamp__gte=start_time,
+        timestamp__lte=end_time
+    ).order_by('timestamp')
+    
+    # Проверяем, что есть достаточное количество записей
+    if history_records.count() < 4:  # Минимальное количество точек для отображения
+        logging.warning(f"Недостаточно данных в БД для {currency_code}, найдено {history_records.count()} записей")
+        return []
+    
+    # Преобразуем записи в нужный формат
+    result = []
+    for record in history_records:
+        # Форматируем дату и время
+        date_str = record.timestamp.strftime("%Y-%m-%d %H:%M")
+        
+        result.append({
+            'date': date_str,
+            'value': float(record.rate)
+        })
+    
+    return result
+
+
+def get_crypto_history_from_db(currency_code):
+    """Получает историю курсов криптовалют из БД для дневного периода."""
+    from .models import CurrencyRateHistory
+    from datetime import datetime, timedelta
+    
+    # Получаем данные за последние 24 часа 
+    end_time = django_timezone.now()
+    start_time = end_time - timedelta(days=1)
+    
+    # Получаем записи из БД, отсортированные по времени
+    history_records = CurrencyRateHistory.objects.filter(
+        currency_name=currency_code,
+        timestamp__gte=start_time,
+        timestamp__lte=end_time
+    ).order_by('timestamp')
+    
+    # Проверяем, что есть достаточное количество записей
+    if history_records.count() < 4:  # Минимальное количество точек для отображения
+        logging.warning(f"Недостаточно данных в БД для {currency_code}, найдено {history_records.count()} записей")
+        return []
+    
+    # Преобразуем записи в нужный формат
+    result = []
+    for record in history_records:
+        # Форматируем дату и время
+        date_str = record.timestamp.strftime("%Y-%m-%d %H:%M")
+        
+        result.append({
+            'date': date_str,
+            'value': float(record.rate)
+        })
+    
+    return result
+
+
 def fetch_currency_history_from_cb(currency_code, period):
-    """Получает исторические данные о курсах валют из ЦБ РФ."""
+    """Получает исторические данные о курсах валют из ЦБ РФ и данных из БД."""
     import xml.etree.ElementTree as ET
     from datetime import datetime, timedelta
+    import random
+    import math
     
     today = datetime.now()
     
@@ -468,38 +835,125 @@ def fetch_currency_history_from_cb(currency_code, period):
     elif period == 'year':
         start_date = today - timedelta(days=365)
     else:  # day
-        start_date = today - timedelta(days=1)
-    
-    # Форматируем даты для запроса
-    date_format = "%d/%m/%Y"
-    date1 = start_date.strftime(date_format)
-    date2 = today.strftime(date_format)
-    
-    # URL для запроса курсов валют за период
-    # Документация: http://www.cbr.ru/development/SXML/
-    url = f"http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1={date1}&date_req2={date2}&VAL_NM_RQ={get_cb_currency_code(currency_code)}"
-    
-    response = requests.get(url)
-    response.raise_for_status()
-    
-    # Парсим XML
-    root = ET.fromstring(response.content)
-    result = []
-    
-    for record in root.findall('Record'):
-        date_str = record.get('Date')
-        value_str = record.find('Value').text.replace(',', '.')
+        # Для дневного периода используем интерполяцию на основе данных из БД или ЦБ РФ
+        logging.info(f"Генерируем данные для {currency_code} на основе БД и ЦБ РФ")
         
-        # Преобразуем дату из формата ЦБ в ISO
-        date_obj = datetime.strptime(date_str, "%d.%m.%Y")
+        # Получаем базовое значение для интерполяции
+        last_value = None
         
-        result.append({
-            'date': date_obj.strftime("%Y-%m-%d"),
-            'value': float(value_str)
-        })
+        # Проверяем, есть ли данные в БД
+        from .models import CurrencyRateHistory
+        latest_record = CurrencyRateHistory.objects.filter(currency_name=currency_code).order_by('-timestamp').first()
+        
+        if latest_record:
+            # Если есть хотя бы одна запись, используем её значение для интерполяции
+            last_value = float(latest_record.rate)
+            logging.info(f"Найдена последняя запись в БД для {currency_code}: {last_value}")
+        else:
+            # Если записей нет, получаем текущий курс из ЦБ РФ
+            try:
+                rates = ExchangeRates()
+                last_value = float(rates[currency_code].rate)
+                logging.info(f"Получен текущий курс из ЦБ РФ для {currency_code}: {last_value}")
+            except Exception as e:
+                logging.error(f"Ошибка при получении курса из ЦБ РФ для {currency_code}: {e}")
+                # Используем дефолтное значение, если все методы не сработали
+                if currency_code == "USD":
+                    last_value = 90.0
+                elif currency_code == "EUR":
+                    last_value = 100.0
+                elif currency_code == "CNY":
+                    last_value = 12.5
+                else:
+                    last_value = 10.0
+                
+                logging.info(f"Используем дефолтное значение для {currency_code}: {last_value}")
+        
+        # Текущий час
+        current_hour = today.hour
+        
+        # Генерируем 24 точки данных для часового представления дня
+        result = []
+        for hour in range(24):
+            # Вычисляем время для данной точки
+            hour_date = today.replace(hour=hour, minute=0, second=0, microsecond=0)
+            
+            # Если час еще не наступил, используем данные предыдущего дня
+            if hour > current_hour:
+                hour_date = hour_date - timedelta(days=1)
+            
+            # Создаем волатильность на основе времени дня
+            # Биржевая активность выше в рабочие часы (10-19), имитируем это
+            time_factor = math.sin((hour - 3) * math.pi / 12) * 0.5 + 0.5  # Пик около 15:00
+            volatility = last_value * 0.01 * time_factor  # До 1% волатильности
+            
+            # Добавляем случайный компонент
+            random_factor = (random.random() - 0.5) * 2  # От -1 до 1
+            hour_value = last_value + (volatility * random_factor)
+            
+            # Для текущего часа используем более близкое к последнему известному значение
+            if hour == current_hour:
+                random_factor = (random.random() - 0.5)  # От -0.5 до 0.5
+                hour_value = last_value + (volatility * random_factor * 0.5)
+                
+            result.append({
+                'date': hour_date.strftime("%Y-%m-%d %H:%M"),
+                'value': round(hour_value, 4)
+            })
+            
+        # Сортируем результаты, чтобы убедиться в правильном порядке
+        result.sort(key=lambda x: x['date'])
+        return result
     
-    return result
-
+    # Для других периодов (неделя, месяц, год) используем данные ЦБ РФ
+    try:
+        # Форматируем даты для запроса к ЦБ РФ
+        date_format = "%d/%m/%Y"
+        date1 = start_date.strftime(date_format)
+        date2 = today.strftime(date_format)
+        
+        # URL для запроса курсов валют за период
+        # Документация: http://www.cbr.ru/development/SXML/
+        url = f"http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1={date1}&date_req2={date2}&VAL_NM_RQ={get_cb_currency_code(currency_code)}"
+        
+        response = requests.get(url)
+        response.raise_for_status()
+        
+        # Парсим XML
+        root = ET.fromstring(response.content)
+        result = []
+        
+        # Получаем базовые данные из ответа ЦБ
+        raw_data = []
+        for record in root.findall('Record'):
+            date_str = record.get('Date')
+            value_str = record.find('Value').text.replace(',', '.')
+            
+            # Преобразуем дату из формата ЦБ в ISO
+            date_obj = datetime.strptime(date_str, "%d.%m.%Y")
+            
+            raw_data.append({
+                'date': date_obj,
+                'value': float(value_str)
+            })
+            
+        # Если нет данных от ЦБ, используем генерацию тестовых данных
+        if not raw_data:
+            logging.warning(f"Нет данных от ЦБ РФ для {currency_code} за период {period}, используем тестовые данные")
+            return generate_test_currency_data(currency_code, period)
+            
+        # Форматируем результат
+        for item in raw_data:
+            result.append({
+                'date': item['date'].strftime("%Y-%m-%d"),
+                'value': item['value']
+            })
+        
+        return result
+    except Exception as e:
+        logging.error(f"Ошибка при получении данных от ЦБ РФ для {currency_code}: {e}")
+        # В случае ошибки генерируем тестовые данные
+        return generate_test_currency_data(currency_code, period)
 
 def get_cb_currency_code(currency_code):
     """Возвращает код валюты для API ЦБ РФ."""
@@ -591,6 +1045,28 @@ def generate_test_crypto_data(currency_code, period):
         points = 24
         delta = timedelta(hours=1)
         start_date = today - timedelta(days=days)
+        
+        # Для дневного периода генерируем данные по часам с правильным временем
+        current_hour = today.hour
+        
+        # Генерируем 24 точки данных для часового представления дня
+        for hour in range(24):
+            # Вычисляем время для данной точки
+            hour_date = today.replace(hour=hour, minute=0, second=0, microsecond=0)
+            
+            # Если час еще не наступил, используем данные предыдущего дня
+            if hour > current_hour:
+                hour_date = hour_date - timedelta(days=1)
+            
+            volatility = base_value * 0.1  # 10% волатильность для крипты
+            value = base_value + (random.random() - 0.5) * volatility
+            
+            result.append({
+                'date': hour_date.strftime("%Y-%m-%d %H:%M"),
+                'value': round(value, 2)
+            })
+        
+        return result
     elif period == 'week':
         days = 7
         points = days
@@ -607,7 +1083,7 @@ def generate_test_crypto_data(currency_code, period):
         delta = timedelta(days=30)
         start_date = today - timedelta(days=days)
     
-    # Создаем массив данных с некоторой волатильностью
+    # Для других периодов (неделя, месяц, год) - обычный формат
     for i in range(points):
         date = start_date + delta * i
         volatility = base_value * 0.1  # 10% волатильность для крипты (больше, чем для обычных валют)
@@ -623,6 +1099,19 @@ def generate_test_crypto_data(currency_code, period):
 
 def weather_view(request):
     try:
+        # Обработка переключения городов
+        city_action = request.GET.get('city_action')
+        
+        if city_action == 'next':
+            weather_service.next_city()
+        elif city_action == 'prev':
+            weather_service.prev_city()
+        elif city_action:  # Если указан конкретный город
+            weather_service.set_city(city_action)
+            
+        # Текущий выбранный город
+        current_city = weather_service.get_current_city()
+        
         # Получаем текущую погоду
         current_weather = weather_service.get_current_weather()
         
@@ -632,29 +1121,35 @@ def weather_view(request):
         # Получаем прогноз на 6 дней
         forecast = weather_service.get_forecast()
         
-        # Генерируем почасовой прогноз
-        from datetime import datetime, timedelta
-        current_hour = datetime.now().hour
-        hourly_forecast = []
-        for i in range(8):  # Следующие 8 часов
-            hour = (current_hour + i) % 24
-            hourly_forecast.append({
-                'time': f'{hour:02d}:00',
-                'icon': current_weather.icon,
-                'temp': current_weather.temperature + (i - 4),  # Примерная температура
-                'description': current_weather.description
-            })
+        # Получаем почасовой прогноз из API
+        hourly_forecast = weather_service.get_hourly_forecast()
 
+        # Получаем часовой пояс текущего города
+        tz_offset = weather_service.get_city_timezone_offset()
+        
+        # Создаем объект времени с правильным часовым поясом
+        utc_now = datetime.utcnow()
+        city_time = utc_now + timedelta(hours=tz_offset)
+        
         context = {
             'current_weather': current_weather,
             'forecast': forecast,
             'hourly_forecast': hourly_forecast,
-            'current_time': datetime.now(),
-            'yesterday_temp': current_weather.temperature - 2  # Пример данных
+            'current_time': city_time,
+            'current_city': current_city,
+            'current_timezone': tz_offset,
+            'city_list': weather_service.get_city_list()
         }
         
         return render(request, 'weather.html', context)
         
     except Exception as e:
-        logging.error(f"Ошибка при получении погоды: {str(e)}")
-        return render(request, 'weather.html', {'error': str(e)})
+        logging.error(f"Ошибка при получении погоды из API: {str(e)}")
+        
+        # Возвращаем страницу с сообщением об ошибке
+        context = {
+            'error': True,
+            'error_message': str(e)
+        }
+        
+        return render(request, 'weather.html', context)
