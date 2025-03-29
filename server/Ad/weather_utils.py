@@ -60,8 +60,15 @@ class WeatherService:
         description = weather.get('description', '').lower()
         
         # Проверяем особые случаи для облаков
-        if main == 'Clouds' and description in self.WEATHER_BACKGROUNDS['Clouds']:
-            return self.WEATHER_BACKGROUNDS['Clouds'][description]
+        if main == 'Clouds':
+            # Создаем словарь с описаниями в нижнем регистре
+            cloud_descriptions = {
+                'few clouds': 'ясно.png',
+                'scattered clouds': 'Пасмурно.png',
+                'broken clouds': 'Пасмурно.png',
+                'overcast clouds': 'Пасмурно.png'
+            }
+            return cloud_descriptions.get(description, 'Пасмурно.png')
             
         # Для всех остальных случаев
         return self.WEATHER_BACKGROUNDS.get(main, 'Пасмурно.png')
