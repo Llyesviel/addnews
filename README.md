@@ -9,7 +9,7 @@ python3 -m venv venv
 ```
 ### Установить бибы
 ```bash
-pip install -r server/requirements.txt
+pip install -r requirements.txt
 ```
 ### Запуск сервера
 ```bash
