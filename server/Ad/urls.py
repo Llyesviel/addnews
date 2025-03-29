@@ -37,6 +37,9 @@ urlpatterns = [
     # API-маршруты
     path('api/', include(api_patterns)),
     
+    # URL для получения детальной информации о новости
+    path('news/<int:news_id>/details/', views.get_news_details, name='news_details'),
+    
     # Перенаправление остальных URL на страницу 404
     # Исключая маршруты, начинающиеся с 'admin'
     path('calendar/<int:year>/<int:month>/', views.get_calendar, name='get_calendar'),

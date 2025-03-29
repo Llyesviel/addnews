@@ -270,7 +270,7 @@ body::-webkit-scrollbar-thumb:hover {
 
 .calendar-btn {
     padding: 8px 16px;
-    background: #4a90e2;
+    background: #231c5c;
     color: white;
     border: none;
     border-radius: 5px;
@@ -279,7 +279,7 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .calendar-btn:hover {
-    background: #357abd;
+    background: #322c77;
 }
 
 #calendar-container table {
@@ -289,7 +289,7 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 #calendar-container th {
-    background: #4a90e2;
+    background: #231c5c;
     color: white;
     padding: 10px;
     text-align: center;
@@ -547,7 +547,7 @@ body.rainy-theme .list-group-item.highlight {
 .comments-header {
     cursor: pointer;
     padding: 10px;
-    background: #4a90e2;
+    background: #231c5c;
     color: white;
     border-radius: 5px;
     display: flex;
@@ -558,7 +558,7 @@ body.rainy-theme .list-group-item.highlight {
 }
 
 .comments-header:hover {
-    background: #357abd;
+    background: #322c77;
 }
 
 .comments-header i {
@@ -612,6 +612,152 @@ body::-webkit-scrollbar {
     overflow: hidden !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
+}
+
+/* Стили для модального окна новостей */
+.news-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+}
+
+.news-modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 80%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+.close-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+    line-height: 1;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: #333;
+}
+
+.news-modal-body {
+    padding: 10px 0;
+}
+
+.news-modal-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 15px 0;
+    display: block;
+}
+
+.news-description {
+    line-height: 1.6;
+    margin: 15px 0;
+    font-size: 1.1em;
+}
+
+.news-date {
+    color: #777;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.news-source {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.news-source a {
+    color: #4a90e2;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.news-source a:hover {
+    text-decoration: underline;
+}
+
+.loading-spinner {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+}
+
+.error-message {
+    color: #e74c3c;
+    padding: 20px;
+    text-align: center;
+    background-color: #fdedeb;
+    border-radius: 8px;
+}
+
+@keyframes modalFadeIn {
+    from {opacity: 0; transform: translateY(-20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+/* Стили для лайкнутых новостей */
+.like-item {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.like-item:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Темная тема для модального окна */
+body.rainy-theme .news-modal-content {
+    background-color: #333;
+    color: #eee;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+}
+
+body.rainy-theme .close-modal {
+    color: #ddd;
+}
+
+body.rainy-theme .close-modal:hover,
+body.rainy-theme .close-modal:focus {
+    color: #fff;
+}
+
+body.rainy-theme .news-date {
+    color: #aaa;
+}
+
+body.rainy-theme .error-message {
+    background-color: #483434;
+    color: #ff7675;
+}
+
+body.rainy-theme .loading-spinner {
+    color: #bbb;
+}
+
+body.rainy-theme .like-item:hover {
+    background-color: rgba(80, 80, 80, 0.5);
 }
 </style>
 {% endblock %}
@@ -690,20 +836,34 @@ body::-webkit-scrollbar {
         {% if recent_activity %}
             <div class="comments-section">
                 <div class="comments-header" onclick="toggleComments()">
-                    <span>Комментарии</span>
+                    <span>Комментарии и лайки</span>
                     <i>▼</i>
                 </div>
                 <div class="comments-content" id="commentsContent">
                     <div class="list-group">
-                        {% for comment in recent_activity %}
-                            <div class="list-group-item" data-comment-date="{{ comment.created_at|date:'Y-m-d' }}">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="mb-1">{{ comment.news.title }}</h5>
-                                    <small class="text-muted">{{ comment.created_at|date:"d.m.Y H:i" }}</small>
+                        {% for activity in recent_activity %}
+                            {% if activity.type == 'comment' %}
+                                <div class="list-group-item" data-comment-date="{{ activity.created_at|date:'Y-m-d' }}">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-1">{{ activity.news.title }}</h5>
+                                        <small class="text-muted">{{ activity.created_at|date:"d.m.Y H:i" }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ activity.content.text }}</p>
+                                    <small class="text-muted">Комментарий к новости</small>
                                 </div>
-                                <p class="mb-1">{{ comment.text }}</p>
-                                <small class="text-muted">Комментарий к новости</small>
-                            </div>
+                            {% elif activity.type == 'like' %}
+                                <div class="list-group-item like-item" data-comment-date="{{ activity.created_at|date:'Y-m-d' }}" data-news-id="{{ activity.news.id }}" onclick="showNewsModal({{ activity.news.id }})">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-1">{{ activity.news.title }}</h5>
+                                        <small class="text-muted">{{ activity.created_at|date:"d.m.Y H:i" }}</small>
+                                    </div>
+                                    <p class="mb-1 d-flex align-items-center">
+                                        <i class="fas fa-thumbs-up mr-2" style="color: #4267B2;"></i>
+                                        <span>Вам понравилась эта новость</span>
+                                    </p>
+                                    <small class="text-muted">Лайк новости <i class="fas fa-external-link-alt ml-1" style="font-size: 0.8em;"></i></small>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
@@ -713,10 +873,88 @@ body::-webkit-scrollbar {
         {% endif %}
     </div>
 </div>
+
+<!-- Модальное окно для отображения полного содержания новости -->
+<div id="newsModal" class="news-modal">
+    <div class="news-modal-content">
+        <span class="close-modal">&times;</span>
+        <div id="newsModalContent" class="news-modal-body">
+            <!-- Здесь будет содержимое новости -->
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i> Загрузка новости...
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block script %}
 <script>
+    // Модальное окно для новостей
+    const newsModal = document.getElementById('newsModal');
+    const newsModalContent = document.getElementById('newsModalContent');
+    const closeModal = document.querySelector('.close-modal');
+
+    // Закрытие модального окна при клике на крестик
+    if (closeModal) {
+        closeModal.onclick = function() {
+            newsModal.style.display = "none";
+        }
+    }
+
+    // Закрытие модального окна при клике вне его области
+    window.onclick = function(event) {
+        if (event.target == newsModal) {
+            newsModal.style.display = "none";
+        }
+    }
+
+    // Функция для отображения модального окна с новостью
+    function showNewsModal(newsId) {
+        // Показываем модальное окно с индикатором загрузки
+        newsModal.style.display = "block";
+        newsModalContent.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Загрузка новости...</div>';
+        
+        // Запрашиваем данные новости
+        fetch(`/news/${newsId}/details/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Не удалось загрузить новость');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                // Формируем HTML-содержимое для модального окна
+                let newsHtml = `
+                    <h2>${data.news.title}</h2>
+                    <div class="news-date">${data.news.date_published}</div>
+                    ${data.news.image ? `<img src="${data.news.image}" alt="${data.news.title}" class="news-modal-image">` : ''}
+                    <div class="news-description">${data.news.description}</div>
+                `;
+                
+                // Добавляем ссылку на источник, если она есть
+                if (data.news.link) {
+                    newsHtml += `<div class="news-source"><a href="${data.news.link}" target="_blank">Читать источник <i class="fas fa-external-link-alt"></i></a></div>`;
+                }
+                
+                // Обновляем содержимое модального окна
+                newsModalContent.innerHTML = newsHtml;
+            } else {
+                newsModalContent.innerHTML = `<div class="error-message">Ошибка: ${data.message || 'Не удалось загрузить новость'}</div>`;
+            }
+        })
+        .catch(error => {
+            newsModalContent.innerHTML = `<div class="error-message">Ошибка: ${error.message}</div>`;
+        });
+    }
+
     function toggleComments() {
         const content = document.getElementById('commentsContent');
         const header = document.querySelector('.comments-header');

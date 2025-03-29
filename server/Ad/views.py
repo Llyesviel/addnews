@@ -1153,3 +1153,36 @@ def weather_view(request):
         }
         
         return render(request, 'weather.html', context)
+
+
+def get_news_details(request, news_id):
+    """
+    Возвращает детальную информацию о новости в формате JSON
+    """
+    try:
+        # Получаем новость по ID
+        news = get_object_or_404(News, id=news_id)
+        
+        # Форматируем дату публикации
+        formatted_date = news.date_published.strftime('%d.%m.%Y %H:%M')
+        
+        # Формируем ответ с данными новости
+        response_data = {
+            'status': 'success',
+            'news': {
+                'id': news.id,
+                'title': news.title,
+                'description': news.description,
+                'date_published': formatted_date,
+                'image': news.image,
+                'link': news.link
+            }
+        }
+        
+        return JsonResponse(response_data)
+    except Exception as e:
+        logging.error(f"Ошибка при получении деталей новости: {str(e)}")
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)

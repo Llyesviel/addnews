@@ -132,7 +132,41 @@ class UserProfile(models.Model):
         
     def get_recent_activity(self, limit=10):
         """Возвращает последние действия пользователя"""
-        return self.comments.select_related('news').order_by('-created_at')[:limit]
+        # Получаем комментарии
+        recent_comments = list(self.comments.select_related('news').all())
+        
+        # Получаем лайки пользователя
+        recent_likes = list(NewsRating.objects.filter(
+            user=self.user, 
+            is_like=True
+        ).select_related('news').all())
+        
+        # Объединяем действия в один список
+        all_activities = []
+        
+        # Добавляем комментарии с типом 'comment'
+        for comment in recent_comments:
+            all_activities.append({
+                'type': 'comment',
+                'content': comment,
+                'created_at': comment.created_at,
+                'news': comment.news
+            })
+        
+        # Добавляем лайки с типом 'like'
+        for like in recent_likes:
+            all_activities.append({
+                'type': 'like',
+                'content': like,
+                'created_at': like.created_at,
+                'news': like.news
+            })
+        
+        # Сортируем по дате (сначала новые)
+        all_activities.sort(key=lambda x: x['created_at'], reverse=True)
+        
+        # Ограничиваем количество
+        return all_activities[:limit]
 
 # Модель для комментариев к новостям
 class NewsComment(models.Model):
